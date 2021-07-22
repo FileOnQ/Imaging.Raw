@@ -23,6 +23,18 @@ namespace FileOnQ.Imaging.Raw
 		[DllImport("libraw.dll")]
 		public static extern LibRawProcessedImage* libraw_dcraw_make_mem_thumb(IntPtr libraw, ref int errorCode);
 
+		[DllImport("libraw.dll")]
+		public static extern int libraw_unpack(IntPtr libraw);
+
+		[DllImport("libraw.dll")]
+		public static extern int libraw_dcraw_process(IntPtr libraw);
+
+		[DllImport("libraw.dll")]
+		public static extern void libraw_set_output_tif(IntPtr libraw, int value);
+
+		[DllImport("libraw.dll")]
+		public static extern void libraw_dcraw_ppm_tiff_writer(IntPtr libraw, string filename);
+
 		// This must pass the processed image so the native lib knows what to clear
 		[DllImport("libraw.dll")]
 		public static extern void libraw_dcraw_clear_mem(IntPtr image);
@@ -65,7 +77,6 @@ namespace FileOnQ.Imaging.Raw
 
 			public uint DataSize;
 
-			//[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U1, SizeConst = 1)]
 			public IntPtr Data;
 		}
 

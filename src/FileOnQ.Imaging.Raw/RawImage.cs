@@ -9,13 +9,15 @@ namespace FileOnQ.Imaging.Raw
 {
 	public unsafe class RawImage : IDisposable
 	{
+		string file;
 		IntPtr libraw;
 		LibRaw.LibRawProcessedImage* thumbnailPointer;
 		
 		public RawImage(string file)
 		{
+			this.file = file;
 			libraw = LibRaw.libraw_init(0);
-			LibRaw.libraw_open_file(libraw, file);
+			//LibRaw.libraw_open_file(libraw, file);
 		}
 
 		public void UnpackThumbnail()
@@ -100,6 +102,16 @@ namespace FileOnQ.Imaging.Raw
 		{
 			var address = (IntPtr)thumbnailPointer + Marshal.OffsetOf(typeof(LibRaw.LibRawProcessedImage), "Data").ToInt32();
 			return new Span<byte>(address.ToPointer(), (int)thumbnailPointer->DataSize);
+		}
+
+		public void WriteTiff(string path)
+		{
+			LibRaw.libraw_open_file(libraw, file);
+			var error = LibRaw.libraw_unpack(libraw);
+			error = LibRaw.libraw_dcraw_process(libraw);
+			LibRaw.libraw_set_output_tif(libraw, 1);
+			
+			LibRaw.libraw_dcraw_ppm_tiff_writer(libraw, path);
 		}
 		
 		public void WriteThumbnail(string file) =>

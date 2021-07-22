@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using BenchmarkDotNet.Engines;
@@ -7,15 +8,13 @@ using BenchmarkDotNet.Running;
 
 namespace FileOnQ.Imaging.Raw.Benchmarking
 {
-	[SimpleJob(RuntimeMoniker.Net48, launchCount: 50, invocationCount: 500)]
-	[SimpleJob(RuntimeMoniker.Net50, launchCount: 50, invocationCount: 500)]
-	//[SimpleJob(RunStrategy.ColdStart, launchCount: 10, invocationCount: 100)]
+	[SimpleJob(RuntimeMoniker.Net48, launchCount: 5, invocationCount: 10)]
+	[SimpleJob(RuntimeMoniker.Net50, launchCount: 5, invocationCount: 10)]
 	[NativeMemoryProfiler]
 	[MemoryDiagnoser]
 	public class LibRaw
 	{
-		readonly string librawInput = @"";
-		//readonly string librawInput = @"";
+		readonly string librawInput = @"D:\FileOnQ.Imaging.Raw\images\sample1.cr2";
 		
 		[Benchmark(Description = "Buffers.MemoryCopy")]
 		public byte[] LibRawThumbnail_MemoryCopy()
@@ -68,18 +67,25 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 		}
 		
 		[Benchmark(Description = "Span<T>")]
-		public Span<byte> LibRawThumbnail_SpanOfT()
+		public void LibRawThumbnail_SpanOfT()
 		{
+			//using (var rawImage = new RawImage(librawInput))
+			//{
+			//	rawImage.UnpackThumbnail();
+			//	return rawImage.GetThumbnailAsSpan();
+			//}
+
 			using (var rawImage = new RawImage(librawInput))
 			{
-				rawImage.UnpackThumbnail();
-				return rawImage.GetThumbnailAsSpan();
+				rawImage.WriteTiff(@"D:\FileOnQ.Imaging.Raw\images\sample1.tiff");
+				//rawImage.UnpackThumbnail();
+				//return rawImage.GetThumbnailAsSpan();
 			}
 		}
 	}
 	
 	class Program
 	{
-		static void Main(string[] args) => BenchmarkRunner.Run<LibRaw>();
+		static void Main(string[] args) => new LibRaw().LibRawThumbnail_SpanOfT(); //BenchmarkRunner.Run<LibRaw>();
 	}
 }
