@@ -15,19 +15,19 @@ namespace FileOnQ.Imaging.Raw
 		internal static extern void libraw_open_file(IntPtr libraw, string filename);
 
 		[DllImport("libraw.dll")]
-		internal static extern LibRawError libraw_unpack_thumb(IntPtr libraw);
+		internal static extern Error libraw_unpack_thumb(IntPtr libraw);
 
 		[DllImport("libraw.dll")]
-		internal static extern LibRawError libraw_dcraw_thumb_writer(IntPtr libraw, string filename);
+		internal static extern Error libraw_dcraw_thumb_writer(IntPtr libraw, string filename);
 
 		[DllImport("libraw.dll")]
-		internal static extern LibRawProcessedImage* libraw_dcraw_make_mem_thumb(IntPtr libraw, ref LibRawError errorCode);
+		internal static extern ProcessedImage* libraw_dcraw_make_mem_thumb(IntPtr libraw, ref Error errorCode);
 
 		[DllImport("libraw.dll")]
-		internal static extern LibRawError libraw_unpack(IntPtr libraw);
+		internal static extern Error libraw_unpack(IntPtr libraw);
 
 		[DllImport("libraw.dll")]
-		internal static extern LibRawError libraw_dcraw_process(IntPtr libraw);
+		internal static extern Error libraw_dcraw_process(IntPtr libraw);
 
 		[DllImport("libraw.dll")]
 		internal static extern void libraw_set_output_tif(IntPtr libraw, int value);

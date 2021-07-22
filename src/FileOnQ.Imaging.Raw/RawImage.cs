@@ -11,7 +11,7 @@ namespace FileOnQ.Imaging.Raw
 	{
 		string file;
 		IntPtr libraw;
-		LibRaw.LibRawProcessedImage* thumbnailPointer;
+		LibRaw.ProcessedImage* thumbnailPointer;
 		
 		public RawImage(string file)
 		{
@@ -30,7 +30,7 @@ namespace FileOnQ.Imaging.Raw
 			// }
 
 			var errorCode = LibRaw.libraw_unpack_thumb(libraw);
-			if (errorCode != LibRaw.LibRawError.Success)
+			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException(errorCode);
 			
 			return new RawThumbnail(libraw);
@@ -52,7 +52,7 @@ namespace FileOnQ.Imaging.Raw
 			
 			// Array.Resize(ref thumbnail.Data, (int)thumbnail.DataSize);
 
-			var address = (IntPtr)thumbnailPointer + Marshal.OffsetOf(typeof(LibRaw.LibRawProcessedImage), "Data").ToInt32();
+			var address = (IntPtr)thumbnailPointer + Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), "Data").ToInt32();
 			var byteCount = buffer.Length;
 
 			if (strategy == 0)
@@ -98,7 +98,7 @@ namespace FileOnQ.Imaging.Raw
 		
 		public Span<byte> GetThumbnailAsSpan()
 		{
-			var address = (IntPtr)thumbnailPointer + Marshal.OffsetOf(typeof(LibRaw.LibRawProcessedImage), "Data").ToInt32();
+			var address = (IntPtr)thumbnailPointer + Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), "Data").ToInt32();
 			return new Span<byte>(address.ToPointer(), (int)thumbnailPointer->DataSize);
 		}
 

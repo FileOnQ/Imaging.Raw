@@ -2,7 +2,7 @@
 {
 	public partial class LibRaw
 	{
-		public enum LibRawError
+		public enum Error
         {
         	Success = 0,
         	UnspecifiedError = -1,

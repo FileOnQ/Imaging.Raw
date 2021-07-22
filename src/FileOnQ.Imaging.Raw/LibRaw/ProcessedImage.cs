@@ -6,7 +6,7 @@ namespace FileOnQ.Imaging.Raw
 	public partial class LibRaw
 	{
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
-		internal struct LibRawProcessedImage
+		internal struct ProcessedImage
 		{
 			public ImageFormats Type;
 

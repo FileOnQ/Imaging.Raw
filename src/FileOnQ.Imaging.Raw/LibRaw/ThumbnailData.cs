@@ -5,7 +5,7 @@ namespace FileOnQ.Imaging.Raw
 	public partial class LibRaw
 	{
 		[StructLayout(LayoutKind.Explicit)]
-		public unsafe struct LibRawThumbnailData
+		public unsafe struct ThumbnailData
 		{
 			[FieldOffset(3)]
 			public uint Length;

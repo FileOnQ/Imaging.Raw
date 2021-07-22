@@ -5,10 +5,10 @@ namespace FileOnQ.Imaging.Raw
 	public partial class LibRaw
 	{
 		[StructLayout(LayoutKind.Explicit)]
-		public struct LibRawData
+		public struct Data
 		{
 			[FieldOffset(12)]
-			public LibRawThumbnailData Thumbnail;
+			public ThumbnailData Thumbnail;
 		}
 	}
 }
