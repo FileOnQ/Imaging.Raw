@@ -14,8 +14,8 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 	[MemoryDiagnoser]
 	public class LibRaw
 	{
-		readonly string librawInput = @"D:\DigitalOnQ\DigitalOnQ\sampleFiles\sample1.cr2";
-		//readonly string librawInput = @"D:\DigitalOnQ\DigitalOnQ\sampleFiles\SignatureEdits\signatureeditsfreerawphoto.NEF";
+		readonly string librawInput = @"";
+		//readonly string librawInput = @"";
 		
 		[Benchmark(Description = "Buffers.MemoryCopy")]
 		public byte[] LibRawThumbnail_MemoryCopy()
