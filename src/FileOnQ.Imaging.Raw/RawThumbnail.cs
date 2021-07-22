@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace FileOnQ.Imaging.Raw
 {
@@ -18,9 +19,18 @@ namespace FileOnQ.Imaging.Raw
 				throw new RawImageException(error);
 		}
 
-		//var thumbnail = LibRaw.libraw_dcraw_make_mem_thumb(libraw, ref errorCode);
-		public Span<byte> GetSpan() => throw new NotImplementedException();
+		public Span<byte> GetSpan()
+		{
+			var error = LibRaw.LibRawError.Success;
+			var thumbnail = LibRaw.libraw_dcraw_make_mem_thumb(libraw, ref error);
+			if (error != LibRaw.LibRawError.Success)
+				throw new RawImageException(error);
 
-		public byte[] CopyToByteArray() => throw new NotImplementedException();
+			// get the memory address of the data buffer.
+			var address = (IntPtr)thumbnail + Marshal.OffsetOf(typeof(LibRaw.LibRawProcessedImage), "Data").ToInt32();
+			return new Span<byte>(address.ToPointer(), (int)thumbnail->DataSize);
+		}
+
+		public byte[] CopyToByteArray() => GetSpan().ToArray();
 	}
 }

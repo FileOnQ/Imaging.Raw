@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace FileOnQ.Imaging.Raw.ConsoleApp
 {
