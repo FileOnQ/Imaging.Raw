@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FileOnQ.Imaging.Raw
 {
-	public unsafe class RawImage : IDisposable
+	public unsafe class RawImage : IRawImage
 	{
 		string file;
 		IntPtr libraw;
@@ -17,25 +17,23 @@ namespace FileOnQ.Imaging.Raw
 		{
 			this.file = file;
 			libraw = LibRaw.libraw_init(0);
-			//LibRaw.libraw_open_file(libraw, file);
+			LibRaw.libraw_open_file(libraw, file);
 		}
 
-		public void UnpackThumbnail()
+		public IRawThumbnail UnpackThumbnail()
 		{
+			// not sure if this is still needed
 			// if (thumbnailPointer != IntPtr.Zero)
 			// {
 			// 	LibRaw.libraw_dcraw_clear_mem(libraw);
 			// 	thumbnailPointer = IntPtr.Zero;
 			// }
-				
-			LibRaw.libraw_unpack_thumb(libraw);
+
+			var errorCode = LibRaw.libraw_unpack_thumb(libraw);
+			if (errorCode != LibRaw.LibRawError.Success)
+				throw new RawImageException(errorCode);
 			
-			// Loading the thumbnail into memory adds double the processing time
-			var errorCode = 0;
-			thumbnailPointer = LibRaw.libraw_dcraw_make_mem_thumb(libraw, ref errorCode);
-			// TODO - check error codes and throw exception if there is a problem.
-			
-			
+			return new RawThumbnail(libraw);
 		}
 
 		// strategy 0 - Buffer.MemoryCopy
