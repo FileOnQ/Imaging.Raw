@@ -27,7 +27,8 @@ namespace FileOnQ.Imaging.Raw
 				throw new RawImageException(error);
 
 			// get the memory address of the data buffer.
-			var address = (IntPtr)thumbnail + Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), "Data").ToInt32();
+			var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
+			var address = (IntPtr) thumbnail + memoryOffset;
 			return new Span<byte>(address.ToPointer(), (int)thumbnail->DataSize);
 		}
 

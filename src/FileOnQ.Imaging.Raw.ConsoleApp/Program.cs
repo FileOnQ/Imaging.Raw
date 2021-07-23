@@ -22,6 +22,7 @@ namespace FileOnQ.Imaging.Raw.ConsoleApp
 					Console.WriteLine("Thumbnail Unpacked");
 
 					thumbnail.Write(outputImage);
+					//File.WriteAllBytes(outputImage, thumbnail.GetSpan().ToArray());
 					Console.WriteLine($"Thumbnail written to location: {outputImage}");
 				}
 			}
