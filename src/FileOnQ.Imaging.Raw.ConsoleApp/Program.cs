@@ -3,10 +3,10 @@ using System.IO;
 
 namespace FileOnQ.Imaging.Raw.ConsoleApp
 {
-    class Program
+	static class Program
     {
-		readonly static string testImage = @"D:\FileOnQ.Imaging.Raw\images\sample1.cr2";
-		readonly static string outputImage = @"D:\FileOnQ.Imaging.Raw\images\sample1.thumb.jpeg";
+		static readonly string testImage = @"D:\FileOnQ.Imaging.Raw\images\sample1.cr2";
+		static readonly string outputImage = @"D:\FileOnQ.Imaging.Raw\images\sample1.thumb.jpeg";
 
 		static void Main(string[] args)
         {
