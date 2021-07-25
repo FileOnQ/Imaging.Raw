@@ -15,10 +15,9 @@ namespace FileOnQ.Imaging.Raw.ConsoleApp
 			try
 			{
 				using (IRawImage image = new RawImage(testImage))
+				using (IImageWriter thumbnail = image.UnpackThumbnail())
 				{
 					Console.WriteLine("Image open successfully!");
-
-					var thumbnail = image.UnpackThumbnail();
 					Console.WriteLine("Thumbnail Unpacked");
 
 					thumbnail.Write(outputImage);
