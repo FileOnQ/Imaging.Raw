@@ -18,13 +18,13 @@ namespace FileOnQ.Imaging.Raw.Tests
 	[TestFixture("images/signature edits free raws P1015526.dng")]
 	[TestFixture("images/signature edits free raws_DSC7082.NEF")]
 	[TestFixture("images/signatureeditsfreerawphoto.NEF")]
-	public class ThumbnailSpanTests
+	public class Thumbnail_Span_Tests
 	{
 		readonly string input;
 		readonly string expectedThumbnail;
 
-		public ThumbnailSpanTests(string path) : this(path, ImageFormat.Jpeg) { }
-		public ThumbnailSpanTests(string path, ImageFormat imageFormat)
+		public Thumbnail_Span_Tests(string path) : this(path, ImageFormat.Jpeg) { }
+		public Thumbnail_Span_Tests(string path, ImageFormat imageFormat)
 		{
 			input = path;
 			
