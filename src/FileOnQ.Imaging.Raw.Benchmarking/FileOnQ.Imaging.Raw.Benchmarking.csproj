@@ -14,4 +14,10 @@
       <ProjectReference Include="..\FileOnQ.Imaging.Raw\FileOnQ.Imaging.Raw.csproj" />
     </ItemGroup>
 
+	<ItemGroup>
+		<None Update="Images\*">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>
