@@ -12,6 +12,10 @@ namespace FileOnQ.Imaging.Raw
 		string file;
 		IntPtr libraw;
 		
+		// TODO - 7/25/2021 - @ahoefling
+		// Add exception tests if file does not exist. If we
+		// don't manage this in the C# code the problem will
+		// persist in weird ways down stream such as OutOfOrderCall
 		public RawImage(string file)
 		{
 			this.file = file;
