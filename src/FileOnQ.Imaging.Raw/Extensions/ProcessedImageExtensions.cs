@@ -20,6 +20,20 @@ namespace FileOnQ.Imaging.Raw
 		/// <see cref="ProcessedImage"/> in the most memory
 		/// efficient way possible.
 		/// </summary>
+		/// <param name="imageWr">
+		/// A proccessed raw image or unpacked thumbnail.
+		/// </param>
+		/// <returns>
+		/// A managed <see cref="Bitmap"/>.
+		/// </returns>
+		public static Bitmap AsBitmap(this IImageWriter imageWriter) =>
+			imageWriter.AsProcessedImage().AsBitmap();
+
+		/// <summary>
+		/// Gets a <see cref="Bitmap"/> from the current
+		/// <see cref="ProcessedImage"/> in the most memory
+		/// efficient way possible.
+		/// </summary>
 		/// <param name="imageData">
 		/// A proccessed raw image or unpacked thumbnail.
 		/// </param>
