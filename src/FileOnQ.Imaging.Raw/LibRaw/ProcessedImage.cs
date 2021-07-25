@@ -8,7 +8,7 @@ namespace FileOnQ.Imaging.Raw
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		internal struct ProcessedImage
 		{
-			public ImageFormats Type;
+			public ImageFormat Type;
 
 			public ushort Height;
 

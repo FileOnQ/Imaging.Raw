@@ -2,7 +2,7 @@
 {
 	public partial class LibRaw
 	{
-		public enum ImageFormats
+		public enum ImageFormat
 		{
 			Jpeg = 1,
 			Bitmap = 2

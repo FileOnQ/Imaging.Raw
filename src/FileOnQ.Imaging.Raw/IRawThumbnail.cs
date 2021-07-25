@@ -2,10 +2,14 @@
 
 namespace FileOnQ.Imaging.Raw
 {
-	public interface IRawThumbnail
+	public interface IImageWriter : IDisposable
 	{
 		void Write(string file);
-		Span<byte> GetSpan();
-		byte[] CopyToByteArray();
+		ProcessedImage AsProcessedImage();
+	}
+
+	public interface IImageProcessor : IImageWriter
+	{
+
 	}
 }
