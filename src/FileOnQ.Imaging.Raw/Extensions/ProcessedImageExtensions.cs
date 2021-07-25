@@ -28,6 +28,11 @@ namespace FileOnQ.Imaging.Raw
 		/// </returns>
 		public static Bitmap AsBitmap(this ProcessedImage imageData)
 		{
+			// TODO - 7/24/2021 - @ahoefling
+			// We need to experiment with GPU parallization tools
+			// such as CUDA and OpenCL. We should be able to build
+			// the bitmap much faster natively on the GPU and then
+			// put the stream together in a Bitmap object
 			if (imageData.ImageFormat == ImageFormat.Bitmap)
 			{
 				if (imageData.Bits != 8)
