@@ -20,7 +20,9 @@ namespace FileOnQ.Imaging.Raw
 		{
 			this.file = file;
 			libraw = LibRaw.libraw_init(0);
-			LibRaw.libraw_open_file(libraw, file);
+			var error = LibRaw.libraw_open_file(libraw, file);
+			if (error != LibRaw.Error.Success)
+				throw new RawImageException(error);
 		}
 
 		public IImageWriter UnpackThumbnail()
@@ -28,7 +30,7 @@ namespace FileOnQ.Imaging.Raw
 			var errorCode = LibRaw.libraw_unpack_thumb(libraw);
 			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException(errorCode);
-			
+
 			return new RawThumbnail(libraw);
 		}
 		public IImageProcessor UnpackRaw()

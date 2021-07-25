@@ -1,23 +1,24 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using NUnit.Framework;
 
 namespace FileOnQ.Imaging.Raw.Tests
 {
-	[TestFixture("images/sample1.cr2")]
-	[TestFixture("images/@signatureeditsco(1).dng")]
-	[TestFixture("images/@signatureeditsco.dng")]
-	[TestFixture("images/canon_eos_r_01.cr3")]
-	[TestFixture("images/Christian - .unique.depth.dng", ImageFormat.Bitmap)] // this file might have a bitmap instead of a jpeg
-	[TestFixture("images/DSC_0118.nef")]
-	[TestFixture("images/DSC02783.ARW")]
-	[TestFixture("images/PANA2417.RW2")]
-	[TestFixture("images/PANA8392.RW2")]
-	[TestFixture("images/photo by @Dupe.png--@Emily.rosegold.arw")]
-	[TestFixture("images/signature edits APC_00171.dng")]
-	[TestFixture("images/signature edits free raws P1015526.dng")]
-	[TestFixture("images/signature edits free raws_DSC7082.NEF")]
-	[TestFixture("images/signatureeditsfreerawphoto.NEF")]
+	[TestFixture("images\\sample1.cr2")]
+	[TestFixture("images\\@signatureeditsco(1).dng")]
+	[TestFixture("images\\@signatureeditsco.dng")]
+	[TestFixture("images\\canon_eos_r_01.cr3")]
+	[TestFixture("images\\Christian - .unique.depth.dng", ImageFormat.Bitmap)] // this file might have a bitmap instead of a jpeg
+	[TestFixture("images\\DSC_0118.nef")]
+	[TestFixture("images\\DSC02783.ARW")]
+	[TestFixture("images\\PANA2417.RW2")]
+	[TestFixture("images\\PANA8392.RW2")]
+	[TestFixture("images\\photo by @Dupe.png--@Emily.rosegold.arw")]
+	[TestFixture("images\\signature edits APC_00171.dng")]
+	[TestFixture("images\\signature edits free raws P1015526.dng")]
+	[TestFixture("images\\signature edits free raws_DSC7082.NEF")]
+	[TestFixture("images\\signatureeditsfreerawphoto.NEF")]
 	public class Thumbnail_WriteToFile_Tests
 	{
 		readonly string input;
@@ -27,7 +28,8 @@ namespace FileOnQ.Imaging.Raw.Tests
 		public Thumbnail_WriteToFile_Tests(string path) : this(path, ImageFormat.Jpeg) { }
 		public Thumbnail_WriteToFile_Tests(string path, ImageFormat imageFormat)
 		{
-			input = path;
+			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			input = Path.Combine(assemblyDirectory, path);
 			
 			var filename = Path.GetFileNameWithoutExtension(input);
 			var directory = Path.GetDirectoryName(input) ?? string.Empty;

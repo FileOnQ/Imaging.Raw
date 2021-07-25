@@ -1,8 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using System.Reflection;
+using NUnit.Framework;
 
 namespace FileOnQ.Imaging.Raw.Tests
 {
-	[TestFixture("images/sample1.cr2")]
+	[TestFixture("images\\sample1.cr2")]
 	public class Thumbnail_Disposed_Tests
 	{
 		readonly string input;
@@ -10,7 +12,8 @@ namespace FileOnQ.Imaging.Raw.Tests
 		const string objectName = "ProcessedImage";
 		public Thumbnail_Disposed_Tests(string path)
 		{
-			input = path;
+			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			input = Path.Combine(assemblyDirectory, path);
 		}
 
 		[Test]

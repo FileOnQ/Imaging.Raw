@@ -23,6 +23,9 @@
     <None Update="libraw.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+		<None Update="libraw32.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
   </ItemGroup>
 
 </Project>
