@@ -2,11 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>net48;net5.0</TargetFrameworks>
+		<Platforms>AnyCPU;x64;x86</Platforms>
 		<LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-	<!-- TODO: 7/25/2021 - @ahoefling - We need to explicitly test x86, x64 and ARM for each platform -->
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="nunit" Version="3.13.2" />
