@@ -8,6 +8,7 @@ using BenchmarkDotNet.Running;
 
 namespace FileOnQ.Imaging.Raw.Benchmarking
 {
+	// TODO - 7/25/2021 - @ahoefling - Add x86 vs x64 platform support - https://github.com/dotnet/BenchmarkDotNet/issues/873
 	[SimpleJob(RuntimeMoniker.Net48, launchCount: 5, invocationCount: 10)]
 	[SimpleJob(RuntimeMoniker.Net50, launchCount: 5, invocationCount: 10)]
 	[NativeMemoryProfiler]

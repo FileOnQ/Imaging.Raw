@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net48;net5.0</TargetFrameworks>
-		<Platforms>AnyCPU;x64;x86</Platforms>
+	<PropertyGroup>
+		<TargetFrameworks>net48;net5.0</TargetFrameworks>
+		<Platforms>x64</Platforms>
 		<LangVersion>9.0</LangVersion>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
@@ -16,13 +16,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\FileOnQ.Imaging.Raw\FileOnQ.Imaging.Raw.csproj" />
+		<ProjectReference Include="..\..\src\FileOnQ.Imaging.Raw\FileOnQ.Imaging.Raw.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="Images\*">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
+	<Import Project="..\FileOnQ.Imaging.Raw.Tests\FileOnQ.Imaging.Raw.Tests.projitems" Label="Shared" />
 
 </Project>
