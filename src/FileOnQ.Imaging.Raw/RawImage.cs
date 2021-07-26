@@ -19,15 +19,15 @@ namespace FileOnQ.Imaging.Raw
 		public RawImage(string file)
 		{
 			this.file = file;
-			libraw = LibRaw.libraw_init(0);
-			var error = LibRaw.libraw_open_file(libraw, file);
+			libraw = LibRaw.Initialize(0);
+			var error = LibRaw.OpenFile(libraw, file);
 			if (error != LibRaw.Error.Success)
 				throw new RawImageException(error);
 		}
 
 		public IImageWriter UnpackThumbnail()
 		{
-			var errorCode = LibRaw.libraw_unpack_thumb(libraw);
+			var errorCode = LibRaw.UnpackThumbnail(libraw);
 			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException(errorCode);
 
@@ -131,7 +131,7 @@ namespace FileOnQ.Imaging.Raw
 			
 			if (libraw != IntPtr.Zero)
 			{
-				LibRaw.libraw_close(libraw);
+				LibRaw.Close(libraw);
 				libraw = IntPtr.Zero;
 			}
 

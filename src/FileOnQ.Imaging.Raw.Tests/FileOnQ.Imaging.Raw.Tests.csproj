@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<!-- TODO: 7/25/2021 - @ahoefling - We need to explicitly test x86, x64 and ARM for each platform -->
+
 	<ItemGroup>
 		<PackageReference Include="nunit" Version="3.13.2" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />

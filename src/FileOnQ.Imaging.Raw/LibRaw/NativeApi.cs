@@ -3,46 +3,179 @@ using System.Runtime.InteropServices;
 
 namespace FileOnQ.Imaging.Raw
 {
-	public static unsafe partial class LibRaw
+	public unsafe partial class LibRaw
 	{
-#if NET5_0_OR_GREATER
-		const string DllName = "libraw.dll";
-#else
-		const string DllName = "libraw32.dll";
-#endif
+		internal static IntPtr Initialize(uint flags)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_init(flags);
+				case Architecture.X64:
+					return X64.libraw_init(flags);
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern IntPtr libraw_init(uint flags);
+		internal static void Close(IntPtr libraw)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					X86.libraw_close(libraw);
+					break;
+				case Architecture.X64:
+					X64.libraw_close(libraw);
+					break;
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern void libraw_close(IntPtr libraw);
+		internal static Error OpenFile(IntPtr libraw, string filename)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_open_file(libraw, filename);
+				case Architecture.X64:
+					return X64.libraw_open_file(libraw, filename);
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern Error libraw_open_file(IntPtr libraw, string filename);
+		internal static Error UnpackThumbnail(IntPtr libraw)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_unpack_thumb(libraw);
+				case Architecture.X64:
+					return X64.libraw_unpack_thumb(libraw);
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern Error libraw_unpack_thumb(IntPtr libraw);
+		internal static Error ThumbnailWriter(IntPtr libraw, string filename)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_dcraw_thumb_writer(libraw, filename);
+				case Architecture.X64:
+					return X64.libraw_dcraw_thumb_writer(libraw, filename);
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern Error libraw_dcraw_thumb_writer(IntPtr libraw, string filename);
+		internal static ProcessedImage* MakeMemoryThumbnail(IntPtr libraw, ref Error errorCode)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_dcraw_make_mem_thumb(libraw, ref errorCode);
+				case Architecture.X64:
+					return X64.libraw_dcraw_make_mem_thumb(libraw, ref errorCode);
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern ProcessedImage* libraw_dcraw_make_mem_thumb(IntPtr libraw, ref Error errorCode);
+		internal static Error Unpack(IntPtr libraw)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_unpack(libraw);
+				case Architecture.X64:
+					return X64.libraw_unpack(libraw);
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern Error libraw_unpack(IntPtr libraw);
+		internal static Error DcrawProcess(IntPtr libraw)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_dcraw_process(libraw);
+				case Architecture.X64:
+					return X64.libraw_dcraw_process(libraw);
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern Error libraw_dcraw_process(IntPtr libraw);
+		internal static void SetOutputTiff(IntPtr libraw, int value)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					X86.libraw_set_output_tif(libraw, value);
+					break;
+				case Architecture.X64:
+					X64.libraw_set_output_tif(libraw, value);
+					break;
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern void libraw_set_output_tif(IntPtr libraw, int value);
+		internal static void DcrawPpmTiffWriter(IntPtr libraw, string filename)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					X86.libraw_dcraw_ppm_tiff_writer(libraw, filename);
+					break;
+				case Architecture.X64:
+					X64.libraw_dcraw_ppm_tiff_writer(libraw, filename);
+					break;
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 
-		[DllImport(DllName)]
-		internal static extern void libraw_dcraw_ppm_tiff_writer(IntPtr libraw, string filename);
-
-		// This must pass the processed image so the native lib knows what to clear
-		[DllImport(DllName)]
-		internal static extern void libraw_dcraw_clear_mem(IntPtr image);
+		internal static void ClearMemory(ProcessedImage* image)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					X86.libraw_dcraw_clear_mem((IntPtr)image);
+					break;
+				case Architecture.X64:
+					X64.libraw_dcraw_clear_mem((IntPtr)image);
+					break;
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 	}
 }

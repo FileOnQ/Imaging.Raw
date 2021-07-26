@@ -15,7 +15,7 @@ namespace FileOnQ.Imaging.Raw
 
 		public void Write(string file)
 		{
-			var error = LibRaw.libraw_dcraw_thumb_writer(libraw, file);
+			var error = LibRaw.ThumbnailWriter(libraw, file);
 			if (error != LibRaw.Error.Success)
 				throw new RawImageException(error);
 		}
@@ -25,7 +25,7 @@ namespace FileOnQ.Imaging.Raw
 			if ((IntPtr)thumbnail == IntPtr.Zero)
 			{
 				var error = LibRaw.Error.Success;
-				thumbnail = LibRaw.libraw_dcraw_make_mem_thumb(libraw, ref error);
+				thumbnail = LibRaw.MakeMemoryThumbnail(libraw, ref error);
 				if (error != LibRaw.Error.Success)
 					throw new RawImageException(error);
 			}
@@ -73,7 +73,7 @@ namespace FileOnQ.Imaging.Raw
 
 			if (thumbnail != null)
 			{
-				LibRaw.libraw_dcraw_clear_mem((IntPtr)thumbnail);
+				LibRaw.ClearMemory(thumbnail);
 				thumbnail = (LibRaw.ProcessedImage*)IntPtr.Zero;
 			}
 
