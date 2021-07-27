@@ -6,27 +6,27 @@ using NUnit.Framework;
 namespace FileOnQ.Imaging.Raw.Tests
 {
 	[TestFixture("Images\\sample1.cr2")]
-	[TestFixture("Images\\@signatureeditsco(1).dng")]
-	[TestFixture("Images\\@signatureeditsco.dng")]
-	[TestFixture("Images\\canon_eos_r_01.cr3")]
-	[TestFixture("Images\\Christian - .unique.depth.dng", ImageFormat.Bitmap)] // this file might have a bitmap instead of a jpeg
-	[TestFixture("Images\\DSC_0118.nef")]
-	[TestFixture("Images\\DSC02783.ARW")]
-	[TestFixture("Images\\PANA2417.RW2")]
-	[TestFixture("Images\\PANA8392.RW2")]
-	[TestFixture("Images\\photo by @Dupe.png--@Emily.rosegold.arw")]
-	[TestFixture("Images\\signature edits APC_00171.dng")]
-	[TestFixture("Images\\signature edits free raws P1015526.dng")]
-	[TestFixture("Images\\signature edits free raws_DSC7082.NEF")]
-	[TestFixture("Images\\signatureeditsfreerawphoto.NEF")]
-	public class Thumbnail_WriteToFile_Tests
+	//[TestFixture("Images\\@signatureeditsco(1).dng")]
+	//[TestFixture("Images\\@signatureeditsco.dng")]
+	//[TestFixture("Images\\canon_eos_r_01.cr3")]
+	//[TestFixture("Images\\Christian - .unique.depth.dng", ImageFormat.Bitmap)] // this file might have a bitmap instead of a jpeg
+	//[TestFixture("Images\\DSC_0118.nef")]
+	//[TestFixture("Images\\DSC02783.ARW")]
+	//[TestFixture("Images\\PANA2417.RW2")]
+	//[TestFixture("Images\\PANA8392.RW2")]
+	//[TestFixture("Images\\photo by @Dupe.png--@Emily.rosegold.arw")]
+	//[TestFixture("Images\\signature edits APC_00171.dng")]
+	//[TestFixture("Images\\signature edits free raws P1015526.dng")]
+	//[TestFixture("Images\\signature edits free raws_DSC7082.NEF")]
+	//[TestFixture("Images\\signatureeditsfreerawphoto.NEF")]
+	public class Process_WriteToFile_Tests
 	{
 		readonly string input;
 		readonly string output;
 		readonly string expectedThumbnail;
 
-		public Thumbnail_WriteToFile_Tests(string path) : this(path, ImageFormat.Jpeg) { }
-		public Thumbnail_WriteToFile_Tests(string path, ImageFormat imageFormat)
+		public Process_WriteToFile_Tests(string path) : this(path, ImageFormat.Jpeg) { }
+		public Process_WriteToFile_Tests(string path, ImageFormat imageFormat)
 		{
 			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 			input = Path.Combine(assemblyDirectory, path);
@@ -43,8 +43,8 @@ namespace FileOnQ.Imaging.Raw.Tests
 		public void Execute()
 		{
 			using (var image = new RawImage(input))
-			using (var thumbnail = image.UnpackThumbnail())
-			{ 
+			{
+				var thumbnail = image.UnpackThumbnail();
 				thumbnail.Write(output);
 			}
 		}
