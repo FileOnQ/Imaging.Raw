@@ -27,6 +27,7 @@
 	</ItemGroup>
 
 	<!-- TODO - 7/27/2021 - @ahoefling - Add similar build steps for libraw -->
+	<!-- TODO - 7/27/2021 - @ahoefling - Update this to use msbuild if possible -->
 	<Target Name="GpuProject" BeforeTargets="DispatchToInnerBuilds">
 		<Exec Command="dotnet tool restore" WorkingDirectory="$(SolutionDir)" />
 		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=x64" WorkingDirectory="$(SolutionDir)" />
