@@ -17,7 +17,7 @@ namespace FileOnQ.Imaging.Raw
 		{
 			var error = LibRaw.ThumbnailWriter(libraw, file);
 			if (error != LibRaw.Error.Success)
-				throw new RawImageException(error);
+				throw new RawImageException<LibRaw.Error>(error);
 		}
 
 		public ProcessedImage AsProcessedImage()
@@ -27,7 +27,7 @@ namespace FileOnQ.Imaging.Raw
 				var error = LibRaw.Error.Success;
 				thumbnail = LibRaw.MakeMemoryThumbnail(libraw, ref error);
 				if (error != LibRaw.Error.Success)
-					throw new RawImageException(error);
+					throw new RawImageException<LibRaw.Error>(error);
 			}
 
 			// get the memory address of the data buffer.

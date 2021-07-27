@@ -22,14 +22,14 @@ namespace FileOnQ.Imaging.Raw
 			libraw = LibRaw.Initialize(0);
 			var error = LibRaw.OpenFile(libraw, file);
 			if (error != LibRaw.Error.Success)
-				throw new RawImageException(error);
+				throw new RawImageException<LibRaw.Error>(error);
 		}
 
 		public IImageWriter UnpackThumbnail()
 		{
 			var errorCode = LibRaw.UnpackThumbnail(libraw);
 			if (errorCode != LibRaw.Error.Success)
-				throw new RawImageException(errorCode);
+				throw new RawImageException<LibRaw.Error>(errorCode);
 
 			return new RawThumbnail(libraw);
 		}

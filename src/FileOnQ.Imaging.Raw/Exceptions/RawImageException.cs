@@ -2,12 +2,12 @@
 
 namespace FileOnQ.Imaging.Raw
 {
-	public class RawImageException : Exception
+	public class RawImageException<T> : Exception
 	{
 		const string ErrorMessage = "Raw image exception - {0}";
-		public LibRaw.Error Error { get; }
+		public T Error { get; }
 
-		public RawImageException(LibRaw.Error error) : base(string.Format(ErrorMessage, error)) =>
-			Error = error;	
+		public RawImageException(T error) : base(string.Format(ErrorMessage, error)) =>
+			Error = error;
 	}
 }

@@ -34,30 +34,26 @@ namespace FileOnQ.Imaging.Raw.Tests
 			var filename = Path.GetFileNameWithoutExtension(input);
 			var directory = Path.GetDirectoryName(input) ?? string.Empty;
 			expectedThumbnail = Path.Combine(directory, $"{filename}.thumb.bmp");
-			output = $"{filename}.test.bmp";
+			output = $"{filename}.thumb.bmp";
 		}
 
-		[OneTimeSetUp]
-		public void Execute()
-		{
-			using (var image = new RawImage(input))
-			using (var thumbnail = image.UnpackThumbnail())
-			{
-				var bitmap = thumbnail.AsBitmap();
-				bitmap.Save(output);
-			}
-		}
-
-		[OneTimeTearDown]
+		[TearDown]
 		public void TearDown()
 		{
-			if (File.Exists(output))
-				File.Delete(output);
+			//if (File.Exists(output))
+			//	File.Delete(output);
 		}
 
 		[Test]
 		public void ThumbnailAsBitmap_Test()
 		{
+			using (var image = new RawImage(input))
+			using (var thumbnail = image.UnpackThumbnail())
+			using (var bitmap = thumbnail.AsBitmap())
+			{
+				bitmap.Save(output);
+			}
+
 			var expectedBuffer = new Span<byte>(File.ReadAllBytes(expectedThumbnail));
 			var actualBuffer = new Span<byte>(File.ReadAllBytes(output));
 
@@ -68,5 +64,28 @@ namespace FileOnQ.Imaging.Raw.Tests
 			for (int index = 0; index < expectedBuffer.Length; index++)
 				Assert.AreEqual(expectedBuffer[index], actualBuffer[index]);
 		}
+
+#if x64
+		[Test]
+		public void ThumbnailAsBitmap_Gpu_Test()
+		{
+			using (var image = new RawImage(input))
+			using (var thumbnail = image.UnpackThumbnail())
+			using (var bitmap = thumbnail.AsBitmap(true))
+			{
+				bitmap.Save(output);
+			}
+
+			var expectedBuffer = new Span<byte>(File.ReadAllBytes(expectedThumbnail));
+			var actualBuffer = new Span<byte>(File.ReadAllBytes(output));
+
+			Assert.IsTrue(actualBuffer.Length > 0);
+			Assert.AreEqual(expectedBuffer.Length, actualBuffer.Length);
+
+			// This is a slow operation, there may be span specific APIs to speed this up
+			for (int index = 0; index < expectedBuffer.Length; index++)
+				Assert.AreEqual(expectedBuffer[index], actualBuffer[index]);
+		}
+#endif
 	}
 }

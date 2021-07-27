@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace FileOnQ.Imaging.Raw
 {
@@ -26,8 +28,8 @@ namespace FileOnQ.Imaging.Raw
 		/// <returns>
 		/// A managed <see cref="Bitmap"/>.
 		/// </returns>
-		public static Bitmap AsBitmap(this IImageWriter imageWriter) =>
-			imageWriter.AsProcessedImage().AsBitmap();
+		public static Bitmap AsBitmap(this IImageWriter imageWriter, bool useAcceleratedGraphics = false) =>
+			imageWriter.AsProcessedImage().AsBitmap(useAcceleratedGraphics);
 
 		/// <summary>
 		/// Gets a <see cref="Bitmap"/> from the current
@@ -40,11 +42,11 @@ namespace FileOnQ.Imaging.Raw
 		/// <returns>
 		/// A managed <see cref="Bitmap"/>.
 		/// </returns>
-		public static Bitmap AsBitmap(this ProcessedImage imageData)
+		public static unsafe Bitmap AsBitmap(this ProcessedImage imageData, bool useAcceleratedGraphics = false)
 		{
 			// TODO - 7/24/2021 - @ahoefling
 			// We need to experiment with GPU parallization tools
-			// such as CUDA and OpenCL. We should be able to build
+			// such as CUDA and OpenCL. We should be able to bui	ld
 			// the bitmap much faster natively on the GPU and then
 			// put the stream together in a Bitmap object
 			if (imageData.ImageFormat == ImageFormat.Bitmap)
@@ -52,32 +54,54 @@ namespace FileOnQ.Imaging.Raw
 				if (imageData.Bits != 8)
 					throw new NotSupportedException($"Only 8-bit Bitmaps are supported. Input image is using {imageData.Bits}-bit Bitmap.");
 
-				var bitmap = new Bitmap(imageData.Width, imageData.Height);
-
-				int position = 0;
-
-				// should be able to change this to thumbnail.Height * thumbnail.Width
-				for (int y = 0; y < imageData.Height; y++)
+				if (useAcceleratedGraphics)
 				{
-					for (int x = 0; x < imageData.Width; x++)
-					{
-						if (position > imageData.Buffer.Length)
-							throw new InvalidOperationException("The bitmap buffer position is larger than the binary data. The width or heigh were not read in correctly.");
+					var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
+					var address = (IntPtr)imageData.Image + memoryOffset;
 
-						// NOTE - 7/23/2021 - @ahoefling
-						// This only works with 8-bit Bitmaps. If we
-						// are reading a 16-bit Bitmap we will need
-						// to update this code.
-						bitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(
-							imageData.Buffer[position],
-							imageData.Buffer[position + 1],
-							imageData.Buffer[position + 2]));
+					Cuda.Error errorCode = Cuda.Error.Success;
+					IntPtr bitmapAddress = Cuda.process_bitmap(address, (int)imageData.Image->DataSize, ref errorCode);
+					if (errorCode != Cuda.Error.Success)
+						throw new RawImageException<Cuda.Error>(errorCode);
 
-						position += 3;
-					}
+					var stride = imageData.Width * 3 + (imageData.Width % 4);
+					var bitmap = new Bitmap(imageData.Width, imageData.Height,
+						stride,
+						System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+						bitmapAddress);
+
+					return bitmap;
 				}
+				else
+				{
 
-				return bitmap;
+					var bitmap = new Bitmap(imageData.Width, imageData.Height);
+
+					int position = 0;
+
+					// should be able to change this to thumbnail.Height * thumbnail.Width
+					for (int y = 0; y < imageData.Height; y++)
+					{
+						for (int x = 0; x < imageData.Width; x++)
+						{
+							if (position > imageData.Buffer.Length)
+								throw new InvalidOperationException("The bitmap buffer position is larger than the binary data. The width or heigh were not read in correctly.");
+
+							// NOTE - 7/23/2021 - @ahoefling
+							// This only works with 8-bit Bitmaps. If we
+							// are reading a 16-bit Bitmap we will need
+							// to update this code.
+							bitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(
+								imageData.Buffer[position],
+								imageData.Buffer[position + 1],
+								imageData.Buffer[position + 2]));
+
+							position += 3;
+						}
+					}
+
+					return bitmap;
+				}
 			}
 			else
 			{

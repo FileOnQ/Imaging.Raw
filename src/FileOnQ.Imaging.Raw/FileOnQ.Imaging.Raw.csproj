@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net48;netstandard2.0;net5.0</TargetFrameworks>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GpuProject>FileOnQ.Imaging.Raw.Gpu.Cuda</GpuProject>
   </PropertyGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net48'">
@@ -20,12 +21,14 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <None Update="libraw.dll">
+    <None Update="*.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-		<None Update="libraw32.dll">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
   </ItemGroup>
+
+	<!-- todo - 7/26/2021 - @ahoefling - add x86 binary for gpu project -->
+	<Target Name="CopyGpuBinaries" BeforeTargets="Build">
+		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="." />
+	</Target>
 
 </Project>

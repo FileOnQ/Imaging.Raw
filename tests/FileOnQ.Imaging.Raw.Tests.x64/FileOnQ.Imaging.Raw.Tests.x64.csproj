@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net48;net5.0</TargetFrameworks>
 		<Platforms>x64</Platforms>
 		<LangVersion>9.0</LangVersion>
 		<Nullable>enable</Nullable>
+		<DefineConstants>$(DefineConstants);x64</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
