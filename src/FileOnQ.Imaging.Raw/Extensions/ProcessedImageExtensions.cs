@@ -74,8 +74,7 @@ namespace FileOnQ.Imaging.Raw
 				}
 				else
 				{
-
-					var bitmap = new Bitmap(imageData.Width, imageData.Height);
+					var bitmap = new Bitmap(imageData.Width, imageData.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
 					int position = 0;
 
@@ -100,6 +99,7 @@ namespace FileOnQ.Imaging.Raw
 						}
 					}
 
+					var b = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 					return bitmap;
 				}
 			}
