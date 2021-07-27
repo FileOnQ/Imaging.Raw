@@ -40,8 +40,8 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[TearDown]
 		public void TearDown()
 		{
-			//if (File.Exists(output))
-			//	File.Delete(output);
+			if (File.Exists(output))
+				File.Delete(output);
 		}
 
 		[Test]

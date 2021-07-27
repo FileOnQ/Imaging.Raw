@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net48;netstandard2.0;net5.0</TargetFrameworks>
+	<PropertyGroup>
+		<TargetFrameworks>net48;netstandard2.0;net5.0</TargetFrameworks>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GpuProject>FileOnQ.Imaging.Raw.Gpu.Cuda</GpuProject>
-  </PropertyGroup>
+	</PropertyGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net48'">
 		<Reference Include="System.Drawing" />
@@ -20,13 +20,19 @@
 		<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="*.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="*.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-	<!-- todo - 7/26/2021 - @ahoefling - Update this to shared project -->
+	<!-- TODO - 7/27/2021 - @ahoefling - Add similar build steps for libraw -->
+	<Target Name="GpuProject" BeforeTargets="DispatchToInnerBuilds">
+		<Exec Command="dotnet tool restore" WorkingDirectory="$(SolutionDir)" />
+		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=x64" WorkingDirectory="$(SolutionDir)" />
+		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=Win32" WorkingDirectory="$(SolutionDir)" />		
+	</Target>
+
 	<Target Name="CopyGpuBinaries" BeforeTargets="Build">
 		<Copy SourceFiles="../$(GpuProject)/bin/Win32/$(Configuration)/$(GpuProject)32.dll" DestinationFolder="." />
 		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="." />

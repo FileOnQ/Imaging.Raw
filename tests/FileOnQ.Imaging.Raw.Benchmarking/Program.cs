@@ -10,8 +10,8 @@ using BenchmarkDotNet.Running;
 namespace FileOnQ.Imaging.Raw.Benchmarking
 {
 	// TODO - 7/25/2021 - @ahoefling - Add x86 vs x64 platform support - https://github.com/dotnet/BenchmarkDotNet/issues/873
-	//[SimpleJob(RuntimeMoniker.Net48, launchCount: 2, invocationCount: 5)]
-	[SimpleJob(RuntimeMoniker.Net50, launchCount: 5, invocationCount: 10)]
+	[SimpleJob(RuntimeMoniker.Net48, launchCount: 15, invocationCount: 10)]
+	[SimpleJob(RuntimeMoniker.Net50, launchCount: 15, invocationCount: 10)]
 	[NativeMemoryProfiler]
 	[MemoryDiagnoser]
 	public class LibRaw
@@ -29,12 +29,12 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 		//	}
 		//}
 
-		//[Benchmark(Description = "Unpack Thumbnail", Baseline = true)]
-		//public object UnpackThumbnail()
-		//{
-		//	using (var image = new RawImage(librawInputBitmap))
-		//		return image.UnpackThumbnail();
-		//}
+		[Benchmark(Description = "Unpack Thumbnail", Baseline = true)]
+		public object UnpackThumbnail()
+		{
+			using (var image = new RawImage(librawInputBitmap))
+				return image.UnpackThumbnail();
+		}
 
 		[Benchmark]
 		public Size Bitmap()

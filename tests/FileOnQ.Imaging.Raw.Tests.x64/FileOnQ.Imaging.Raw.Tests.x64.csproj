@@ -16,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\FileOnQ.Imaging.Raw\FileOnQ.Imaging.Raw.csproj" />
+	  <ProjectReference Include="..\..\src\FileOnQ.Imaging.Raw\FileOnQ.Imaging.Raw.csproj" />
 	</ItemGroup>
 
 	<Import Project="..\FileOnQ.Imaging.Raw.Tests\FileOnQ.Imaging.Raw.Tests.projitems" Label="Shared" />
