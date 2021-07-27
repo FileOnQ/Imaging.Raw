@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace FileOnQ.Imaging.Raw.Tests
 {
-	[TestFixture("images\\sample1.cr2")]
+	[TestFixture("Images\\sample1.cr2")]
 	public class Thumbnail_Disposed_Tests
 	{
 		readonly string input;
@@ -12,7 +12,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 		const string objectName = "ProcessedImage";
 		public Thumbnail_Disposed_Tests(string path)
 		{
-			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 			input = Path.Combine(assemblyDirectory, path);
 		}
 

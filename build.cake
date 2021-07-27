@@ -1,3 +1,5 @@
+#load "local:?path=build/clean.cake"
+
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
@@ -47,29 +49,6 @@ PlatformTarget GetPlatform(string platform)
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
-
-Task("Clean")
-    .Does(() =>
-{
-	// TODO - 7/27/2021 - @ahoefling - Use super clean technique instead of CleanDirectories
-    CleanDirectories("./src/**/bin/");
-    Information("Cleaning Directory ./src/**/bin/");
-    
-    CleanDirectories("./src/**/obj/");
-    Information("Cleaning Directory ./src/**/obj/");
-    
-    CleanDirectories("./Sample/**/bin/");
-    Information("Cleaning Directory ./Sample/**/bin/");
-    
-    CleanDirectories("./Sample/**/obj/");
-    Information("Cleaning Directory ./Sample/**/obj/");
-	
-	CleanDirectories("./tests/**/bin/");
-    Information("Cleaning Directory ./tests/**/bin/");
-    
-    CleanDirectories("./tests/**/obj/");
-    Information("Cleaning Directory ./tests/**/obj/");
-});
 
 Task("Restore")
     .Does(() =>

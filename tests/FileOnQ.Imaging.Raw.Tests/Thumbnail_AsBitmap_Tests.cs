@@ -28,7 +28,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 		public Thumbnail_AsBitmap_Tests(string path) : this(path, ImageFormat.Jpeg) { }
 		public Thumbnail_AsBitmap_Tests(string path, ImageFormat imageFormat)
 		{
-			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 			input = Path.Combine(assemblyDirectory, path);
 
 			var filename = Path.GetFileNameWithoutExtension(input);
