@@ -38,6 +38,12 @@ Task("Clean")
     
     CleanDirectories("./Sample/**/obj/");
     Information("Cleaning Directory ./Sample/**/obj/");
+	
+	CleanDirectories("./tests/**/bin/");
+    Information("Cleaning Directory ./tests/**/bin/");
+    
+    CleanDirectories("./tests/**/obj/");
+    Information("Cleaning Directory ./tests/**/obj/");
 });
 
 Task("Restore")
