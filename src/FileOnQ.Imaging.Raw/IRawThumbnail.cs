@@ -10,6 +10,16 @@ namespace FileOnQ.Imaging.Raw
 
 	public interface IImageProcessor : IImageWriter
 	{
+		void Process(IImageProcessorProperties properties);
+	}
+
+	public interface IImageProcessorProperties
+	{
+
+	}
+
+	public class DcrawProcessor : IImageProcessorProperties
+	{
 
 	}
 }

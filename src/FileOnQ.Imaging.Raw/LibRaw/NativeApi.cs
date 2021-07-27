@@ -144,7 +144,7 @@ namespace FileOnQ.Imaging.Raw
 			}
 		}
 
-		internal static void DcrawPpmTiffWriter(IntPtr libraw, string filename)
+		internal static void DcrawWriter(IntPtr libraw, string filename)
 		{
 			switch (RuntimeInformation.ProcessArchitecture)
 			{

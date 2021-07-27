@@ -57,10 +57,17 @@ namespace FileOnQ.Imaging.Raw.Tests
 				Assert.IsTrue(actualBuffer.Length > 0);
 				Assert.AreEqual(expectedBuffer.Length, actualBuffer.Length);
 
-				// NOTE - 7/23/2021 - @ahoefling
-				// This is a slow operation, there may be span specific APIs to speed this up
+				bool isValid = true;
 				for (int index = 0; index < expectedBuffer.Length; index++)
-					Assert.AreEqual(expectedBuffer[index], actualBuffer[index]);
+				{
+					if (expectedBuffer[index] != actualBuffer[index])
+					{
+						isValid = false;
+						break;
+					}
+				}
+
+				Assert.IsTrue(isValid, "Expected buffer does not match actual buffer, files are different");
 			}
 		}
 	}

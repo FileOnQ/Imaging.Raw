@@ -6,46 +6,46 @@ using NUnit.Framework;
 namespace FileOnQ.Imaging.Raw.Tests
 {
 	[TestFixture("Images\\sample1.cr2")]
-	//[TestFixture("Images\\@signatureeditsco(1).dng")]
-	//[TestFixture("Images\\@signatureeditsco.dng")]
-	//[TestFixture("Images\\canon_eos_r_01.cr3")]
-	//[TestFixture("Images\\Christian - .unique.depth.dng", ImageFormat.Bitmap)] // this file might have a bitmap instead of a jpeg
-	//[TestFixture("Images\\DSC_0118.nef")]
-	//[TestFixture("Images\\DSC02783.ARW")]
-	//[TestFixture("Images\\PANA2417.RW2")]
-	//[TestFixture("Images\\PANA8392.RW2")]
-	//[TestFixture("Images\\photo by @Dupe.png--@Emily.rosegold.arw")]
-	//[TestFixture("Images\\signature edits APC_00171.dng")]
-	//[TestFixture("Images\\signature edits free raws P1015526.dng")]
-	//[TestFixture("Images\\signature edits free raws_DSC7082.NEF")]
-	//[TestFixture("Images\\signatureeditsfreerawphoto.NEF")]
+	[TestFixture("Images\\@signatureeditsco(1).dng")]
+	[TestFixture("Images\\@signatureeditsco.dng")]
+	[TestFixture("Images\\canon_eos_r_01.cr3")]
+	[TestFixture("Images\\Christian - .unique.depth.dng")]
+	[TestFixture("Images\\DSC_0118.nef")]
+	[TestFixture("Images\\DSC02783.ARW")]
+	[TestFixture("Images\\PANA2417.RW2")]
+	[TestFixture("Images\\PANA8392.RW2")]
+	[TestFixture("Images\\photo by @Dupe.png--@Emily.rosegold.arw")]
+	[TestFixture("Images\\signature edits APC_00171.dng")]
+	[TestFixture("Images\\signature edits free raws P1015526.dng")]
+	[TestFixture("Images\\signature edits free raws_DSC7082.NEF")]
+	[TestFixture("Images\\signatureeditsfreerawphoto.NEF")]
 	public class Process_WriteToFile_Tests
 	{
 		readonly string input;
 		readonly string output;
 		readonly string expectedThumbnail;
 
-		public Process_WriteToFile_Tests(string path) : this(path, ImageFormat.Jpeg) { }
-		public Process_WriteToFile_Tests(string path, ImageFormat imageFormat)
+		public Process_WriteToFile_Tests(string path)
 		{
 			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 			input = Path.Combine(assemblyDirectory, path);
 			
 			var filename = Path.GetFileNameWithoutExtension(input);
 			var directory = Path.GetDirectoryName(input) ?? string.Empty;
-			var format = imageFormat == ImageFormat.Jpeg ? "jpeg" : "ppm";
+			var format = "ppm";
 
-			output = $"{filename}.thumb.{format}";
-			expectedThumbnail = Path.Combine(directory, $"{filename}.thumb.{format}");
+			output = $"{filename}.processed.{format}";
+			expectedThumbnail = Path.Combine(directory, $"{filename}.processed.{format}");
 		}
 
 		[OneTimeSetUp]
 		public void Execute()
 		{
 			using (var image = new RawImage(input))
+			using (var raw = image.UnpackRaw())
 			{
-				var thumbnail = image.UnpackThumbnail();
-				thumbnail.Write(output);
+				raw.Process(new DcrawProcessor());
+				raw.Write(output);
 			}
 		}
 
@@ -57,11 +57,11 @@ namespace FileOnQ.Imaging.Raw.Tests
 		}
 		
 		[Test]
-		public void ThumbnailWrite_FileExists_Test() =>
+		public void ProcessWrite_FileExists_Test() =>
 			Assert.IsTrue(File.Exists(output));
 
 		[Test]
-		public void ThumbnailWrite_MatchJpeg_Test()
+		public void ProcessWrite_MatchPpm_Test()
 		{
 			var expectedBuffer = new Span<byte>(File.ReadAllBytes(expectedThumbnail));
 			var actualBuffer = new Span<byte>(File.ReadAllBytes(output));
@@ -69,9 +69,17 @@ namespace FileOnQ.Imaging.Raw.Tests
 			Assert.IsTrue(actualBuffer.Length > 0);
 			Assert.AreEqual(expectedBuffer.Length, actualBuffer.Length);
 
-			// This is a slow operation, there may be span specific APIs to speed this up
+			bool isValid = true;
 			for (int index = 0; index < expectedBuffer.Length; index++)
-				Assert.AreEqual(expectedBuffer[index], actualBuffer[index]);
+			{
+				if (expectedBuffer[index] != actualBuffer[index])
+				{
+					isValid = false;
+					break;
+				}
+			}
+
+			Assert.IsTrue(isValid, "Expected buffer does not match actual buffer, files are different");
 		}
 	}
 }
