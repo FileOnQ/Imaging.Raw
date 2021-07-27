@@ -26,8 +26,9 @@
     </None>
   </ItemGroup>
 
-	<!-- todo - 7/26/2021 - @ahoefling - add x86 binary for gpu project -->
+	<!-- todo - 7/26/2021 - @ahoefling - Update this to shared project -->
 	<Target Name="CopyGpuBinaries" BeforeTargets="Build">
+		<Copy SourceFiles="../$(GpuProject)/bin/Win32/$(Configuration)/$(GpuProject)32.dll" DestinationFolder="." />
 		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="." />
 	</Target>
 

@@ -65,7 +65,6 @@ namespace FileOnQ.Imaging.Raw.Tests
 				Assert.AreEqual(expectedBuffer[index], actualBuffer[index]);
 		}
 
-#if x64
 		[Test]
 		public void ThumbnailAsBitmap_Gpu_Test()
 		{
@@ -86,6 +85,5 @@ namespace FileOnQ.Imaging.Raw.Tests
 			for (int index = 0; index < expectedBuffer.Length; index++)
 				Assert.AreEqual(expectedBuffer[index], actualBuffer[index]);
 		}
-#endif
 	}
 }

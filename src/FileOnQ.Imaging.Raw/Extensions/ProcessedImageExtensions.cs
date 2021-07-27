@@ -60,7 +60,7 @@ namespace FileOnQ.Imaging.Raw
 					var address = (IntPtr)imageData.Image + memoryOffset;
 
 					Cuda.Error errorCode = Cuda.Error.Success;
-					IntPtr bitmapAddress = Cuda.process_bitmap(address, (int)imageData.Image->DataSize, ref errorCode);
+					IntPtr bitmapAddress = Cuda.ProcessBitmap(address, (int)imageData.Image->DataSize, ref errorCode);
 					if (errorCode != Cuda.Error.Success)
 						throw new RawImageException<Cuda.Error>(errorCode);
 

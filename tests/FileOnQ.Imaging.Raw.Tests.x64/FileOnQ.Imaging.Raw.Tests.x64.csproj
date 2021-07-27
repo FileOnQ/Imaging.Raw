@@ -5,7 +5,6 @@
 		<Platforms>x64</Platforms>
 		<LangVersion>9.0</LangVersion>
 		<Nullable>enable</Nullable>
-		<DefineConstants>$(DefineConstants);x64</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
