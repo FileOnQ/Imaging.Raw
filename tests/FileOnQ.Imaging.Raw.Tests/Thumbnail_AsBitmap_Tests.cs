@@ -34,7 +34,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 			var filename = Path.GetFileNameWithoutExtension(input);
 			var directory = Path.GetDirectoryName(input) ?? string.Empty;
 			expectedThumbnail = Path.Combine(directory, $"{filename}.thumb.bmp");
-			output = $"{filename}.thumb.bmp";
+			output = Path.Combine(directory, $"{filename}.thumb.bmp");
 		}
 
 		[TearDown]

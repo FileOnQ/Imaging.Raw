@@ -35,7 +35,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 			var directory = Path.GetDirectoryName(input) ?? string.Empty;
 			var format = imageFormat == ImageFormat.Jpeg ? "jpeg" : "ppm";
 
-			output = $"{filename}.thumb.{format}";
+			output = Path.Combine(directory, $"{filename}.thumb.{format}");
 			expectedThumbnail = Path.Combine(directory, $"{filename}.thumb.{format}");
 		}
 
