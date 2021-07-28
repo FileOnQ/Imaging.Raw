@@ -28,6 +28,9 @@ namespace FileOnQ.Imaging.Raw
 			internal static extern ProcessedImage* libraw_dcraw_make_mem_thumb(IntPtr libraw, ref Error errorCode);
 
 			[DllImport(DllName)]
+			internal static extern ProcessedImage* libraw_dcraw_make_mem_image(IntPtr libraw, ref Error errorCode);
+
+			[DllImport(DllName)]
 			internal static extern Error libraw_unpack(IntPtr libraw);
 
 			[DllImport(DllName)]

@@ -97,6 +97,21 @@ namespace FileOnQ.Imaging.Raw
 			}
 		}
 
+		internal static ProcessedImage* MakeMemoryImage(IntPtr libraw, ref Error errorCode)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_dcraw_make_mem_image(libraw, ref errorCode);
+				case Architecture.X64:
+					return X64.libraw_dcraw_make_mem_image(libraw, ref errorCode);
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
+
 		internal static Error Unpack(IntPtr libraw)
 		{
 			switch (RuntimeInformation.ProcessArchitecture)
