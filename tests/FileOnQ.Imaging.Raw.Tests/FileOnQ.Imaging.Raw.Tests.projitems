@@ -186,11 +186,56 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)NoThumbnailTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Process_AsBitmap_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_AsBitmap_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Process_Disposed_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_Disposed_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_ImageBuffer_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Process_WriteToFile_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_WriteToFile_Tests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Images\%40signatureeditsco%281%29.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\%40signatureeditsco.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\canon_eos_r_01.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\Christian - .unique.depth.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\DSC02783.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\DSC_0118.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\PANA2417.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\PANA8392.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\photo by %40Dupe.png--%40Emily.rosegold.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\sample1.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\signature edits APC_00171.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\signature edits free raws P1015526.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\signature edits free raws_DSC7082.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\signatureeditsfreerawphoto.process.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

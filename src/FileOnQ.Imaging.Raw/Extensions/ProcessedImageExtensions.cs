@@ -28,7 +28,7 @@ namespace FileOnQ.Imaging.Raw
 		/// <returns>
 		/// A managed <see cref="Bitmap"/>.
 		/// </returns>
-		public static Bitmap AsBitmap(this IImageWriter imageWriter, bool useAcceleratedGraphics = false) =>
+		public static Bitmap AsBitmap(this IImageWriter imageWriter, int useAcceleratedGraphics = 0) =>
 			imageWriter.AsProcessedImage().AsBitmap(useAcceleratedGraphics);
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace FileOnQ.Imaging.Raw
 		/// <returns>
 		/// A managed <see cref="Bitmap"/>.
 		/// </returns>
-		public static unsafe Bitmap AsBitmap(this ProcessedImage imageData, bool useAcceleratedGraphics = false)
+		public static unsafe Bitmap AsBitmap(this ProcessedImage imageData, int useAcceleratedGraphics = 0)
 		{
 			// TODO - 7/24/2021 - @ahoefling
 			// We need to experiment with GPU parallization tools
@@ -54,21 +54,60 @@ namespace FileOnQ.Imaging.Raw
 				if (imageData.Bits != 8)
 					throw new NotSupportedException($"Only 8-bit Bitmaps are supported. Input image is using {imageData.Bits}-bit Bitmap.");
 
-				if (useAcceleratedGraphics)
+				if (useAcceleratedGraphics == 1)
 				{
 					var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
 					var address = (IntPtr)imageData.Image + memoryOffset;
 
 					Cuda.Error errorCode = Cuda.Error.Success;
-					IntPtr bitmapAddress = Cuda.ProcessBitmap(address, (int)imageData.Image->DataSize, ref errorCode);
+					IntPtr bitmapAddress = Cuda.ProcessBitmap(address, (int)imageData.Image->DataSize, imageData.Width, imageData.Height, ref errorCode);
 					if (errorCode != Cuda.Error.Success)
 						throw new RawImageException<Cuda.Error>(errorCode);
 
+					// TODO - 7/28/2021 - @ahoefling - calculate bytes using data from LibRaw
 					var stride = imageData.Width * 3 + (imageData.Width % 4);
 					var bitmap = new Bitmap(imageData.Width, imageData.Height,
 						stride,
 						System.Drawing.Imaging.PixelFormat.Format24bppRgb,
 						bitmapAddress);
+
+					return bitmap;
+				}
+				else if (useAcceleratedGraphics == 2)
+				{
+					var offset = imageData.Width % 4;
+					var strideWithoutOffset = imageData.Width * 3;
+					var stride = strideWithoutOffset + offset;
+
+					var additionalBytes = offset * imageData.Height; // We should subtract offset to ensure we remove trailing bytes
+					var buffer = new byte[imageData.Buffer.Length + additionalBytes];
+
+					var bitmapPosition = 0;
+					for (int position = 0; position < imageData.Buffer.Length; position += 3)
+					{
+						if (position > 0 && position % strideWithoutOffset == 0)
+						{
+							for (int j = 0; j < offset; j++)
+							{
+								buffer[bitmapPosition] = 0;
+								bitmapPosition++;
+							}
+						}
+
+						buffer[bitmapPosition + 2] = imageData.Buffer[position];
+						buffer[bitmapPosition + 1] = imageData.Buffer[position + 1];
+						buffer[bitmapPosition] = imageData.Buffer[position + 2];
+
+						bitmapPosition += 3;
+					}
+
+					var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+					var address = handle.AddrOfPinnedObject();
+
+					var bitmap = new Bitmap(imageData.Width, imageData.Height,
+						stride,
+						System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+						address);
 
 					return bitmap;
 				}
