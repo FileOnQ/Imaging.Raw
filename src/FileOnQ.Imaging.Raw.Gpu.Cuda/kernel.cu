@@ -6,23 +6,37 @@
 
 #include "ImagingGpu.h"
 
-cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, unsigned int size, int* error);
+cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, unsigned int bitmapSize, unsigned int size, unsigned int width, unsigned height, int* error);
 
 //https://developer.nvidia.com/blog/even-easier-introduction-cuda/
 
-__global__ void process_bitmap_kernel(unsigned char* bitmap, unsigned char* data, int pixels)
+__global__ void process_bitmap_kernel(unsigned char* bitmap, unsigned char* data, int pixels, int imageStride, int offset)
 {
 	int index = blockIdx.x * blockDim.x + threadIdx.x;
-	int stride = blockDim.x * gridDim.x;
+	int gpuStride = blockDim.x * gridDim.x;
 
 	int position = index * 3;
-	for (int i = index; i < pixels; i+= stride)
+
+	int row = position / imageStride;
+	int bitmapPosition = (index * 3) + (row * offset);
+
+	for (int i = index; i < pixels; i+= gpuStride)
 	{
-		bitmap[position + 2] = data[position];
-		bitmap[position + 1] = data[position + 1];
-		bitmap[position] = data[position + 2];
+		if (position > 0 && position % imageStride == 0)
+		{
+			for (int j = 0; j < offset; j++)
+			{
+				bitmap[bitmapPosition] = 0;
+				bitmapPosition++;
+			}
+		}
+
+		bitmap[bitmapPosition + 2] = data[position];
+		bitmap[bitmapPosition + 1] = data[position + 1];
+		bitmap[bitmapPosition] = data[position + 2];
 		
 		position += 3;
+		bitmapPosition += 3;
 	}
 }
 
@@ -54,11 +68,13 @@ __global__ void process_bitmap_kernel(unsigned char* bitmap, unsigned char* data
 //	return 0;
 //}
 
-unsigned char* process_bitmap(unsigned char* data, int size, int* error)
+unsigned char* process_bitmap(unsigned char* data, int size, int width, int height, int* error)
 {
-	unsigned char* bitmap = new unsigned char[size];
+	int offset = height * (width % 4);
+	int bitmapSize = size + offset;
+	unsigned char* bitmap = new unsigned char[bitmapSize];
 
-	cudaError_t cudaStatus = proccessBitmapWithCuda(bitmap, data, size, error);
+	cudaError_t cudaStatus = proccessBitmapWithCuda(bitmap, data, bitmapSize, size, width, height, error);
 	if (cudaStatus != cudaSuccess) {
 		bitmap[0] = 1;
 		fprintf(stderr, cudaGetErrorString(cudaStatus));
@@ -74,7 +90,7 @@ unsigned char* process_bitmap(unsigned char* data, int size, int* error)
 // -4 = Unable to launch CUDA kernel
 // -5 = Error while running CUDA kernel
 // -6 = Unable to copy device memory to host memory
-cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, unsigned int size, int* error)
+cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, unsigned int bitmapSize, unsigned int size, unsigned int width, unsigned int height, int* error)
 {
 	unsigned char* dev_bitmap = 0;
 	unsigned char* dev_data = 0;
@@ -88,7 +104,7 @@ cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, u
 	}
 
 	// Allocate GPU buffers for intpu data and output bitmap
-	cudaStatus = cudaMalloc((void**)&dev_bitmap, size * sizeof(unsigned char));
+	cudaStatus = cudaMalloc((void**)&dev_bitmap, bitmapSize * sizeof(unsigned char));
 	if (cudaStatus != cudaSuccess) {
 		*error = -2;
 		goto Error;
@@ -101,7 +117,7 @@ cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, u
 	}
 
 	// Copy input image from host memory to GPU buffers.
-	cudaStatus = cudaMemcpy(dev_bitmap, bitmap, size * sizeof(unsigned char), cudaMemcpyHostToDevice);
+	cudaStatus = cudaMemcpy(dev_bitmap, bitmap, bitmapSize * sizeof(unsigned char), cudaMemcpyHostToDevice);
 	if (cudaStatus != cudaSuccess) {
 		*error = -3;
 		goto Error;
@@ -119,9 +135,12 @@ cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, u
 	int pixels = size / 3;
 	int blockSize = 256;
 	int numberOfBlocks = (pixels + blockSize - 1) / blockSize;
+
+	int offset = width % 4;
+	int stride = width * 3;
 	
 	// Launch a kernel on the GPU with one thread for each element.
-	process_bitmap_kernel<<<numberOfBlocks, blockSize>>>(dev_bitmap, dev_data, pixels);
+	process_bitmap_kernel<<<numberOfBlocks, blockSize>>>(dev_bitmap, dev_data, pixels, stride, offset);
 
 	// Check for any errors launching the kernel
 	cudaStatus = cudaGetLastError();
@@ -140,7 +159,7 @@ cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, u
 	}
 
 	// Copy output vector from GPU buffer to host memory.
-	cudaStatus = cudaMemcpy(bitmap, dev_bitmap, size * sizeof(unsigned char), cudaMemcpyDeviceToHost);
+	cudaStatus = cudaMemcpy(bitmap, dev_bitmap, bitmapSize * sizeof(unsigned char), cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
 		*error = -6;
 		goto Error;
