@@ -61,7 +61,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 			Assert.IsTrue(File.Exists(output));
 
 		[Test]
-		public void ThumbnailWrite_MatchJpeg_Test()
+		public void ThumbnailWrite_MatchBytes_Test()
 		{
 			var expectedBuffer = new Span<byte>(File.ReadAllBytes(expectedThumbnail));
 			var actualBuffer = new Span<byte>(File.ReadAllBytes(output));

@@ -54,6 +54,9 @@
     <None Include="$(MSBuildThisFileDirectory)Images\Christian - .unique.depth.thumb.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\Christian - .unique.depth.thumb.ppm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="$(MSBuildThisFileDirectory)Images\DSC02783.ARW">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
