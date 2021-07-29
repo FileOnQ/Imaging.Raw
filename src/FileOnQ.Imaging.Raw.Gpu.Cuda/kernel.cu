@@ -16,23 +16,23 @@ __global__ void process_bitmap_kernel(unsigned char* bitmap, unsigned char* data
 	int index = blockIdx.x * blockDim.x + threadIdx.x;
 	int gpuStride = blockDim.x * gridDim.x;
 
-	// Calculate the input pointer position
-	int position = index * 3;
-
-	// Calculate the row on the output bitmap pointer
-	// Consider
-	//  position = 20226
-	//  imageStride = 20226
-	// We need to subtract 1 to ensure we are on the correct row
-	int row = ((index * 3) - 1) / imageStride;
-
-	// calculate the position of the output bitmap pointer
-	int bitmapPosition = (index * 3) + (row * offset);
-
 	// As we iterate through pixel space which is different than buffer space (3 bytes for 1 pixel).
 	// We need to ensure when i == number of pixels we set the last offset items in the bitmap to 0
 	for (int i = index; i <= pixels; i+= gpuStride)
 	{
+		// Calculate the input pointer position
+		int position = index * 3;
+	
+		// Calculate the row on the output bitmap pointer
+		// Consider
+		//  position = 20226
+		//  imageStride = 20226
+		// We need to subtract 1 to ensure we are on the correct row
+		int row = (position - 1) / imageStride;
+	
+		// calculate the position of the output bitmap pointer
+		int bitmapPosition = position + (row * offset);
+
 		// At the end of every row, calcuated by the input pointer,
 		// we need to set the offset to 0 or empty data.
 		if (position > 0 && position % imageStride == 0)
@@ -51,10 +51,6 @@ __global__ void process_bitmap_kernel(unsigned char* bitmap, unsigned char* data
 		bitmap[bitmapPosition + 2] = data[position];
 		bitmap[bitmapPosition + 1] = data[position + 1];
 		bitmap[bitmapPosition] = data[position + 2];
-		
-		// Update the current position in the 2 pointers
-		position += 3;
-		bitmapPosition += 3;
 	}
 }
 
