@@ -64,5 +64,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_ImageBuffer_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Process_WriteToFile_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_WriteToFile_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\AssertUtilities.cs" />
   </ItemGroup>
 </Project>
