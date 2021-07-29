@@ -44,57 +44,48 @@ namespace FileOnQ.Imaging.Raw
 		/// </returns>
 		public static unsafe Bitmap AsBitmap(this ProcessedImage imageData, int useAcceleratedGraphics = 0)
 		{
-			// TODO - 7/24/2021 - @ahoefling
-			// We need to experiment with GPU parallization tools
-			// such as CUDA and OpenCL. We should be able to bui	ld
-			// the bitmap much faster natively on the GPU and then
-			// put the stream together in a Bitmap object
 			if (imageData.ImageFormat == ImageFormat.Bitmap)
 			{
 				if (imageData.Bits != 8)
 					throw new NotSupportedException($"Only 8-bit Bitmaps are supported. Input image is using {imageData.Bits}-bit Bitmap.");
 
+				if (imageData.Colors != 3)
+					throw new NotSupportedException($"Only 3 color channels (RGB) are supported. Input image is using {imageData.Colors} channel Bitmap.");
+
 				if (useAcceleratedGraphics == 1 && !Cuda.IsCudaCapable())
-					useAcceleratedGraphics = 2;
+					useAcceleratedGraphics = 0;
 
 				if (useAcceleratedGraphics == 1)
 				{
-					File.WriteAllBytes(@"D:\FileOnQ.Imaging.Raw\tests\FileOnQ.Imaging.Raw.Tests.x64\bin\x64\Debug\net5.0\test.ppm", imageData.Buffer.ToArray());
-
 					var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
 					var address = (IntPtr)imageData.Image + memoryOffset;
 
 					Cuda.Error errorCode = Cuda.Error.Success;
-					int length = 0;
-					IntPtr bitmapAddress = Cuda.ProcessBitmap(address, imageData.Buffer.Length, imageData.Width, imageData.Height, ref length, ref errorCode);
+					IntPtr bitmapAddress = Cuda.ProcessBitmap(address, imageData.Buffer.Length, imageData.Width, imageData.Height, ref errorCode);
 					if (errorCode != Cuda.Error.Success)
 						throw new RawImageException<Cuda.Error>(errorCode);
 
-					// TODO - 7/28/2021 - @ahoefling - calculate bytes using data from LibRaw
-					var stride = imageData.Width * 3 + (imageData.Width % 4);
+					var properties = new ImageProperties(imageData.Width, imageData.Bits, imageData.Colors);
 
 					var bitmap = new Bitmap(imageData.Width, imageData.Height,
-						stride,
+						properties.Stride,
 						System.Drawing.Imaging.PixelFormat.Format24bppRgb,
 						bitmapAddress);
 
 					return bitmap;
 				}
-				else if (useAcceleratedGraphics == 2)
+				else
 				{
-					var offset = imageData.Width % 4;
-					var strideWithoutOffset = imageData.Width * 3;
-					var stride = strideWithoutOffset + offset;
-
-					var additionalBytes = offset * imageData.Height; // We should subtract offset to ensure we remove trailing bytes // Additional - this matches the native bitmap result
+					var properties = new ImageProperties(imageData.Width, imageData.Bits, imageData.Colors);
+					var additionalBytes = properties.Offset * imageData.Height;
 					var buffer = new byte[imageData.Buffer.Length + additionalBytes];
 
 					var bitmapPosition = 0;
 					for (int position = 0; position < imageData.Buffer.Length; position += 3)
 					{
-						if (position > 0 && position % strideWithoutOffset == 0)
+						if (position > 0 && position % properties.StrideWithoutOffset == 0)
 						{
-							for (int j = 0; j < offset; j++)
+							for (int j = 0; j < properties.Offset; j++)
 							{
 								buffer[bitmapPosition] = 0;
 								bitmapPosition++;
@@ -112,40 +103,10 @@ namespace FileOnQ.Imaging.Raw
 					var address = handle.AddrOfPinnedObject();
 
 					var bitmap = new Bitmap(imageData.Width, imageData.Height,
-						stride,
+						properties.Stride,
 						System.Drawing.Imaging.PixelFormat.Format24bppRgb,
 						address);
 
-					return bitmap;
-				}
-				else
-				{
-					var bitmap = new Bitmap(imageData.Width, imageData.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-					int position = 0;
-
-					// should be able to change this to thumbnail.Height * thumbnail.Width
-					for (int y = 0; y < imageData.Height; y++)
-					{
-						for (int x = 0; x < imageData.Width; x++)
-						{
-							if (position > imageData.Buffer.Length)
-								throw new InvalidOperationException("The bitmap buffer position is larger than the binary data. The width or heigh were not read in correctly.");
-
-							// NOTE - 7/23/2021 - @ahoefling
-							// This only works with 8-bit Bitmaps. If we
-							// are reading a 16-bit Bitmap we will need
-							// to update this code.
-							bitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(
-								imageData.Buffer[position],
-								imageData.Buffer[position + 1],
-								imageData.Buffer[position + 2]));
-
-							position += 3;
-						}
-					}
-
-					var b = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 					return bitmap;
 				}
 			}

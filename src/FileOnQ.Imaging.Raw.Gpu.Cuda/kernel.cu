@@ -3,10 +3,11 @@
 #include "device_launch_parameters.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "ImagingGpu.h"
 
-cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, unsigned int bitmapSize, unsigned int size, unsigned int width, unsigned height, int* error);
+cudaError_t proccess_bitmap_with_cuda(unsigned char* bitmap, unsigned char* data, unsigned int bitmapSize, unsigned int size, unsigned int width, unsigned height, int* error);
 
 //https://developer.nvidia.com/blog/even-easier-introduction-cuda/
 
@@ -55,14 +56,13 @@ __global__ void process_bitmap_kernel(unsigned char* bitmap, unsigned char* data
 	}
 }
 
-unsigned char* process_bitmap(unsigned char* data, int size, int width, int height, int* length, int* error)
+unsigned char* process_bitmap(unsigned char* data, int size, int width, int height, int* error)
 {
 	int offset = height * (width % 4);
 	int bitmapSize = size + offset;
-	*length = bitmapSize;
 	unsigned char* bitmap = new unsigned char[bitmapSize];
 
-	cudaError_t cudaStatus = proccessBitmapWithCuda(bitmap, data, bitmapSize, size, width, height, error);
+	cudaError_t cudaStatus = proccess_bitmap_with_cuda(bitmap, data, bitmapSize, size, width, height, error);
 	if (cudaStatus != cudaSuccess) {
 		bitmap[0] = 1;
 		fprintf(stderr, cudaGetErrorString(cudaStatus));
@@ -78,7 +78,7 @@ unsigned char* process_bitmap(unsigned char* data, int size, int width, int heig
 // -4 = Unable to launch CUDA kernel
 // -5 = Error while running CUDA kernel
 // -6 = Unable to copy device memory to host memory
-cudaError_t proccessBitmapWithCuda(unsigned char* bitmap, unsigned char* data, unsigned int bitmapSize, unsigned int size, unsigned int width, unsigned int height, int* error)
+cudaError_t proccess_bitmap_with_cuda(unsigned char* bitmap, unsigned char* data, unsigned int bitmapSize, unsigned int size, unsigned int width, unsigned int height, int* error)
 {
 	unsigned char* dev_bitmap = 0;
 	unsigned char* dev_data = 0;
@@ -169,4 +169,10 @@ bool is_cuda_capable()
 		return false;
 	
 	return *count > 0;
+}
+
+void free_memory(unsigned char* pointer)
+{
+	if (pointer)
+		::free(pointer);
 }
