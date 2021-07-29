@@ -54,34 +54,6 @@ __global__ void process_bitmap_kernel(unsigned char* bitmap, unsigned char* data
 	}
 }
 
-// used for debugging, we should move this into a standalone console app
-//int main()
-//{
-//	unsigned char* data = new unsigned char[9];
-//	data[0] = 1;
-//	data[1] = 2;
-//	data[2] = 3;
-//	data[3] = 4;
-//	data[4] = 5;
-//	data[5] = 6;
-//	data[6] = 7;
-//	data[7] = 8;
-//	data[8] = 9;
-//
-//	unsigned char* bitmap = process_bitmap(data, 9);
-//
-//	/*int* a = new int[2];
-//	int* b = new int[2];
-//	int* c = new int[2];
-//	a[0] = 5;
-//	b[0] = 3;
-//	a[1] = 2;
-//	b[1] = 2;
-//
-//	addWithCuda(c, a, b, 2);*/
-//	return 0;
-//}
-
 unsigned char* process_bitmap(unsigned char* data, int size, int width, int height, int* length, int* error)
 {
 	int offset = height * (width % 4);
