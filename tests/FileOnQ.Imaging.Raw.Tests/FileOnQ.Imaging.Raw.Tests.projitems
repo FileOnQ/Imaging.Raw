@@ -61,6 +61,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_AsBitmap_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Process_Disposed_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_Disposed_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Process_ImageBuffer_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_ImageBuffer_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Process_WriteToFile_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_WriteToFile_Tests.cs" />
