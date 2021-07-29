@@ -27,6 +27,7 @@ __global__ void process_bitmap_kernel(unsigned char* bitmap, unsigned char* data
 		// Consider
 		//  position = 20226
 		//  imageStride = 20226
+		//  20226 / 20226 = 1, but we want it to equal 0 or we will be off by 1
 		// We need to subtract 1 to ensure we are on the correct row
 		int row = (position - 1) / imageStride;
 	
