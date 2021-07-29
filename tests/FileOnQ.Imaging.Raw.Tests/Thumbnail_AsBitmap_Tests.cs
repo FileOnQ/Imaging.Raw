@@ -46,7 +46,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 		}
 
 		[Test]
-		public void ThumbnailAsBitmap_Test()
+		public void ThumbnailAsBitmap_Cpu_Test()
 		{
 			using (var image = new RawImage(input))
 			using (var thumbnail = image.UnpackThumbnail())
@@ -63,20 +63,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 		{
 			using (var image = new RawImage(input))
 			using (var thumbnail = image.UnpackThumbnail())
-			using (var bitmap = thumbnail.AsBitmap(1))
-			{
-				bitmap.Save(output);
-			}
-
-			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
-		}
-
-		[Test]
-		public void ThumbnailAsBitmap_IntPtr_Test()
-		{
-			using (var image = new RawImage(input))
-			using (var thumbnail = image.UnpackThumbnail())
-			using (var bitmap = thumbnail.AsBitmap(2))
+			using (var bitmap = thumbnail.AsBitmap(true))
 			{
 				bitmap.Save(output);
 			}

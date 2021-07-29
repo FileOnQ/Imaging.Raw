@@ -40,12 +40,12 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[TearDown]
 		public void TearDown()
 		{
-			//if (File.Exists(output))
-			//	File.Delete(output);
+			if (File.Exists(output))
+				File.Delete(output);
 		}
 
 		[Test]
-		public void ProcessAsBitmap_Test()
+		public void ProcessAsBitmap_Cpu_Test()
 		{
 			using (var image = new RawImage(input))
 			using (var raw = image.UnpackRaw())
@@ -67,26 +67,10 @@ namespace FileOnQ.Imaging.Raw.Tests
 				raw.Process(new DcrawProcessor());
 
 				var processedImage = raw.AsProcessedImage();
-				using (var bitmap = raw.AsBitmap(1))
+				using (var bitmap = raw.AsBitmap(true))
 					bitmap.Save(output);
 			}
 			
-			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
-		}
-
-		[Test]
-		public void ProcessAsBitmap_IntPtr_Test()
-		{
-			using (var image = new RawImage(input))
-			using (var raw = image.UnpackRaw())
-			{
-				raw.Process(new DcrawProcessor());
-
-				var processedImage = raw.AsProcessedImage();
-				using (var bitmap = raw.AsBitmap(2))
-					bitmap.Save(output);
-			}
-
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
 		}
 	}

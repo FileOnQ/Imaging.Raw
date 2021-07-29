@@ -28,7 +28,7 @@ namespace FileOnQ.Imaging.Raw
 		/// <returns>
 		/// A managed <see cref="Bitmap"/>.
 		/// </returns>
-		public static Bitmap AsBitmap(this IImageWriter imageWriter, int useAcceleratedGraphics = 0) =>
+		public static Bitmap AsBitmap(this IImageWriter imageWriter, bool useAcceleratedGraphics = false) =>
 			imageWriter.AsProcessedImage().AsBitmap(useAcceleratedGraphics);
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace FileOnQ.Imaging.Raw
 		/// <returns>
 		/// A managed <see cref="Bitmap"/>.
 		/// </returns>
-		public static unsafe Bitmap AsBitmap(this ProcessedImage imageData, int useAcceleratedGraphics = 0)
+		public static unsafe Bitmap AsBitmap(this ProcessedImage imageData, bool useAcceleratedGraphics = false)
 		{
 			if (imageData.ImageFormat == ImageFormat.Bitmap)
 			{
@@ -52,10 +52,10 @@ namespace FileOnQ.Imaging.Raw
 				if (imageData.Colors != 3)
 					throw new NotSupportedException($"Only 3 color channels (RGB) are supported. Input image is using {imageData.Colors} channel Bitmap.");
 
-				if (useAcceleratedGraphics == 1 && !Cuda.IsCudaCapable())
-					useAcceleratedGraphics = 0;
+				if (useAcceleratedGraphics && !Cuda.IsCudaCapable())
+					useAcceleratedGraphics = false;
 
-				if (useAcceleratedGraphics == 1)
+				if (useAcceleratedGraphics)
 				{
 					var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
 					var address = (IntPtr)imageData.Image + memoryOffset;
