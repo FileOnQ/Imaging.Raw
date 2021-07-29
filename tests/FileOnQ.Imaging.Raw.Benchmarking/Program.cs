@@ -10,14 +10,15 @@ using BenchmarkDotNet.Running;
 namespace FileOnQ.Imaging.Raw.Benchmarking
 {
 	// TODO - 7/25/2021 - @ahoefling - Add x86 vs x64 platform support - https://github.com/dotnet/BenchmarkDotNet/issues/873
-	[SimpleJob(RuntimeMoniker.Net48, launchCount: 15, invocationCount: 10)]
-	[SimpleJob(RuntimeMoniker.Net50, launchCount: 15, invocationCount: 10)]
+	[SimpleJob(RuntimeMoniker.Net48, launchCount: 2, invocationCount: 10)]
+	[SimpleJob(RuntimeMoniker.Net50, launchCount: 2, invocationCount: 10)]
 	[NativeMemoryProfiler]
 	[MemoryDiagnoser]
 	public class LibRaw
 	{
-		readonly string librawInput = @"images\sample1.cr2";
-		readonly string librawInputBitmap = @"Images\\Christian - .unique.depth.dng";
+		readonly string librawInputBitmap = @"images\sample1.cr2";
+		//readonly string librawInputBitmap = @"Images\\Christian - .unique.depth.dng";
+		//readonly string librawInputBitmap = "Images\\canon_eos_r_01.cr3";
 
 		//[Benchmark()]
 		//public Span<byte> Thumbnail_AsSpan()
@@ -29,21 +30,34 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 		//	}
 		//}
 
-		[Benchmark(Description = "Unpack Thumbnail", Baseline = true)]
-		public object UnpackThumbnail()
-		{
-			using (var image = new RawImage(librawInputBitmap))
-				return image.UnpackThumbnail();
-		}
+		//[Benchmark(Description = "Unpack Thumbnail", Baseline = true)]
+		//public object UnpackThumbnail()
+		//{
+		//	using (var image = new RawImage(librawInputBitmap))
+		//		return image.UnpackThumbnail();
+		//}
 
-		[Benchmark]
+		[Benchmark(Baseline = true)]
 		public Size Bitmap()
 		{
 			using (var image = new RawImage(librawInputBitmap))
-			using (var thumbnail = image.UnpackThumbnail())
-			using (var bitmap = thumbnail.AsBitmap())
+			using (var raw = image.UnpackRaw())
 			{
-				return bitmap.Size;
+				raw.Process(new DcrawProcessor());
+				using (var bitmap = raw.AsBitmap())
+					return bitmap.Size;
+			}
+		}
+
+		[Benchmark(Description = "Bitmap - IntPtr")]
+		public Size Bitmap_IntPtr()
+		{
+			using (var image = new RawImage(librawInputBitmap))
+			using (var raw = image.UnpackRaw())
+			{
+				raw.Process(new DcrawProcessor());
+				using (var bitmap = raw.AsBitmap(2))
+					return bitmap.Size;
 			}
 		}
 
@@ -51,10 +65,11 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 		public Size Bitmap_Gpu()
 		{
 			using (var image = new RawImage(librawInputBitmap))
-			using (var thumbnail = image.UnpackThumbnail())
-			using (var bitmap = thumbnail.AsBitmap(true))
+			using (var raw = image.UnpackRaw())
 			{
-				return bitmap.Size;
+				raw.Process(new DcrawProcessor());
+				using (var bitmap = raw.AsBitmap(1))
+					return bitmap.Size;
 			}
 		}
 	}
