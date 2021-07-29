@@ -54,8 +54,13 @@ namespace FileOnQ.Imaging.Raw
 				if (imageData.Bits != 8)
 					throw new NotSupportedException($"Only 8-bit Bitmaps are supported. Input image is using {imageData.Bits}-bit Bitmap.");
 
+				if (useAcceleratedGraphics == 1 && !Cuda.IsCudaCapable())
+					useAcceleratedGraphics = 2;
+
 				if (useAcceleratedGraphics == 1)
 				{
+					File.WriteAllBytes(@"D:\FileOnQ.Imaging.Raw\tests\FileOnQ.Imaging.Raw.Tests.x64\bin\x64\Debug\net5.0\test.ppm", imageData.Buffer.ToArray());
+
 					var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
 					var address = (IntPtr)imageData.Image + memoryOffset;
 

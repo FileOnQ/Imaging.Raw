@@ -7,3 +7,4 @@
 #endif
 
 extern "C" IMAGING_RAW_API unsigned char* process_bitmap(unsigned char* data, int size, int width, int height, int* length, int* errorCode);
+extern "C" IMAGING_RAW_API bool is_cuda_capable();

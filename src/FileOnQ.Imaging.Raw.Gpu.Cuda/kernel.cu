@@ -159,3 +159,14 @@ Error:
 
 	return cudaStatus;
 }
+
+bool is_cuda_capable()
+{
+	int c = 0;
+	int* count = &c;
+	cudaError_t status = cudaGetDeviceCount(count);
+	if (status != cudaSuccess)
+		return false;
+	
+	return *count > 0;
+}
