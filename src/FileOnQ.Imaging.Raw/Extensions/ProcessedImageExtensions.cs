@@ -60,12 +60,59 @@ namespace FileOnQ.Imaging.Raw
 					var address = (IntPtr)imageData.Image + memoryOffset;
 
 					Cuda.Error errorCode = Cuda.Error.Success;
-					IntPtr bitmapAddress = Cuda.ProcessBitmap(address, (int)imageData.Image->DataSize, imageData.Width, imageData.Height, ref errorCode);
+					int length = 0;
+					IntPtr bitmapAddress = Cuda.ProcessBitmap(address, imageData.Buffer.Length, imageData.Width, imageData.Height, ref length, ref errorCode);
 					if (errorCode != Cuda.Error.Success)
 						throw new RawImageException<Cuda.Error>(errorCode);
 
 					// TODO - 7/28/2021 - @ahoefling - calculate bytes using data from LibRaw
 					var stride = imageData.Width * 3 + (imageData.Width % 4);
+
+					//byte* ptr = (byte*)bitmapAddress;
+					////int k = stride - (imageData.Width % 4);
+					////do
+					////{
+					////	ptr[k] = 0;
+					////	ptr[k + 1] = 0;
+
+					////	k = k + stride;
+					////} while (k < length);
+
+					//var offset = imageData.Width % 4;
+					//var strideWithoutOffset = imageData.Width * 3;
+
+					//var additionalBytes = offset * imageData.Height; // We should subtract offset to ensure we remove trailing bytes // Additional - this matches the native bitmap result
+					//var buffer = new byte[imageData.Buffer.Length + additionalBytes];
+
+					//var bitmapPosition = 0;
+					//for (int position = 0; position < imageData.Buffer.Length; position += 3)
+					//{
+					//	if (position > 0 && position % strideWithoutOffset == 0)
+					//	{
+					//		for (int j = 0; j < offset; j++)
+					//		{
+					//			buffer[bitmapPosition] = 0;
+					//			bitmapPosition++;
+					//		}
+					//	}
+
+					//	buffer[bitmapPosition + 2] = imageData.Buffer[position];
+					//	buffer[bitmapPosition + 1] = imageData.Buffer[position + 1];
+					//	buffer[bitmapPosition] = imageData.Buffer[position + 2];
+
+					//	bitmapPosition += 3;
+					//}
+
+					//var errors = new List<(int, byte, byte)>();
+					//for (int i = 0; i < length; i++)
+					//{
+					//	if (buffer[i] != ptr[i])
+					//	{
+					//		errors.Add((i, buffer[i], ptr[i]));
+					//	}
+					//}
+
+
 					var bitmap = new Bitmap(imageData.Width, imageData.Height,
 						stride,
 						System.Drawing.Imaging.PixelFormat.Format24bppRgb,
@@ -79,7 +126,7 @@ namespace FileOnQ.Imaging.Raw
 					var strideWithoutOffset = imageData.Width * 3;
 					var stride = strideWithoutOffset + offset;
 
-					var additionalBytes = offset * imageData.Height; // We should subtract offset to ensure we remove trailing bytes
+					var additionalBytes = offset * imageData.Height; // We should subtract offset to ensure we remove trailing bytes // Additional - this matches the native bitmap result
 					var buffer = new byte[imageData.Buffer.Length + additionalBytes];
 
 					var bitmapPosition = 0;

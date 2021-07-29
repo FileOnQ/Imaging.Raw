@@ -8,7 +8,7 @@ namespace FileOnQ.Imaging.Raw
 		private unsafe class x64
 		{
 			[DllImport("FileOnQ.Imaging.Raw.Gpu.Cuda.dll")]
-			internal static extern IntPtr process_bitmap(IntPtr data, int size, int width, int height, ref Error error);
+			internal static extern IntPtr process_bitmap(IntPtr data, int size, int width, int height, ref int length, ref Error error);
 		}
 	}
 }
