@@ -26,15 +26,26 @@
 		</None>
 	</ItemGroup>
 
-	<!-- TODO - 7/27/2021 - @ahoefling - Add similar build steps for libraw -->
-	<!-- TODO - 7/27/2021 - @ahoefling - Update this to use msbuild if possible -->
+	<!-- NOTE - 7/30/2021 - @ahoefling - only build LibRaw if it is a rebuild or clean. The binaries take a long time to compile and don't change often -->
+	<Target Name="LibRaw" BeforeTargets="DispatchToInnerBuilds" Condition="!Exists('libraw32.dll') and !Exists('libraw.dll')">
+		<Exec Command="libraw.bat x64" WorkingDirectory="$(SolutionDir)/build" />
+		<Copy SourceFiles="$(SolutionDir)/LibRaw/bin/libraw.dll" DestinationFolder="." />
+
+		<Exec Command="libraw.bat x86" WorkingDirectory="$(SolutionDir)/build" />
+		<Copy SourceFiles="$(SolutionDir)/LibRaw/bin/libraw32.dll" DestinationFolder="." />
+	</Target>
+
+	<Target Name="CleanLibRaw" BeforeTargets="Clean">
+		<Delete Files="libraw.dll" />
+		<Delete Files="libraw32.dll" />
+	</Target>
+
+	<!-- NOTE 7/30/2021 - @ahoefling - Building the GPU binaries on every build ensures the latest kernels are included with each build -->
 	<Target Name="GpuProject" BeforeTargets="DispatchToInnerBuilds">
 		<Exec Command="dotnet tool restore" WorkingDirectory="$(SolutionDir)" />
 		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=x64" WorkingDirectory="$(SolutionDir)" />
-		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=Win32" WorkingDirectory="$(SolutionDir)" />		
-	</Target>
+		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=Win32" WorkingDirectory="$(SolutionDir)" />
 
-	<Target Name="CopyGpuBinaries" BeforeTargets="Build">
 		<Copy SourceFiles="../$(GpuProject)/bin/Win32/$(Configuration)/$(GpuProject)32.dll" DestinationFolder="." />
 		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="." />
 	</Target>
