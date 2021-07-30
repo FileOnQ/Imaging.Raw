@@ -5,6 +5,7 @@
 		<Platforms>x86</Platforms>
 		<LangVersion>9.0</LangVersion>
 		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>

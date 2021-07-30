@@ -3,7 +3,7 @@ using System.Reflection;
 using FileOnQ.Imaging.Raw.Tests.Utilities;
 using NUnit.Framework;
 
-namespace FileOnQ.Imaging.Raw.Tests
+namespace FileOnQ.Imaging.Raw.Tests.Integration
 {
 	[TestFixture("Images\\@signatureeditsco(1).dng", "2EF59B98A5ED52162A70D7B6A85DA2DCF6E2E51CB946DE9011032A52D91FB2E4")]
 	[TestFixture("Images\\@signatureeditsco.dng", "5E103695025C40ED0F78F47F29EBF5333D5B0529FDA955EE21DAECA6E6F3579F")]
@@ -19,6 +19,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 	[TestFixture("Images\\signature edits free raws P1015526.dng", "DF7C22D13CBABA9EB6DBC07A2723A139A9690EBC0894AFD5B272C2CD876C60D2")]
 	[TestFixture("Images\\signature edits free raws_DSC7082.NEF", "FD8C804D24CF864895AC5C2A0B4A27D932FE067661CD8DD9E7D725FBE7D018F2")]
 	[TestFixture("Images\\signatureeditsfreerawphoto.NEF", "A69D1A858C2C058BEA73C04099989F7F7AAAEF8BE355BA334F464E625DF7553A")]
+	[Category(Constants.Category.Integration)]
 	public class Thumbnail_AsBitmap_Tests
 	{
 		readonly string input;
@@ -52,7 +53,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 			using (var thumbnail = image.UnpackThumbnail())
 			using (var bitmap = thumbnail.AsBitmap())
 			{
-				bitmap.Save(output);
+				bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 			}
 
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
@@ -65,7 +66,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 			using (var thumbnail = image.UnpackThumbnail())
 			using (var bitmap = thumbnail.AsBitmap(true))
 			{
-				bitmap.Save(output);
+				bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 			}
 
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));

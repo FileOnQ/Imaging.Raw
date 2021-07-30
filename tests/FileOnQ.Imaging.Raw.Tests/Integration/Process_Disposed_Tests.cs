@@ -2,15 +2,16 @@
 using System.Reflection;
 using NUnit.Framework;
 
-namespace FileOnQ.Imaging.Raw.Tests
+namespace FileOnQ.Imaging.Raw.Tests.Integration
 {
-	[TestFixture("Images\\sample1.cr2")]
-	public class Thumbnail_Disposed_Tests
+	[TestFixture("Images\\PANA2417.RW2")]
+	[Category(Constants.Category.Integration)]
+	public class Process_Disposed_Tests
 	{
 		readonly string input;
 		const string errorMessage = "The ProcessedImage must be used prior to disposing of the object.\r\nObject name: 'ProcessedImage'.";
 		const string objectName = "ProcessedImage";
-		public Thumbnail_Disposed_Tests(string path)
+		public Process_Disposed_Tests(string path)
 		{
 			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 			input = Path.Combine(assemblyDirectory, path);
@@ -19,17 +20,18 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public void Disposed_ProccessedImage_Bits_Test()
 		{
-			ProcessedImage image;
-			using (var rawImage = new RawImage(input))
-			using (var thumbnail = rawImage.UnpackThumbnail())
+			ProcessedImage processedImage;
+			using (var image = new RawImage(input))
+			using (var raw = image.UnpackRaw())
 			{
-				image = thumbnail.AsProcessedImage();
+				raw.Process(new DcrawProcessor());
+				processedImage = raw.AsProcessedImage();
 			}
 
 			RawImageDisposedException? exception = null;
 			try
 			{
-				_ = image.Bits;
+				_ = processedImage.Bits;
 			}
 			catch (RawImageDisposedException ex)
 			{
@@ -44,17 +46,18 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public void Disposed_ProccessedImage_Buffer_Test()
 		{
-			ProcessedImage image;
-			using (var rawImage = new RawImage(input))
-			using (var thumbnail = rawImage.UnpackThumbnail())
+			ProcessedImage processedImage;
+			using (var image = new RawImage(input))
+			using (var raw = image.UnpackRaw())
 			{
-				image = thumbnail.AsProcessedImage();
+				raw.Process(new DcrawProcessor());
+				processedImage = raw.AsProcessedImage();
 			}
 
 			RawImageDisposedException? exception = null;
 			try
 			{
-				_ = image.Buffer;
+				_ = processedImage.Buffer;
 			}
 			catch (RawImageDisposedException ex)
 			{
@@ -69,17 +72,18 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public void Disposed_ProccessedImage_Colors_Test()
 		{
-			ProcessedImage image;
-			using (var rawImage = new RawImage(input))
-			using (var thumbnail = rawImage.UnpackThumbnail())
+			ProcessedImage processedImage;
+			using (var image = new RawImage(input))
+			using (var raw = image.UnpackRaw())
 			{
-				image = thumbnail.AsProcessedImage();
+				raw.Process(new DcrawProcessor());
+				processedImage = raw.AsProcessedImage();
 			}
 
 			RawImageDisposedException? exception = null;
 			try
 			{
-				_ = image.Colors;
+				_ = processedImage.Colors;
 			}
 			catch (RawImageDisposedException ex)
 			{
@@ -94,17 +98,18 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public void Disposed_ProccessedImage_Height_Test()
 		{
-			ProcessedImage image;
-			using (var rawImage = new RawImage(input))
-			using (var thumbnail = rawImage.UnpackThumbnail())
+			ProcessedImage processedImage;
+			using (var image = new RawImage(input))
+			using (var raw = image.UnpackRaw())
 			{
-				image = thumbnail.AsProcessedImage();
+				raw.Process(new DcrawProcessor());
+				processedImage = raw.AsProcessedImage();
 			}
 
 			RawImageDisposedException? exception = null;
 			try
 			{
-				_ = image.Height;
+				_ = processedImage.Height;
 			}
 			catch (RawImageDisposedException ex)
 			{
@@ -119,17 +124,18 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public void Disposed_ProccessedImage_Width_Test()
 		{
-			ProcessedImage image;
-			using (var rawImage = new RawImage(input))
-			using (var thumbnail = rawImage.UnpackThumbnail())
+			ProcessedImage processedImage;
+			using (var image = new RawImage(input))
+			using (var raw = image.UnpackRaw())
 			{
-				image = thumbnail.AsProcessedImage();
+				raw.Process(new DcrawProcessor());
+				processedImage = raw.AsProcessedImage();
 			}
 
 			RawImageDisposedException? exception = null;
 			try
 			{
-				_ = image.Width;
+				_ = processedImage.Width;
 			}
 			catch (RawImageDisposedException ex)
 			{
@@ -144,17 +150,18 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public void Disposed_ProccessedImage_ImageFormat_Test()
 		{
-			ProcessedImage image;
-			using (var rawImage = new RawImage(input))
-			using (var thumbnail = rawImage.UnpackThumbnail())
+			ProcessedImage processedImage;
+			using (var image = new RawImage(input))
+			using (var raw = image.UnpackRaw())
 			{
-				image = thumbnail.AsProcessedImage();
+				raw.Process(new DcrawProcessor());
+				processedImage = raw.AsProcessedImage();
 			}
 
 			RawImageDisposedException? exception = null;
 			try
 			{
-				_ = image.ImageFormat;
+				_ = processedImage.ImageFormat;
 			}
 			catch (RawImageDisposedException ex)
 			{

@@ -4,7 +4,7 @@ using System.Reflection;
 using FileOnQ.Imaging.Raw.Tests.Utilities;
 using NUnit.Framework;
 
-namespace FileOnQ.Imaging.Raw.Tests
+namespace FileOnQ.Imaging.Raw.Tests.Integration
 {
 	[TestFixture("Images\\@signatureeditsco(1).dng", "1C3315E8F93F01362330B18918EC11CED0A0D85E99710BFCDA731F8A58227765")]
 	[TestFixture("Images\\@signatureeditsco.dng", "6B6D39A3775CE9112512D557B665CCB62751C11F996CAF59D5B2C45B81E043AF")]
@@ -20,6 +20,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 	[TestFixture("Images\\signature edits free raws P1015526.dng", "EC87D117430BB22DC95565423BF5BFF50116E486A9DF9F4B41771E9C4FC65A9E")]
 	[TestFixture("Images\\signature edits free raws_DSC7082.NEF", "49CDACDD6B40DEDB9D0EEA12DB22B5D1895F9594D0C96A33927B6EE7611FD7E3")]
 	[TestFixture("Images\\signatureeditsfreerawphoto.NEF", "43D9C922A1C8BE0BAF8EC7351C1854351A6DEF3CA96C7F3B31A9988E0A083F6B")]
+	[Category(Constants.Category.Integration)]
 	public class Thumbnail_ImageBuffer_Tests
 	{
 		readonly string input;

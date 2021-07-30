@@ -82,6 +82,12 @@ namespace FileOnQ.Imaging.Raw
 					var buffer = new byte[imageData.Buffer.Length + additionalBytes];
 
 					var bitmapPosition = 0;
+
+					// TODO - 7/29/2021 - @ahoefling - It may be safer to use the bitmap pointer instead of our own
+					//var bitmap = new Bitmap(imageData.Width, imageData.Height);
+					//var data = bitmap.LockBits(new Rectangle(0, 0, imageData.Width, imageData.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+					//var pointer = (byte*)data.Scan0;
+
 					for (int position = 0; position < imageData.Buffer.Length; position += 3)
 					{
 						if (position > 0 && position % properties.StrideWithoutOffset == 0)
@@ -99,6 +105,8 @@ namespace FileOnQ.Imaging.Raw
 
 						bitmapPosition += 3;
 					}
+
+					//bitmap.UnlockBits(data);
 
 					var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
 					var address = handle.AddrOfPinnedObject();

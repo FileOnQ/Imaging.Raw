@@ -56,15 +56,20 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)NoThumbnailTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Process_AsBitmap_Tests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_AsBitmap_Tests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Process_Disposed_Tests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_Disposed_Tests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Process_ImageBuffer_Tests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_ImageBuffer_Tests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Process_WriteToFile_Tests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Thumbnail_WriteToFile_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integration\NoThumbnailTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integration\Process_AsBitmap_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integration\Thumbnail_AsBitmap_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integration\Process_Disposed_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integration\Thumbnail_Disposed_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integration\Process_ImageBuffer_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integration\Thumbnail_ImageBuffer_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integration\Process_WriteToFile_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integration\Thumbnail_WriteToFile_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\AssertUtilities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Integration\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Unit\" />
   </ItemGroup>
 </Project>

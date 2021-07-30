@@ -3,13 +3,13 @@ using System.IO;
 using System.Reflection;
 using NUnit.Framework;
 
-namespace FileOnQ.Imaging.Raw.Tests
+namespace FileOnQ.Imaging.Raw.Tests.Integration
 {
 	[TestFixture("Images\\sample1.cr2")]
 	[TestFixture("Images\\@signatureeditsco(1).dng")]
 	[TestFixture("Images\\@signatureeditsco.dng")]
 	[TestFixture("Images\\canon_eos_r_01.cr3")]
-	[TestFixture("Images\\Christian - .unique.depth.dng")]
+	[TestFixture("Images\\Christian - .unique.depth.dng", ImageFormat.Bitmap)] // this file might have a bitmap instead of a jpeg
 	[TestFixture("Images\\DSC_0118.nef")]
 	[TestFixture("Images\\DSC02783.ARW")]
 	[TestFixture("Images\\PANA2417.RW2")]
@@ -19,33 +19,34 @@ namespace FileOnQ.Imaging.Raw.Tests
 	[TestFixture("Images\\signature edits free raws P1015526.dng")]
 	[TestFixture("Images\\signature edits free raws_DSC7082.NEF")]
 	[TestFixture("Images\\signatureeditsfreerawphoto.NEF")]
-	public class Process_WriteToFile_Tests
+	[Category(Constants.Category.Integration)]
+	public class Thumbnail_WriteToFile_Tests
 	{
 		readonly string input;
 		readonly string output;
 		readonly string expectedThumbnail;
 
-		public Process_WriteToFile_Tests(string path)
+		public Thumbnail_WriteToFile_Tests(string path) : this(path, ImageFormat.Jpeg) { }
+		public Thumbnail_WriteToFile_Tests(string path, ImageFormat imageFormat)
 		{
 			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 			input = Path.Combine(assemblyDirectory, path);
 			
 			var filename = Path.GetFileNameWithoutExtension(input);
 			var directory = Path.GetDirectoryName(input) ?? string.Empty;
-			var format = "ppm";
+			var format = imageFormat == ImageFormat.Jpeg ? "jpeg" : "ppm";
 
-			output = Path.Combine(directory, $"{filename}.processed.{format}");
-			expectedThumbnail = Path.Combine(directory, $"{filename}.processed.{format}");
+			output = Path.Combine(directory, $"{filename}.thumb.{format}");
+			expectedThumbnail = Path.Combine(directory, $"{filename}.thumb.{format}");
 		}
 
 		[OneTimeSetUp]
 		public void Execute()
 		{
 			using (var image = new RawImage(input))
-			using (var raw = image.UnpackRaw())
-			{
-				raw.Process(new DcrawProcessor());
-				raw.Write(output);
+			using (var thumbnail = image.UnpackThumbnail())
+			{ 
+				thumbnail.Write(output);
 			}
 		}
 
@@ -57,11 +58,11 @@ namespace FileOnQ.Imaging.Raw.Tests
 		}
 		
 		[Test]
-		public void ProcessWrite_FileExists_Test() =>
+		public void ThumbnailWrite_FileExists_Test() =>
 			Assert.IsTrue(File.Exists(output));
 
 		[Test]
-		public void ProcessWrite_MatchPpm_Test()
+		public void ThumbnailWrite_MatchBytes_Test()
 		{
 			var expectedBuffer = new Span<byte>(File.ReadAllBytes(expectedThumbnail));
 			var actualBuffer = new Span<byte>(File.ReadAllBytes(output));

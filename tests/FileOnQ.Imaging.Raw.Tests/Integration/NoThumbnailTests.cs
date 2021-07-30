@@ -2,9 +2,10 @@
 using System.Reflection;
 using NUnit.Framework;
 
-namespace FileOnQ.Imaging.Raw.Tests
+namespace FileOnQ.Imaging.Raw.Tests.Integration
 {
 	[TestFixture("Images/IMG_20201121_104443.dng")]
+	[Category(Constants.Category.Integration)]
 	public class NoThumbnailTests
 	{
 		readonly string input;
