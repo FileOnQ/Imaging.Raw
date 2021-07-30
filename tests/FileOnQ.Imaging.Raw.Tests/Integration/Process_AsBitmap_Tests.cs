@@ -80,7 +80,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 				raw.Process(new DcrawProcessor());
 
 				var processedImage = raw.AsProcessedImage();
-				using (var bitmap = raw.AsBitmap())
+				using (var bitmap = raw.AsBitmap(true))
 				{
 					bitmap.Save(output);
 					//var data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
