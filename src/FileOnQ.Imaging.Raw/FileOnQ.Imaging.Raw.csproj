@@ -26,7 +26,8 @@
 		</None>
 	</ItemGroup>
 
-	<!-- NOTE - 7/30/2021 - @ahoefling - only build LibRaw if it is a rebuild or clean. The binaries take a long time to compile and don't change often -->
+	<!-- NOTE - 7/30/2021 - @ahoefling - Only build LibRaw if it is a rebuild or clean. The binaries take a long time to compile and don't change often -->
+	<!-- NOTE - 7/30/2021 - @ahoefling - This build target only works with MSBuild through Visual Studio-->
 	<Target Name="LibRaw" BeforeTargets="DispatchToInnerBuilds" Condition="!Exists('libraw32.dll') and !Exists('libraw.dll')">
 		<Exec Command="libraw.bat x64" WorkingDirectory="$(SolutionDir)/build" />
 		<Copy SourceFiles="$(SolutionDir)/LibRaw/bin/libraw.dll" DestinationFolder="." />
