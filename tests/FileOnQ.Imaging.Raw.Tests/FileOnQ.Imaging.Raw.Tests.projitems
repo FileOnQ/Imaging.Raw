@@ -59,6 +59,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integration\NoThumbnailTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integration\Process_AsBitmap_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integration\Thumbnail_AsBitmap_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integration\Process_Disposed_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integration\Thumbnail_Disposed_Tests.cs" />
@@ -69,7 +70,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\AssertUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Integration\" />
     <Folder Include="$(MSBuildThisFileDirectory)Unit\" />
   </ItemGroup>
 </Project>

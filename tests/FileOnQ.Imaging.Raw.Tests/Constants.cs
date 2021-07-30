@@ -1,6 +1,6 @@
 ﻿namespace FileOnQ.Imaging.Raw.Tests
 {
-	public static class Constants
+	public static partial class Constants
     {
 		public static class Category
 		{
