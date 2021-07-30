@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using FileOnQ.Imaging.Raw.Tests.Utilities;
 using NUnit.Framework;
@@ -51,18 +48,13 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 		[Test]
 		public unsafe void ProcessAsBitmap_Cpu_Test()
 		{
-			Span<byte> actual = default;
-
 			using (var image = new RawImage(input))
 			using (var raw = image.UnpackRaw())
 			{
 				raw.Process(new DcrawProcessor());
 				using (var bitmap = raw.AsBitmap())
 				{
-					bitmap.Save(output);
-					//var data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
-					//actual = new Span<byte>((void*)data.Scan0, bitmap.Height * data.Stride);
-					//bitmap.UnlockBits(data);
+					bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 				}
 			}
 
@@ -72,8 +64,6 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 		[Test]
 		public unsafe void ProcessAsBitmap_Gpu_Test()
 		{
-			Span<byte> actual = default;
-
 			using (var image = new RawImage(input))
 			using (var raw = image.UnpackRaw())
 			{
@@ -82,10 +72,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 				var processedImage = raw.AsProcessedImage();
 				using (var bitmap = raw.AsBitmap(true))
 				{
-					bitmap.Save(output);
-					//var data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
-					//actual = new Span<byte>((void*)data.Scan0, bitmap.Height * data.Stride);
-					//bitmap.UnlockBits(data);
+					bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 				}
 			}
 			
