@@ -78,6 +78,11 @@ namespace FileOnQ.Imaging.Raw
 			}
 
 			// free unmanaged resources
+			if (image != null)
+			{
+				LibRaw.ClearMemory(image);
+				image = (LibRaw.ProcessedImage*)IntPtr.Zero;
+			}
 
 			isDisposed = true;
 		}
