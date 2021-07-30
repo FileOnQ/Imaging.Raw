@@ -55,6 +55,7 @@ namespace FileOnQ.Imaging.Raw
 				if (useAcceleratedGraphics && !Cuda.IsCudaCapable())
 					useAcceleratedGraphics = false;
 
+				// TODO - 7/29/2021 - This calculation fails for 32 bit assemblies. I think we may need to change our calculation to handle the different memory address space
 				if (useAcceleratedGraphics)
 				{
 					var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
