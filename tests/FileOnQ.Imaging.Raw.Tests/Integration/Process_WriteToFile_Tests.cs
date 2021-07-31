@@ -1,33 +1,36 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using FileOnQ.Imaging.Raw.Tests.Utilities;
 using NUnit.Framework;
 
 namespace FileOnQ.Imaging.Raw.Tests.Integration
 {
-	[TestFixture("Images\\sample1.cr2")]
-	[TestFixture("Images\\@signatureeditsco(1).dng")]
-	[TestFixture("Images\\@signatureeditsco.dng")]
-	[TestFixture("Images\\canon_eos_r_01.cr3")]
-	[TestFixture("Images\\Christian - .unique.depth.dng")]
-	[TestFixture("Images\\DSC_0118.nef")]
-	[TestFixture("Images\\DSC02783.ARW")]
-	[TestFixture("Images\\PANA2417.RW2")]
-	[TestFixture("Images\\PANA8392.RW2")]
-	[TestFixture("Images\\photo by @Dupe.png--@Emily.rosegold.arw")]
-	[TestFixture("Images\\signature edits APC_00171.dng")]
-	[TestFixture("Images\\signature edits free raws P1015526.dng")]
-	[TestFixture("Images\\signature edits free raws_DSC7082.NEF")]
-	[TestFixture("Images\\signatureeditsfreerawphoto.NEF")]
+	[TestFixture(TestData.RawImage1)]
+	[TestFixture(TestData.RawImage2)]
+	[TestFixture(TestData.RawImage3)]
+	[TestFixture(TestData.RawImage4)]
+	[TestFixture(TestData.RawImage5)]
+	[TestFixture(TestData.RawImage6)]
+	[TestFixture(TestData.RawImage7)]
+	[TestFixture(TestData.RawImage8)]
+	[TestFixture(TestData.RawImage9)]
+	[TestFixture(TestData.RawImage10)]
+	[TestFixture(TestData.RawImage11)]
+	[TestFixture(TestData.RawImage12)]
+	[TestFixture(TestData.RawImage13)]
+	[TestFixture(TestData.RawImage14)]
 	[Category(Constants.Category.Integration)]
 	public class Process_WriteToFile_Tests
 	{
 		readonly string input;
 		readonly string output;
-		readonly string expectedThumbnail;
+		readonly string hash;
 
 		public Process_WriteToFile_Tests(string path)
 		{
+			hash = TestData.Integration.ProcessWriteToFile.HashCodes[path];
+
 			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 			input = Path.Combine(assemblyDirectory, path);
 			
@@ -36,7 +39,6 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			var format = "ppm";
 
 			output = Path.Combine(directory, $"{filename}.processed.{format}");
-			expectedThumbnail = Path.Combine(directory, $"{filename}.processed.{format}");
 		}
 
 		[OneTimeSetUp]
@@ -64,23 +66,10 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 		[Test]
 		public void ProcessWrite_MatchPpm_Test()
 		{
-			var expectedBuffer = new Span<byte>(File.ReadAllBytes(expectedThumbnail));
-			var actualBuffer = new Span<byte>(File.ReadAllBytes(output));
+			var actualBuffer = File.ReadAllBytes(output);
 
 			Assert.IsTrue(actualBuffer.Length > 0);
-			Assert.AreEqual(expectedBuffer.Length, actualBuffer.Length);
-
-			bool isValid = true;
-			for (int index = 0; index < expectedBuffer.Length; index++)
-			{
-				if (expectedBuffer[index] != actualBuffer[index])
-				{
-					isValid = false;
-					break;
-				}
-			}
-
-			Assert.IsTrue(isValid, "Expected buffer does not match actual buffer, files are different");
+			AssertUtilities.IsHashEqual(hash, actualBuffer);
 		}
 	}
 }
