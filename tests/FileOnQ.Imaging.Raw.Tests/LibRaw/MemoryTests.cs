@@ -21,6 +21,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 	[TestFixture(TestData.RawImage12)]
 	[TestFixture(TestData.RawImage13)]
 	[TestFixture(TestData.RawImage14)]
+	[Category("libraw")]
 	public class MemoryTests
     {
 		readonly string path;
@@ -31,9 +32,10 @@ namespace FileOnQ.Imaging.Raw.Tests
 		}
 
 		[Test]
+		[Category("andy")]
 		public unsafe void LoadUnpackCloseTest()
 		{
-			int count = 100;
+			int count = 10;
 
 			for (int i = 0; i < count; i++)
 			{
@@ -49,7 +51,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public unsafe void LoadUnpackProcessCloseTest()
 		{
-			int count = 100;
+			int count = 10;
 
 			for (int i = 0; i < count; i++)
 			{
@@ -66,7 +68,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public unsafe void LoadUnpackProcessWriteCloseTest()
 		{
-			int count = 100;
+			int count = 10;
 
 			for (int i = 0; i < count; i++)
 			{
@@ -140,7 +142,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public unsafe void LoadUnpackProcessMemoryCopyToBitmapCloseTest()
 		{
-			int count = 10;
+			int count = 20;
 
 			for (int i = 0; i < count; i++)
 			{
