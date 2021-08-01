@@ -59,13 +59,13 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
 		}
 
-		//[Test]
+		[Test]
 		public void ThumbnailAsBitmap_Gpu_Test()
 		{
 			using (var image = new RawImage(input))
 			using (var thumbnail = image.UnpackThumbnail())
 			using (var processedImage = thumbnail.AsProcessedImage())
-			using (var bitmap = processedImage.AsBitmap())
+			using (var bitmap = processedImage.AsBitmap(true))
 			{
 				bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 			}

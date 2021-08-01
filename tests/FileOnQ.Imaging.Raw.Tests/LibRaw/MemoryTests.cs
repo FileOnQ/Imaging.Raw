@@ -32,7 +32,6 @@ namespace FileOnQ.Imaging.Raw.Tests
 		}
 
 		[Test]
-		[Category("andy")]
 		public unsafe void LoadUnpackCloseTest()
 		{
 			int count = 10;

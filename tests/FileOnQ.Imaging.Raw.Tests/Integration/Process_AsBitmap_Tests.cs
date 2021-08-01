@@ -62,7 +62,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
 		}
 
-		//[Test]
+		[Test]
 		public unsafe void ProcessAsBitmap_Gpu_Test()
 		{
 			using (var image = new RawImage(input))
@@ -71,7 +71,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 				raw.Process(new DcrawProcessor());
 
 				using (var processedImage = raw.AsProcessedImage())
-				using (var bitmap = processedImage.AsBitmap())
+				using (var bitmap = processedImage.AsBitmap(true))
 				{
 					bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 				}
