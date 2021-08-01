@@ -56,11 +56,11 @@ __global__ void process_bitmap_kernel(unsigned char* bitmap, unsigned char* data
 	}
 }
 
-unsigned char* process_bitmap(unsigned char* data, int size, int width, int height, int* error)
+unsigned char* process_bitmap(unsigned char* data, int size, int width, int height, int* length, int* error)
 {
 	int offset = height * (width % 4);
 	int bitmapSize = size + offset;
-	unsigned char* bitmap = new unsigned char[bitmapSize];
+	unsigned char* bitmap = (unsigned char*)malloc(bitmapSize * sizeof(unsigned char));
 
 	cudaError_t cudaStatus = proccess_bitmap_with_cuda(bitmap, data, bitmapSize, size, width, height, error);
 	if (cudaStatus != cudaSuccess) {
@@ -68,6 +68,7 @@ unsigned char* process_bitmap(unsigned char* data, int size, int width, int heig
 		fprintf(stderr, cudaGetErrorString(cudaStatus));
 	}
 
+	*length = bitmapSize;
 	return bitmap;
 }
 

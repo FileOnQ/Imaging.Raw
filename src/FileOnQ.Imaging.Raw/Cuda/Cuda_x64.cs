@@ -11,7 +11,7 @@ namespace FileOnQ.Imaging.Raw
 			internal static extern bool is_cuda_capable();
 
 			[DllImport("FileOnQ.Imaging.Raw.Gpu.Cuda.dll")]
-			internal static extern IntPtr process_bitmap(IntPtr data, int size, int width, int height, ref Error error);
+			internal static extern IntPtr process_bitmap(IntPtr data, int size, int width, int height, ref int length, ref Error error);
 			
 			[DllImport("FileOnQ.Imaging.Raw.Gpu.Cuda.dll")]
 			internal static extern void free_memory(IntPtr pointer);

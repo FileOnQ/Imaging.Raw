@@ -43,20 +43,32 @@ namespace FileOnQ.Imaging.Raw
 
 				if (useAcceleratedGraphics)
 				{
-					// TODO - 7/31/2021 - @ahoefling - this is causing memory leaks and libraw runs out of space. We need to copy native memory to managed prior to adding it to the bitmap
 					var handle = GCHandle.Alloc(imageData.Buffer, GCHandleType.Pinned);
 					imageData.AddHandle(handle);
 					
 					Cuda.Error errorCode = Cuda.Error.Success;
-					IntPtr bitmapAddress = Cuda.ProcessBitmap(handle.AddrOfPinnedObject(), imageData.Buffer.Length, imageData.Width, imageData.Height, ref errorCode);
+					int bitmapLength = 0;
+					IntPtr bitmapAddress = Cuda.ProcessBitmap(handle.AddrOfPinnedObject(), imageData.Buffer.Length, imageData.Width, imageData.Height, ref bitmapLength, ref errorCode);
 					if (errorCode != Cuda.Error.Success)
 						throw new RawImageException<Cuda.Error>(errorCode);
+
+					// TODO - 7/31/2021 - @ahoefling - determine th perf impact
+					var buffer = new byte[bitmapLength];
+					var data = (byte*)bitmapAddress;
+					for (int i = 0; i < bitmapLength; i++)
+						buffer[i] = data[i];
+
+					// TODO - 7/31/2021 - @ahoefling - determine th perf impact
+					Cuda.FreeMemory(bitmapAddress);
+
+					var bitmapHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+					imageData.AddHandle(bitmapHandle);
 
 					var properties = new ImageProperties(imageData.Width, imageData.Bits, imageData.Colors);
 					var bitmap = new Bitmap(imageData.Width, imageData.Height,
 						properties.Stride,
 						System.Drawing.Imaging.PixelFormat.Format24bppRgb,
-						bitmapAddress);
+						bitmapHandle.AddrOfPinnedObject());
 
 					return bitmap;
 				}
