@@ -50,7 +50,8 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 		{
 			using (var image = new RawImage(input))
 			using (var thumbnail = image.UnpackThumbnail())
-			using (var bitmap = thumbnail.AsBitmap())
+			using (var processedImage = thumbnail.AsProcessedImage())
+			using (var bitmap = processedImage.AsBitmap())
 			{
 				bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 			}
@@ -58,12 +59,13 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
 		}
 
-		[Test]
+		//[Test]
 		public void ThumbnailAsBitmap_Gpu_Test()
 		{
 			using (var image = new RawImage(input))
 			using (var thumbnail = image.UnpackThumbnail())
-			using (var bitmap = thumbnail.AsBitmap(true))
+			using (var processedImage = thumbnail.AsProcessedImage())
+			using (var bitmap = processedImage.AsBitmap())
 			{
 				bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 			}

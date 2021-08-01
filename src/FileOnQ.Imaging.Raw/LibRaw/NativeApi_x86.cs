@@ -16,6 +16,9 @@ namespace FileOnQ.Imaging.Raw
 			internal static extern void libraw_close(IntPtr libraw);
 
 			[DllImport(DllName)]
+			internal static extern void libraw_recycle(IntPtr libraw);
+
+			[DllImport(DllName)]
 			internal static extern Error libraw_open_file(IntPtr libraw, string filename);
 
 			[DllImport(DllName)]

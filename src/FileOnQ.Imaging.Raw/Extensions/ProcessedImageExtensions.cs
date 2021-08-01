@@ -22,20 +22,6 @@ namespace FileOnQ.Imaging.Raw
 		/// <see cref="ProcessedImage"/> in the most memory
 		/// efficient way possible.
 		/// </summary>
-		/// <param name="imageWr">
-		/// A proccessed raw image or unpacked thumbnail.
-		/// </param>
-		/// <returns>
-		/// A managed <see cref="Bitmap"/>.
-		/// </returns>
-		public static Bitmap AsBitmap(this IImageWriter imageWriter, bool useAcceleratedGraphics = false) =>
-			imageWriter.AsProcessedImage().AsBitmap(useAcceleratedGraphics);
-
-		/// <summary>
-		/// Gets a <see cref="Bitmap"/> from the current
-		/// <see cref="ProcessedImage"/> in the most memory
-		/// efficient way possible.
-		/// </summary>
 		/// <param name="imageData">
 		/// A proccessed raw image or unpacked thumbnail.
 		/// </param>
@@ -55,19 +41,18 @@ namespace FileOnQ.Imaging.Raw
 				if (useAcceleratedGraphics && !Cuda.IsCudaCapable())
 					useAcceleratedGraphics = false;
 
-				// TODO - 7/29/2021 - This calculation fails for 32 bit assemblies. I think we may need to change our calculation to handle the different memory address space
 				if (useAcceleratedGraphics)
 				{
-					var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
-					var address = (IntPtr)imageData.Image + memoryOffset;
-
+					// TODO - 7/31/2021 - @ahoefling - this is causing memory leaks and libraw runs out of space. We need to copy native memory to managed prior to adding it to the bitmap
+					var handle = GCHandle.Alloc(imageData.Buffer, GCHandleType.Pinned);
+					imageData.AddHandle(handle);
+					
 					Cuda.Error errorCode = Cuda.Error.Success;
-					IntPtr bitmapAddress = Cuda.ProcessBitmap(address, imageData.Buffer.Length, imageData.Width, imageData.Height, ref errorCode);
+					IntPtr bitmapAddress = Cuda.ProcessBitmap(handle.AddrOfPinnedObject(), imageData.Buffer.Length, imageData.Width, imageData.Height, ref errorCode);
 					if (errorCode != Cuda.Error.Success)
 						throw new RawImageException<Cuda.Error>(errorCode);
 
 					var properties = new ImageProperties(imageData.Width, imageData.Bits, imageData.Colors);
-
 					var bitmap = new Bitmap(imageData.Width, imageData.Height,
 						properties.Stride,
 						System.Drawing.Imaging.PixelFormat.Format24bppRgb,
@@ -82,12 +67,6 @@ namespace FileOnQ.Imaging.Raw
 					var buffer = new byte[imageData.Buffer.Length + additionalBytes];
 
 					var bitmapPosition = 0;
-
-					// TODO - 7/29/2021 - @ahoefling - It may be safer to use the bitmap pointer instead of our own
-					//var bitmap = new Bitmap(imageData.Width, imageData.Height);
-					//var data = bitmap.LockBits(new Rectangle(0, 0, imageData.Width, imageData.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-					//var pointer = (byte*)data.Scan0;
-
 					for (int position = 0; position < imageData.Buffer.Length; position += 3)
 					{
 						if (position > 0 && position % properties.StrideWithoutOffset == 0)
@@ -106,15 +85,13 @@ namespace FileOnQ.Imaging.Raw
 						bitmapPosition += 3;
 					}
 
-					//bitmap.UnlockBits(data);
-
 					var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-					var address = handle.AddrOfPinnedObject();
+					imageData.AddHandle(handle);
 
 					var bitmap = new Bitmap(imageData.Width, imageData.Height,
 						properties.Stride,
 						System.Drawing.Imaging.PixelFormat.Format24bppRgb,
-						address);
+						handle.AddrOfPinnedObject());
 
 					return bitmap;
 				}
@@ -157,12 +134,12 @@ namespace FileOnQ.Imaging.Raw
 			}
 
 			// TODO move this to a partial method
-#if NET48 || NETSTANDARD2_0
-			var data = imageData.Buffer.ToArray();
-			memory.Write(data, 0, data.Length);
-#elif NET5_0_OR_GREATER
-			memory.Write(imageData.Buffer);
-#endif
+			//#if NET48 || NETSTANDARD2_0
+			//			memory.Write(imageData.Buffer, 0, imageData.Buffer.Length);
+			//#elif NET5_0_OR_GREATER
+			//			memory.Write(imageData.Buffer);
+			//#endif
+			memory.Write(imageData.Buffer, 0, imageData.Buffer.Length);
 
 			memory.Seek(0, SeekOrigin.Begin);
 			return memory;

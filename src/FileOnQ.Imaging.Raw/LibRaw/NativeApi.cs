@@ -37,6 +37,23 @@ namespace FileOnQ.Imaging.Raw
 			}
 		}
 
+		internal static void Recycle(IntPtr libraw)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					X86.libraw_recycle(libraw);
+					break;
+				case Architecture.X64:
+					X64.libraw_recycle(libraw);
+					break;
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
+
 		internal static Error OpenFile(IntPtr libraw, string filename)
 		{
 			switch (RuntimeInformation.ProcessArchitecture)

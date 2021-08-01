@@ -5,7 +5,7 @@ namespace FileOnQ.Imaging.Raw
 {
 	unsafe class RawImageProcessor : IImageProcessor
 	{
-		readonly IntPtr libraw;
+		IntPtr libraw;
 		LibRaw.ProcessedImage* image;
 		public RawImageProcessor(IntPtr libraw)
 		{
@@ -36,21 +36,49 @@ namespace FileOnQ.Imaging.Raw
 					throw new RawImageException<LibRaw.Error>(error);
 			}
 
+			if (image->Type == LibRaw.ImageFormat.Bitmap)
+			{
+				var e = LibRaw.Error.Success;
+				if (image->Width <= 0)
+				{
+
+				}
+
+				if (image->Height <= 0)
+				{
+
+				}
+
+				if (image-> Colors <= 0)
+				{
+
+				}
+
+				if (image->Bits <= 0)
+				{
+
+				}
+
+				if (image->DataSize <= 0)
+				{
+
+				}
+			}
+
 			// get the memory address of the data buffer.
 			var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
 			var address = (IntPtr)image + memoryOffset;
 
+			// copy values from native memory to managed memory
+			var buffer = new byte[image->DataSize];
+			var ptr = (byte*)address;
+			for (int position = 0; position < image->DataSize; position++)
+				buffer[position] = ptr[position];
+
 			return new ProcessedImage
 			{
-				// TODO - 7/24/2021 - @ahoefling
-				// Change Func<bool> IsDisposed to a weak event handler. The current
-				// implementation creates a strong GC reference between ProcessedImage
-				// and RawThumbnail. This means that RawThumbnail will not be GCed
-				// until the ProcessedImage is.
-				IsDisposed = () => isDisposed,
-				Image = image,
 				ImageFormat = (ImageFormat)image->Type,
-				Buffer = new Span<byte>(address.ToPointer(), (int)image->DataSize),
+				Buffer = buffer,
 				Height = image->Height,
 				Width = image->Width,
 				Colors = image->Colors,
@@ -82,6 +110,12 @@ namespace FileOnQ.Imaging.Raw
 			{
 				LibRaw.ClearMemory(image);
 				image = (LibRaw.ProcessedImage*)IntPtr.Zero;
+			}
+
+			if (libraw != IntPtr.Zero)
+			{
+				// Clear pointer, but don't clear memory, let the owner clear the memory
+				libraw = IntPtr.Zero;
 			}
 
 			isDisposed = true;

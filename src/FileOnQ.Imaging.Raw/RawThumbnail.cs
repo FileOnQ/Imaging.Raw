@@ -5,7 +5,7 @@ namespace FileOnQ.Imaging.Raw
 {
 	unsafe class RawThumbnail : IImageWriter
 	{
-		readonly IntPtr libraw;
+		IntPtr libraw;
 		LibRaw.ProcessedImage* thumbnail;
 
 		public RawThumbnail(IntPtr libraw)
@@ -34,17 +34,16 @@ namespace FileOnQ.Imaging.Raw
 			var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(LibRaw.ProcessedImage.Data)).ToInt32();
 			var address = (IntPtr)thumbnail + memoryOffset;
 
+			// copy values from native memory to managed memory
+			var buffer = new byte[thumbnail->DataSize];
+			var ptr = (byte*)address;
+			for (int position = 0; position < thumbnail->DataSize; position++)
+				buffer[position] = ptr[position];
+
 			return new ProcessedImage
 			{
-				// TODO - 7/24/2021 - @ahoefling
-				// Change Func<bool> IsDisposed to a weak event handler. The current
-				// implementation creates a strong GC reference between ProcessedImage
-				// and RawThumbnail. This means that RawThumbnail will not be GCed
-				// until the ProcessedImage is.
-				IsDisposed = () => isDisposed,
-				Image = thumbnail,
 				ImageFormat = (ImageFormat)thumbnail->Type,
-				Buffer = new Span<byte>(address.ToPointer(), (int)thumbnail->DataSize),
+				Buffer = buffer,
 				Height = thumbnail->Height,
 				Width = thumbnail->Width,
 				Colors = thumbnail->Colors,
@@ -75,6 +74,12 @@ namespace FileOnQ.Imaging.Raw
 			{
 				LibRaw.ClearMemory(thumbnail);
 				thumbnail = (LibRaw.ProcessedImage*)IntPtr.Zero;
+			}
+
+			if (libraw == IntPtr.Zero)
+			{
+				// clear the pointer, but don't clear the memory. Let the pointer owner clear the memory
+				libraw = IntPtr.Zero;
 			}
 
 			isDisposed = true;

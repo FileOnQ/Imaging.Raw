@@ -41,7 +41,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			{
 				var image = thumbnail.AsProcessedImage();
 
-				AssertUtilities.IsHashEqual(hash, image.Buffer.ToArray());
+				AssertUtilities.IsHashEqual(hash, image.Buffer);
 			}
 		}
 	}

@@ -1,113 +1,49 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace FileOnQ.Imaging.Raw
 {
-	public unsafe ref struct ProcessedImage
+	public unsafe class ProcessedImage : IDisposable
 	{
-		Span<byte> buffer;
-		public Span<byte> Buffer
+		List<GCHandle> handles = new List<GCHandle>();
+
+		public byte[] Buffer { get; set; }
+		public ImageFormat ImageFormat { get; set; }
+		public int Height { get; set; }
+		public int Width { get; set; }
+		public int Colors { get; set; }
+		public int Bits { get; set; }
+
+		internal void AddHandle(GCHandle handle) => handles.Add(handle);
+
+		~ProcessedImage() => Dispose(false);
+
+		bool isDisposed;
+		public void Dispose()
 		{
-			get
-			{
-				ValidateImageMemory();
-				return buffer;
-			}
-			set
-			{
-				ValidateImageMemory();
-				buffer = value;
-			}
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
-		ImageFormat imageFormat;
-		public ImageFormat ImageFormat
+		protected virtual void Dispose(bool disposing)
 		{
-			get
-			{
-				ValidateImageMemory();
-				return imageFormat;
-			}
-			set
-			{
-				ValidateImageMemory();
-				imageFormat = value;
-			}
-		}
+			if (isDisposed)
+				return;
 
-		int height;
-		public int Height
-		{
-			get
+			if (disposing)
 			{
-				ValidateImageMemory();
-				return height;
+				// free managed resources
 			}
-			set
-			{
-				ValidateImageMemory();
-				height = value;
-			}
-		}
 
-		int width;
-		public int Width
-		{
-			get
+			// free unmanaged resources
+			foreach (var handle in handles)
 			{
-				ValidateImageMemory();
-				return width;
+				if (handle != default && handle.IsAllocated)
+					handle.Free();
 			}
-			set
-			{
-				ValidateImageMemory();
-				width = value;
-			}
-		}
 
-		int colors;
-		public int Colors
-		{
-			get
-			{
-				ValidateImageMemory();
-				return colors;
-			}
-			set
-			{
-				ValidateImageMemory();
-				colors = value;
-			}
-		}
-
-		int bits;
-		public int Bits
-		{
-			get
-			{
-				ValidateImageMemory();
-				return bits;
-			}
-			set
-			{
-				ValidateImageMemory();
-				bits = value;
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the pointer to the <see cref="LibRaw.ProcessedImage"/>.
-		/// </summary>
-		/// <remarks>
-		/// There is no guarentee that this pointer will exist. Always perform
-		/// a null check prior to dereferencing it and retrieving data.
-		/// </remarks>
-		internal LibRaw.ProcessedImage* Image { get; set; }
-		internal Func<bool> IsDisposed { get; set; }
-
-		void ValidateImageMemory()
-		{
-			if (IsDisposed())
-				throw new RawImageDisposedException(nameof(ProcessedImage));
+			isDisposed = true;
 		}
 	}
 }

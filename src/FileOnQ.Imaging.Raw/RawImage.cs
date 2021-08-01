@@ -20,6 +20,11 @@ namespace FileOnQ.Imaging.Raw
 		{
 			this.file = file;
 			libraw = LibRaw.Initialize(0);
+			if (libraw == IntPtr.Zero)
+			{
+				throw new Exception("Unable to initialize raw image");
+			}
+
 			var error = LibRaw.OpenFile(libraw, file);
 			if (error != LibRaw.Error.Success)
 				throw new RawImageException<LibRaw.Error>(error);
@@ -137,6 +142,7 @@ namespace FileOnQ.Imaging.Raw
 			
 			if (libraw != IntPtr.Zero)
 			{
+				LibRaw.Recycle(libraw);
 				LibRaw.Close(libraw);
 				libraw = IntPtr.Zero;
 			}

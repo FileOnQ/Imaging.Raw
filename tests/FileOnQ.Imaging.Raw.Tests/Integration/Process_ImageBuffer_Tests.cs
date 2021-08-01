@@ -42,7 +42,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 				raw.Process(new DcrawProcessor());
 				var processedImage = raw.AsProcessedImage();
 
-				AssertUtilities.IsHashEqual(hash, processedImage.Buffer.ToArray());
+				AssertUtilities.IsHashEqual(hash, processedImage.Buffer);
 			}
 		}
 	}

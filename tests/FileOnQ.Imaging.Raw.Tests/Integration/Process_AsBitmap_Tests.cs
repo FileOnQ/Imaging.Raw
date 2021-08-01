@@ -46,13 +46,14 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 		}
 
 		[Test]
-		public unsafe void ProcessAsBitmap_Cpu_Test()
+		public void ProcessAsBitmap_Cpu_Test()
 		{
 			using (var image = new RawImage(input))
 			using (var raw = image.UnpackRaw())
 			{
 				raw.Process(new DcrawProcessor());
-				using (var bitmap = raw.AsBitmap())
+				using (var processedImage = raw.AsProcessedImage())
+				using (var bitmap = processedImage.AsBitmap())
 				{
 					bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 				}
@@ -61,7 +62,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
 		}
 
-		[Test]
+		//[Test]
 		public unsafe void ProcessAsBitmap_Gpu_Test()
 		{
 			using (var image = new RawImage(input))
@@ -69,13 +70,13 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			{
 				raw.Process(new DcrawProcessor());
 
-				var processedImage = raw.AsProcessedImage();
-				using (var bitmap = raw.AsBitmap(true))
+				using (var processedImage = raw.AsProcessedImage())
+				using (var bitmap = processedImage.AsBitmap())
 				{
 					bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
 				}
 			}
-			
+
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
 		}
 	}
