@@ -48,7 +48,7 @@ jobs:
     - name: Update Version
       run: |
         chcp 65001 # set code page to utf-8
-        echo "PACKAGE_VERSION=1.0.0-PR.${{ GITHUB.RUN_NUMBER }}" >> $GITHUB_ENV
+        echo "PACKAGE_VERSION=1.0.0-PR.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
         
     - name: Test Version
       run: echo ${{ PACKAGE_VERSION }}
