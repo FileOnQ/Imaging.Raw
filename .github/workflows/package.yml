@@ -46,9 +46,7 @@ jobs:
 #    
     # TODO - check if PR build vs main build
     - name: Update Version
-      run: |
-        chcp 65001 # set code page to utf-8
-        echo "PACKAGE_VERSION=1.0.0-PR.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
+      run: echo "PACKAGE_VERSION=1.0.0-PR.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
         
     - name: Test Version
       run: echo "Version = ${{ env.PACKAGE_VERSION }}"
