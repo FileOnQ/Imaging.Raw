@@ -60,4 +60,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Packages-1.0.0-pr.${{ GITHUB.RUN_NUMBER }}
-        path: *.nupkg
+        path: src/FileOnQ.Imaging.Raw/bin/**/*.nupkg
