@@ -8,7 +8,13 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: ${{ matrix.os }}
+    strategy: 
+      matrix:
+        include: 
+          - os: windows-2019
+            cuda: '11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
 
     steps:
     - uses: actions/checkout@v2
@@ -17,8 +23,8 @@ jobs:
         
     - name: Install CUDA
       env:
-        cuda: '11.4.0'
-        visual_studio: 'Visual Studio 16 2019'
+        cuda: ${{ matrix.cuda }}
+        visual_studio: ${{ matrix.visual_studio }}
       shell: powershell
       run: .\build\cuda.ps1
       
