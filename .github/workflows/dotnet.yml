@@ -12,7 +12,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
+      with:
+        submodules: 'true'
+        
     - name: Install CUDA
       env:
         cuda: '11.4.0'
