@@ -1,4 +1,4 @@
-name: .NET
+name: FileOnQ.Imaging.Raw
 
 on:
   push:

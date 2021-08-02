@@ -1,12 +1,10 @@
-name: .NET
+name: LibRaw
 
 on:
   push:
     branches: [ main ]
-    paths: [ LibRaw/** ]
   pull_request:
     branches: [ main ]
-    paths: [ LibRaw/** ]
 
 jobs:
   build:
