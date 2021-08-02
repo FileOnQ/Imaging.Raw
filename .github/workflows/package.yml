@@ -48,10 +48,12 @@ jobs:
     - name: Update Version
       run: |
         chcp 65001 # set code page to utf-8
-        echo "PACKAGE_VERSION=1.0.0-PR.${{ env.GITHUB_RUN_NUMBER }}" >> $GITHUB_ENV
+        echo "PACKAGE_VERSION=1.0.0-PR.$env.RUN_NUMBER" >> $GITHUB_ENV
+      env:
+        RUN_NUMBER: ${{ env.GITHUB_RUN_NUMBER }}
         
     - name: Test Version
-      run: echo "Version=$env.PACKAGE_VERSION"
+      run: echo "Version=${{ env.PACKAGE_VERSION }}"
 
 #    - name: Pack
 #      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj /p:Version=$env.PACKAGE_VERSION /p:PackageVersion=$env.PACKAGE_VERSION
