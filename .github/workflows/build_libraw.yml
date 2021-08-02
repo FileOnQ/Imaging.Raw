@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    if: ${{ github.event.label.name == 'LibRaw' }}
     runs-on: ${{ matrix.os }}
     strategy: 
       matrix:
