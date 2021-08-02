@@ -13,18 +13,33 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install CUDA
+      env:
+        cuda: '11.4'
+        visual_studio: 'Visual Studio 16 2019'
+      shell: powershell
+      run: .\build\cuda.ps1
+      
+    - name: Check NVCC
+      shell: powershell
+      run: |
+        nvcc -V
+        ls $env:CUDA_PATH
+        ls $env:CUDA_PATH\bin
+        ls $env:CUDA_PATH\include
+
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.102
-    
-    - name: Setup NuGet.exe
-      uses: NuGet/setup-nuget@v1.0.5
-      with:
-        nuget-version: 5.x
 
-    - name: Restore .NET Tools
-      run: dotnet tool restore
-
-    - name: Build
-      run: dotnet cake --Target=CI-Build
+#    - name: Setup NuGet.exe
+#      uses: NuGet/setup-nuget@v1.0.5
+#      with:
+#        nuget-version: 5.x
+#
+#    - name: Restore .NET Tools
+#      run: dotnet tool restore
+#
+#    - name: Build
+#      run: dotnet cake --Target=CI-Build
