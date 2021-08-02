@@ -46,7 +46,15 @@ jobs:
 #    
     # TODO - check if PR build vs main build
     - name: Update Version
-      run: echo "PACKAGE_VERSION=1.0.0-PR.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
+      if: ${{ github.github_ref == 'main' }}
+      run: echo "PACKAGE_VERSION=1.0.0-dev.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
+      
+    - name: Update Version
+      if: ${{ github.github_ref == 'main' }}
+      run: echo "PACKAGE_VERSION=1.0.0-dev.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
+        
+    - name: REF
+      run: echo "${{ github.github_ref }}"
         
     - name: Test Version
       run: echo "Version = ${{ env.PACKAGE_VERSION }}"
