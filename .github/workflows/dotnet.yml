@@ -15,6 +15,15 @@ jobs:
           - os: windows-2019
             cuda: '11.4.0'
             visual_studio: 'Visual Studio 16 2019'
+            architecture: 'AnyCPU'
+          - os: windows-2019
+            cuda: '11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            architecture: 'x64'
+          - os: windows-2019
+            cuda: '11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            architecture: 'x86'
 
     steps:
     - uses: actions/checkout@v2
@@ -48,3 +57,6 @@ jobs:
 
     - name: Build
       run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj
+      
+    - name: Test (net5/net48)
+      run: dotnet test --logger:"console;verbosity=detailed" tests/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}.csproj
