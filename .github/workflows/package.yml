@@ -52,5 +52,5 @@ jobs:
       
     - uses: actions/upload-artifact@2
       with:
-        name: FileOnQ.Imaging.Raw.${{ PACKAGE_VERSION }}.nupkg
+        name: FileOnQ.Imaging.Raw.$PACKAGE_VERSION.nupkg
         path: src/FileOnQ.Imaging.Raw/bin/**/*.nupkg
