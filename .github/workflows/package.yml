@@ -44,11 +44,14 @@ jobs:
       with:
         nuget-version: 5.x
     
+    # TODO - check if PR build vs main build
     - name: Update Version
-      run: echo "PACKAGE_VERSION=1.0.0-PR.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+      run: |
+        chcp 65001 # set code page to utf-8
+        echo "PACKAGE_VERSION=1.0.0-PR.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
 
-    - name: Build
-      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj /p:Version=$PACKAGE_VERSION /p:PackageVersion=$PACKAGE_VERSION
+    - name: Pack
+      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj /p:Version=$env.PACKAGE_VERSION /p:PackageVersion=$env.PACKAGE_VERSION
       
     - name: Upload NuGet Package
       uses: actions/upload-artifact@v2
