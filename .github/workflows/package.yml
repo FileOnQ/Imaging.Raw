@@ -50,7 +50,7 @@ jobs:
     - name: Build
       run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj /p:Version=$PACKAGE_VERSION /p:PackageVersion=$PACKAGE_VERSION
       
-    - uses: actions/upload-artifact@2
+    - uses: actions/upload-artifact@v2
       with:
         name: FileOnQ.Imaging.Raw.$PACKAGE_VERSION.nupkg
         path: src/FileOnQ.Imaging.Raw/bin/**/*.nupkg
