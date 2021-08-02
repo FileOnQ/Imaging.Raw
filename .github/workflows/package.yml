@@ -45,11 +45,11 @@ jobs:
         nuget-version: 5.x
 
     - name: Set Dev Version
-      if: ${{ github.github_ref == 'main' }}
+      if: ${{ github.ref == 'main' }}
       run: echo "PACKAGE_VERSION=1.0.0-dev.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
       
     - name: Set PR Version
-      if: ${{ contains(github.github_ref, 'pull' }}
+      if: ${{ contains(github.ref, 'pull' }}
       run: echo "PACKAGE_VERSION=1.0.0-pr.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
         
     - name: Test Version
