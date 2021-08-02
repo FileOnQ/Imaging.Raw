@@ -3,10 +3,10 @@ name: .NET
 on:
   push:
     branches: [ main ]
-    paths: [ libraw/** ]
+    paths: [ LibRaw/** ]
   pull_request:
     branches: [ main ]
-    paths: [ libraw/** ]
+    paths: [ LibRaw/** ]
 
 jobs:
   build:
