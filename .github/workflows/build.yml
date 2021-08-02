@@ -13,15 +13,15 @@ jobs:
       matrix:
         include: 
           - os: windows-2019
-            cuda: '11.4.0'
+            cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             architecture: 'AnyCPU'
           - os: windows-2019
-            cuda: '11.4.0'
+            cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             architecture: 'x64'
           - os: windows-2019
-            cuda: '11.4.0'
+            cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             architecture: 'x86'
 
