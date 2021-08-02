@@ -15,55 +15,51 @@ jobs:
             cuda: 'CUDA-11.4.0'
 
     steps:
-#    - uses: actions/checkout@v2
-#      with:
-#        submodules: 'true'
-#
-#    - name: Install CUDA
-#      env:
-#        cuda: ${{ matrix.cuda }}
-#        visual_studio: ${{ matrix.visual_studio }}
-#      shell: powershell
-#      run: .\build\cuda.ps1
-#
-#    - name: Check NVCC
-#      shell: powershell
-#      run: |
-#        nvcc -V
-#        ls $env:CUDA_PATH
-#        ls $env:CUDA_PATH\bin
-#        ls $env:CUDA_PATH\include
-#
-#    - name: Setup .NET SDK
-#      uses: actions/setup-dotnet@v1
-#      with:
-#        dotnet-version: 5.0.102
-#
-#    - name: Setup NuGet.exe
-#      uses: NuGet/setup-nuget@v1.0.5
-#      with:
-#        nuget-version: 5.x
-#    
-    # TODO - check if PR build vs main build
-    - name: Update Version
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Install CUDA
+      env:
+        cuda: ${{ matrix.cuda }}
+        visual_studio: ${{ matrix.visual_studio }}
+      shell: powershell
+      run: .\build\cuda.ps1
+
+    - name: Check NVCC
+      shell: powershell
+      run: |
+        nvcc -V
+        ls $env:CUDA_PATH
+        ls $env:CUDA_PATH\bin
+        ls $env:CUDA_PATH\include
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.102
+
+    - name: Setup NuGet.exe
+      uses: NuGet/setup-nuget@v1.0.5
+      with:
+        nuget-version: 5.x
+
+    - name: Set Dev Version
       if: ${{ github.github_ref == 'main' }}
       run: echo "PACKAGE_VERSION=1.0.0-dev.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
       
-    - name: Update Version
-      if: ${{ github.github_ref == 'main' }}
-      run: echo "PACKAGE_VERSION=1.0.0-dev.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
-        
-    - name: REF
-      run: echo "${{ github.ref }}"
+    - name: Set PR Version
+      if: ${{ contains(github.github_ref, 'pull' }}
+      run: echo "PACKAGE_VERSION=1.0.0-pr.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
         
     - name: Test Version
       run: echo "Version = ${{ env.PACKAGE_VERSION }}"
-#
-#    - name: Pack
-#      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj /p:Version=1.0.0-pr.${{ GITHUB.RUN_NUMBER }} /p:PackageVersion=1.0.0-pr.${{ GITHUB.RUN_NUMBER }}
-#
-#    - name: Upload NuGet Package
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: Packages-1.0.0-pr.${{ GITHUB.RUN_NUMBER }}
-#        path: src/FileOnQ.Imaging.Raw/bin/**/*.nupkg
+
+    - name: Pack
+      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release /p:Version=${{ env.PACKAGE_VERSION }} /p:PackageVersion=${{ env.PACKAGE_VERSION }}
+
+    - name: Upload NuGet Package
+      uses: actions/upload-artifact@v2
+      with:
+        name: Packages-${{ env.PACKAGE_VERSION }}
+        path: src/FileOnQ.Imaging.Raw/bin/**/*.nupkg
