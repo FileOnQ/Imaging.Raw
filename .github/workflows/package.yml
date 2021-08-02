@@ -51,7 +51,7 @@ jobs:
         echo "PACKAGE_VERSION=1.0.0-PR.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
         
     - name: Test Version
-      run: echo "Version = ${{ PACKAGE_VERSION }}"
+      run: echo "Version = ${{ env.PACKAGE_VERSION }}"
 #
 #    - name: Pack
 #      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj /p:Version=1.0.0-pr.${{ GITHUB.RUN_NUMBER }} /p:PackageVersion=1.0.0-pr.${{ GITHUB.RUN_NUMBER }}
