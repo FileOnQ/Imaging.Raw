@@ -43,13 +43,9 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.5
       with:
         nuget-version: 5.x
-
-    - name: Get PR Number
-      id: findPr
-      uses: jwalton/gh-find-current-pr@v1
     
     - name: Get Version
-      run: echo "::set-env name=PACKAGE_VERSION::1.0.0-dev.${{ GITHUB_RUN_NUMBER }}"
+      run: echo "::set-env name=PACKAGE_VERSION::1.0.0-pr.${{ GITHUB_RUN_NUMBER }}"
 
     - name: Build
       run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj /p:Version=${{ PACKAGE_VERSION }} /p:PackageVersion=${{ PACKAGE_VERSION }}
