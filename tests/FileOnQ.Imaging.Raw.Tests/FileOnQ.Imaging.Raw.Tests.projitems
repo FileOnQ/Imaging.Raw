@@ -68,7 +68,4 @@
     <Compile Include="$(MSBuildThisFileDirectory)TestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\AssertUtilities.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Unit\" />
-  </ItemGroup>
 </Project>
