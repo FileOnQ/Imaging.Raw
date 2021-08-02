@@ -1,8 +1,7 @@
-name: FileOnQ.Imaging.Raw
+name: Create NuGet Package (1.0.0)
 
+# TODO - 8/2/2021 - @ahoefling - Add support for build tagging which will create a final build
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -14,16 +13,6 @@ jobs:
         include: 
           - os: windows-2019
             cuda: 'CUDA-11.4.0'
-            visual_studio: 'Visual Studio 16 2019'
-            architecture: 'AnyCPU'
-          - os: windows-2019
-            cuda: 'CUDA-11.4.0'
-            visual_studio: 'Visual Studio 16 2019'
-            architecture: 'x64'
-          - os: windows-2019
-            cuda: 'CUDA-11.4.0'
-            visual_studio: 'Visual Studio 16 2019'
-            architecture: 'x86'
 
     steps:
     - uses: actions/checkout@v2
@@ -55,9 +44,17 @@ jobs:
       with:
         nuget-version: 5.x
 
-    - name: Build
-      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj
+    - name: Get PR Number
+      id: findPr
+      uses: jwalton/gh-find-current-pr@v1
+    
+    - name: Get Version
+      run: echo "::set-env name=PACKAGE_VERSION::1.0.0-dev.${{ GITHUB_RUN_NUMBER }}"
 
-      # TODO - 8/2/2021 - @ahoefling - add separate task for unit vs integration. Rigth now there are only integration tests      
-    - name: Test
-      run: dotnet test --logger:"console;verbosity=detailed" tests/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}.csproj --filter TestCategory=Integration
+    - name: Build
+      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj /p:Version=${{ PACKAGE_VERSION }} /p:PackageVersion=${{ PACKAGE_VERSION }}
+      
+    - uses: actions/upload-artifact@2
+      with:
+        name: FileOnQ.Imaging.Raw.${{ PACKAGE_VERSION }}.nupkg
+        path: src/FileOnQ.Imaging.Raw/bin/**/*.nupkg
