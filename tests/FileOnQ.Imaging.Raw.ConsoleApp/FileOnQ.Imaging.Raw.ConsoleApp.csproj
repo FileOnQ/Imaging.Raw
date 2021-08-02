@@ -9,4 +9,10 @@
     <ProjectReference Include="..\..\src\FileOnQ.Imaging.Raw\FileOnQ.Imaging.Raw.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="PANA2417.RW2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
