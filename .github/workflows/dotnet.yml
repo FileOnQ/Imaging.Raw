@@ -33,13 +33,10 @@ jobs:
       with:
         dotnet-version: 5.0.102
 
-#    - name: Setup NuGet.exe
-#      uses: NuGet/setup-nuget@v1.0.5
-#      with:
-#        nuget-version: 5.x
-#
-#    - name: Restore .NET Tools
-#      run: dotnet tool restore
-#
-#    - name: Build
-#      run: dotnet cake --Target=CI-Build
+    - name: Setup NuGet.exe
+      uses: NuGet/setup-nuget@v1.0.5
+      with:
+        nuget-version: 5.x
+
+    - name: Build
+      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj
