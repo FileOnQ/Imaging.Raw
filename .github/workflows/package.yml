@@ -53,7 +53,7 @@ jobs:
     - name: Test Version
       run: echo "Version=$env.VERSION"
       env:
-        VERSION: ${{ PACKAGE_VERSION }} 
+        VERSION: ${{ GITHUB_RUN_NUMBER }} 
 
 #    - name: Pack
 #      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj /p:Version=$env.PACKAGE_VERSION /p:PackageVersion=$env.PACKAGE_VERSION
