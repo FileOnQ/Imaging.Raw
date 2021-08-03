@@ -24,6 +24,11 @@
 		<RepositoryUrl>https://github.com/FileOnQ/Imaging.Raw</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<!-- End NuGet Package Properties -->
+		
+		<!-- Start NuGet Symbols Package Properties -->
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<!-- End1 NuGet Symbols Package Properties -->
 	</PropertyGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net48'">
