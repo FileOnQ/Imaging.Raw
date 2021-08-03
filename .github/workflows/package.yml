@@ -56,10 +56,12 @@ jobs:
       run: echo "Version = ${{ env.PACKAGE_VERSION }}"
 
     - name: Pack
-      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release /p:Version=${{ env.PACKAGE_VERSION }} /p:PackageVersion=${{ env.PACKAGE_VERSION }}
+      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release -o . /p:Version=${{ env.PACKAGE_VERSION }} /p:PackageVersion=${{ env.PACKAGE_VERSION }}
 
     - name: Upload NuGet Package
       uses: actions/upload-artifact@v2
       with:
         name: Packages-${{ env.PACKAGE_VERSION }}
-        path: src/FileOnQ.Imaging.Raw/bin/**/*.nupkg
+        path: | 
+          *.nupkg
+          *.snupkg
