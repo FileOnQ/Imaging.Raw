@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FileOnQ.Imaging.Raw\FileOnQ.Imaging.Raw.csproj" />
+    <PackageReference Include="FileOnQ.Imaging.Raw" Version="1.0.1-dev.1" />
   </ItemGroup>
 
   <ItemGroup>
