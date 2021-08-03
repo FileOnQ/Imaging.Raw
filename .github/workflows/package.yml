@@ -6,14 +6,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy: 
-      matrix:
-        include: 
-          - os: windows-2019
-            cuda: 'CUDA-11.4.0'
-
+  pack:
+    runs-on: windows-2019
     steps:
     - uses: actions/checkout@v2
       with:
@@ -21,8 +15,8 @@ jobs:
 
     - name: Install CUDA
       env:
-        cuda: ${{ matrix.cuda }}
-        visual_studio: ${{ matrix.visual_studio }}
+        cuda: 'CUDA-11.4.0'
+        visual_studio: 'Visual Studio 16 2019'
       shell: powershell
       run: .\build\cuda.ps1
 
@@ -66,8 +60,8 @@ jobs:
           *.nupkg
           *.snupkg
 
-  publish:
-    needs: build
+  nuget-publish:
+    needs: pack
     runs-on: windows-2019
     if: github.ref == 'refs/heads/main'
     steps:
