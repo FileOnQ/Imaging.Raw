@@ -3,8 +3,8 @@ name: FileOnQ.Imaging.Raw
 on:
   push:
     branches: [ main ]
-#  pull_request:
-#    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -58,6 +58,6 @@ jobs:
     - name: Build
       run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj
 
-      # TODO - 8/2/2021 - @ahoefling - add separate task for unit vs integration. Rigth now there are only integration tests      
+      # TODO - 8/2/2021 - @ahoefling - add separate task for unit vs integration. Right now there are only integration tests      
     - name: Test
       run: dotnet test --logger:"console;verbosity=detailed" tests/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}.csproj --filter TestCategory=Integration
