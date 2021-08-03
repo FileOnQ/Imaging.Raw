@@ -45,9 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileOnQ.Imaging.Raw.Benchma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileOnQ.Imaging.Raw", "src\FileOnQ.Imaging.Raw\FileOnQ.Imaging.Raw.csproj", "{8DFECD8D-5D98-4D96-A482-B61884449255}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileOnQ.Imaging.Raw.Tests.AnyCPU", "tests\FileOnQ.Imaging.Raw.Tests.AnyCPU\FileOnQ.Imaging.Raw.Tests.AnyCPU.csproj", "{65C523D2-F936-4E81-95EB-A69A5E3ECE79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileOnQ.Imaging.Raw.Tests.AnyCPU", "tests\FileOnQ.Imaging.Raw.Tests.AnyCPU\FileOnQ.Imaging.Raw.Tests.AnyCPU.csproj", "{65C523D2-F936-4E81-95EB-A69A5E3ECE79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "samples\ConsoleApp\ConsoleApp.csproj", "{FC82DD03-2A84-4100-B276-1F1489661FAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "samples\ConsoleApp\ConsoleApp.csproj", "{FC82DD03-2A84-4100-B276-1F1489661FAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForms", "samples\WinForms\WinForms.csproj", "{4236B979-6BB0-4018-B0E7-62005B8E7D64}"
 EndProject

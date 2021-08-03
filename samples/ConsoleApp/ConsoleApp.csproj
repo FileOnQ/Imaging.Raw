@@ -2,11 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFrameworks>net48;net5.0</TargetFrameworks>
+		<RuntimeIdentifiers>win-x86;win-x64</RuntimeIdentifiers>
+		<Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FileOnQ.Imaging.Raw" Version="1.0.0-dev.41" />
+    <PackageReference Include="FileOnQ.Imaging.Raw" Version="1.0.1-dev.4" />
   </ItemGroup>
 
   <ItemGroup>

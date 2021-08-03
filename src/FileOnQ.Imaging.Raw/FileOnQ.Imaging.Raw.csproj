@@ -5,7 +5,6 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GpuProject>FileOnQ.Imaging.Raw.Gpu.Cuda</GpuProject>
 		<RootDir>$(ProjectDir)../../</RootDir>
-		<TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);IncludeReferencedProjectInPackage</TargetsForTfmSpecificContentInPackage>
 
 		<!-- NuGet Package Properties -->
 		<PackageId>FileOnQ.Imaging.Raw</PackageId>
@@ -45,22 +44,23 @@
 		<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Update="*.dll">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+	<ItemGroup Condition="'$(TargetFramework)' != 'net48'">
+		<!-- Copy all win-x86 native binaries -->
+		<Content Include="*32.dll" Pack="True" PackagePath="runtimes\win-x86\native\" Link="runtimes\win-x86\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
+
+		<!-- Copy all win-x64 native binaries -->
+		<Content Include="libraw.dll" Pack="True" PackagePath="runtimes\win-x64\native" Link="runtimes\win-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
+		<Content Include="FileOnQ.Imaging.Raw.Gpu.Cuda.dll" Pack="True" PackagePath="runtimes\win-x64\native" Link="runtimes\win-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+		<!-- Copy all win-x86 and win-x64 native binaries -->
+		<Content Include="*.dll" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="$(RootDir)\images\fileonq.png" Pack="true" PackagePath="" />
 	</ItemGroup>
-
-	<!-- NOTE - 8/2/2021 - @ahoefling - Required to add native dlls for each target framework during 'dotnet pack' https://stackoverflow.com/questions/49160673/how-to-include-a-local-dll-reference-in-to-a-nuget-package-when-calling-msbuild -->
-	<Target Name="IncludeReferencedProjectInPackage" Condition="'$(IncludeBuildOutput)' != 'false'">
-		<ItemGroup>
-			<TfmSpecificPackageFile Include="*.dll" PackagePath="lib/$(TargetFramework)" />
-		</ItemGroup>
-	</Target>
 
 	<!-- NOTE - 7/30/2021 - @ahoefling - Only build LibRaw if it is a rebuild or clean. The binaries take a long time to compile and don't change often -->
 	<!-- NOTE - 7/30/2021 - @ahoefling - This build target only works with MSBuild through Visual Studio-->
@@ -86,5 +86,4 @@
 		<Copy SourceFiles="../$(GpuProject)/bin/Win32/$(Configuration)/$(GpuProject)32.dll" DestinationFolder="." />
 		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="." />
 	</Target>
-
 </Project>

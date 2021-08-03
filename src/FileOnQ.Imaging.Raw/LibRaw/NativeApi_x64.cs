@@ -7,7 +7,11 @@ namespace FileOnQ.Imaging.Raw
 	{
 		private static unsafe class X64
 		{
+#if NETFRAMEWORK
 			const string DllName = "libraw.dll";
+#else
+			const string DllName = "runtimes/win-x64/libraw.dll";
+#endif
 
 			[DllImport(DllName)]
 			internal static extern IntPtr libraw_init(uint flags);
