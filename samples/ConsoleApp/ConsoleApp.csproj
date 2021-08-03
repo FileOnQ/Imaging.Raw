@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FileOnQ.Imaging.Raw" Version="1.0.1-dev.1" />
+    <PackageReference Include="FileOnQ.Imaging.Raw" Version="1.0.0-dev.41" />
   </ItemGroup>
 
   <ItemGroup>
