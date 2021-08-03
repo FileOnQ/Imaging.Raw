@@ -105,7 +105,7 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 
 			var error = Cuda.Error.Success;
 			int length = 0;
-			pointer = Cuda.ProcessBitmap(handle.AddrOfPinnedObject(), buffer.Length, width, height, ref error);
+			pointer = Cuda.ProcessBitmap(handle.AddrOfPinnedObject(), buffer.Length, width, height, ref length, ref error);
 
 			var stride = width * 3 + (width % 4);
 			return new Bitmap(width, height,

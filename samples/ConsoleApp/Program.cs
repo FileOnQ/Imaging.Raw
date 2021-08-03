@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using FileOnQ.Imaging.Raw;
 
-namespace FileOnQ.Imaging.Raw.ConsoleApp
+namespace ConsoleApp
 {
 	static class Program
     {
@@ -16,8 +17,8 @@ namespace FileOnQ.Imaging.Raw.ConsoleApp
 
 			try
 			{
-				using (IRawImage image = new RawImage(testImage))
-				using (IImageWriter thumbnail = image.UnpackThumbnail())
+				using (var image = new RawImage(testImage))
+				using (var thumbnail = image.UnpackThumbnail())
 				{
 					Console.WriteLine("Image open successfully!");
 					Console.WriteLine("Thumbnail Unpacked");

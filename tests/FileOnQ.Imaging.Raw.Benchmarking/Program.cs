@@ -27,7 +27,7 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 				raw.Process(new DcrawProcessor());
 				var processedImage = raw.AsProcessedImage();
 
-				File.WriteAllBytes(filePath, processedImage.Buffer.ToArray());
+				File.WriteAllBytes(filePath, processedImage.Buffer);
 			}
 
 			Console.WriteLine("Input data generated, starting benchmark!");
