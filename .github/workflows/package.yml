@@ -39,12 +39,12 @@ jobs:
         nuget-version: 5.x
 
     - name: Set Dev Version
-      if: ${{ github.ref == 'main' }}
+      #if: ${{ github.ref == 'main' }}
       run: echo "PACKAGE_VERSION=1.0.0-dev.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
       
-    - name: Set PR Version
-      if: ${{ contains(github.ref, 'pull') }}
-      run: echo "PACKAGE_VERSION=1.0.0-pr.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
+#    - name: Set PR Version
+#      if: ${{ contains(github.ref, 'pull') }}
+#      run: echo "PACKAGE_VERSION=1.0.0-pr.${{ GITHUB.RUN_NUMBER }}" >> $env:GITHUB_ENV
         
     - name: Test Version
       run: echo "Version = ${{ env.PACKAGE_VERSION }}"
@@ -69,3 +69,14 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Packages
+          
+      - name: Set NuGet API Key
+        run: nuget setapikey ${{ secrets.NUGET_API_KEY }}
+        
+      - name: Publish NuGet Package
+        run: nuget push *.nupkg
+       
+# according to the docs this is not needed if snupkg is in same folder 
+#      - name: Publish NuGet Symbols
+#        run: nuget push *.snupkg
+        
