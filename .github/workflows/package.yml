@@ -63,7 +63,7 @@ jobs:
   nuget-publish:
     needs: pack
     runs-on: windows-2019
-    if: github.ref == 'refs/heads/main'
+    #if: github.ref == 'refs/heads/main'
     steps:
       - name: Download Packages
         uses: actions/download-artifact@v2
