@@ -7,11 +7,7 @@ namespace FileOnQ.Imaging.Raw
 	{
 		private unsafe class x64
 		{
-#if NETFRAMEWORK
 			const string DllName = "FileOnQ.Imaging.Raw.Gpu.Cuda.dll";
-#else
-			const string DllName = "runtimes/win-x64/FileOnQ.Imaging.Raw.Gpu.Cuda.dll";
-#endif
 
 			[DllImport(DllName)]
 			internal static extern bool is_cuda_capable();
