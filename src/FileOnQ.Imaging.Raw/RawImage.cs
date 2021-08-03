@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using FileOnQ.Imaging.Raw.Interop;
 
 namespace FileOnQ.Imaging.Raw
 {
@@ -18,6 +19,10 @@ namespace FileOnQ.Imaging.Raw
 		// persist in weird ways down stream such as OutOfOrderCall
 		public RawImage(string file)
 		{
+			// TODO - 8/3/2021 - @ahoefling - This might make more sense to put in a library init layer.
+			//        Currently this is the closest thing we have
+			DllLoader.Configure();
+
 			this.file = file;
 			libraw = LibRaw.Initialize(0);
 			if (libraw == IntPtr.Zero)

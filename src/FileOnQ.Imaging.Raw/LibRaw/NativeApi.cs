@@ -1,34 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace FileOnQ.Imaging.Raw
 {
 	public unsafe partial class LibRaw
 	{
-#if NET5_0_OR_GREATER
-		static LibRaw()
-		{
-			var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			switch (RuntimeInformation.ProcessArchitecture)
-			{
-				case Architecture.X86:
-					path = Path.Combine(path, "runtimes\\win-x86\\native");
-					break;
-				case Architecture.X64:
-					path = Path.Combine(path, "runtimes\\win-x64\\native");
-					break;
-			}
-
-			SetDllDirectory(path);
-		}
-
-		[DllImport("kernel32.dll", SetLastError = true)]
-		static extern bool SetDllDirectory(string path);
-#endif
-
 		internal static IntPtr Initialize(uint flags)
 		{
 			switch (RuntimeInformation.ProcessArchitecture)
