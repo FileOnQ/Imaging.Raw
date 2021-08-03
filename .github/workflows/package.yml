@@ -74,7 +74,7 @@ jobs:
         run: nuget setapikey ${{ secrets.NUGET_API_KEY }}
         
       - name: Publish NuGet Package
-        run: nuget push *.nupkg
+        run: nuget push *.nupkg -Source https://api.nuget.org/v3/index.json
        
 # according to the docs this is not needed if snupkg is in same folder 
 #      - name: Publish NuGet Symbols
