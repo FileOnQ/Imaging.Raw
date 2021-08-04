@@ -3,31 +3,6 @@
 	<PropertyGroup>
 		<TargetFrameworks>net48;netstandard2.0;net5.0</TargetFrameworks>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<GpuProject>FileOnQ.Imaging.Raw.Gpu.Cuda</GpuProject>
-		<RootDir>$(ProjectDir)../../</RootDir>
-
-		<!-- NuGet Package Properties -->
-		<PackageId>FileOnQ.Imaging.Raw</PackageId>
-		<Summary>FileOnQ Raw Imaging library</Summary>
-		<PackageTag>image, raw</PackageTag>
-		<Title>FileOnQ.Imaging.Raw</Title>
-		<Description>FileOnQ Raw Imaging library</Description>
-		<PackageIcon>fileonq.png</PackageIcon>
-		<Product>$(AssemblyName) ($(TargetFramework))</Product>
-		<PackageVersion>$(Version)$(VersionSuffix)</PackageVersion>
-		<Authors>FileOnQ</Authors>
-		<Owners>fileonq</Owners>
-		<NeutralLanguage>en</NeutralLanguage>
-		<Copyright>© FileOnQ, Inc. All rights reserved.</Copyright>
-		<License>LGPL</License>
-		<RepositoryUrl>https://github.com/FileOnQ/Imaging.Raw</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<!-- End NuGet Package Properties -->
-		
-		<!-- Start NuGet Symbols Package Properties -->
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<!-- End1 NuGet Symbols Package Properties -->
 	</PropertyGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net48'">
@@ -44,52 +19,6 @@
 		<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<!-- Copy all win-x86 native binaries -->
-		<Content Include="*32.dll" Pack="True" PackagePath="runtimes\win-x86\native\" Link="runtimes\win-x86\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
-
-		<!-- Copy all win-x64 native binaries -->
-		<Content Include="libraw.dll" Pack="True" PackagePath="runtimes\win-x64\native" Link="runtimes\win-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
-		<Content Include="FileOnQ.Imaging.Raw.Gpu.Cuda.dll" Pack="True" PackagePath="runtimes\win-x64\native" Link="runtimes\win-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
-	</ItemGroup>
-
-	<!-- NOTE - 8/3/2021 - @ahoefling - This copies all dlls to output folder so direct project references work. Without this the regular unit tests will fail. However, when the project
-	            reference is using NuGet instead of direct project reference the dlls can be placed in the runtimes/**/native folder for net5+. -->
-	<ItemGroup>
-		<None Include="*.dll" CopyToOutputDirectory="Always" />
-	</ItemGroup>
-
-	<!-- Adds targets to NuGet which runs additional targets downstream. These targets are used for copying native dlls from the package to the bin directory -->
-	<ItemGroup>
-		<Content Include="FileOnQ.Imaging.Raw.targets" Pack="true" PackagePath="build\net48" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="$(RootDir)\images\fileonq.png" Pack="true" PackagePath="" />
-	</ItemGroup>
-
-	<!-- NOTE - 7/30/2021 - @ahoefling - Only build LibRaw if it is a rebuild or clean. The binaries take a long time to compile and don't change often -->
-	<!-- NOTE - 7/30/2021 - @ahoefling - This build target only works with MSBuild through Visual Studio-->
-	<Target Name="LibRaw" BeforeTargets="DispatchToInnerBuilds" Condition="!Exists('libraw32.dll') and !Exists('libraw.dll')">
-		<Exec Command="libraw.bat x64" WorkingDirectory="$(RootDir)/build" />
-		<Copy SourceFiles="$(RootDir)/LibRaw/bin/libraw.dll" DestinationFolder="." />
-
-		<Exec Command="libraw.bat x86" WorkingDirectory="$(RootDir)/build" />
-		<Copy SourceFiles="$(RootDir)/LibRaw/bin/libraw32.dll" DestinationFolder="." />
-	</Target>
-
-	<Target Name="CleanLibRaw" BeforeTargets="Clean">
-		<Delete Files="libraw.dll" />
-		<Delete Files="libraw32.dll" />
-	</Target>
-
-	<!-- NOTE 7/30/2021 - @ahoefling - Building the GPU binaries on every build ensures the latest kernels are included with each build -->
-	<Target Name="GpuProject" BeforeTargets="DispatchToInnerBuilds">
-		<Exec Command="dotnet tool restore" WorkingDirectory="$(RootDir)" />
-		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=x64" WorkingDirectory="$(RootDir)" />
-		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=Win32" WorkingDirectory="$(RootDir)" />
-
-		<Copy SourceFiles="../$(GpuProject)/bin/Win32/$(Configuration)/$(GpuProject)32.dll" DestinationFolder="." />
-		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="." />
-	</Target>
+	<Import Project="Build\nuget.props" />
+	<Import Project="Build\cpp-build.targets" />
 </Project>
