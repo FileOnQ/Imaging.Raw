@@ -43,7 +43,7 @@
 	<ItemGroup>
 		<None Include="*.dll" CopyToOutputDirectory="Always" />
 	</ItemGroup>
-	
+
 	<!-- Adds targets to NuGet which runs additional targets downstream. These targets are used for copying native dlls from the package to the bin directory -->
 	<ItemGroup>
 		<Content Include="Build\FileOnQ.Imaging.Raw.targets" Pack="true" PackagePath="build\net48" />
