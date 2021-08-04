@@ -55,7 +55,13 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
 		<!-- Copy all win-x86 and win-x64 native binaries -->
-		<Content Include="*.dll" CopyToOutputDirectory="Always" />
+		<None Include="*.dll" CopyToOutputDirectory="Always" />
+	</ItemGroup>
+
+	<!-- Adds targets to NuGet which runs additional targets downstream. These targets are used for copying native dlls from the package to the bin directory -->
+	<ItemGroup>
+		<Content Include="FileOnQ.Imaging.Raw.targets" Pack="true" PackagePath="build\net48" />
+		<Content Include="FileOnQ.Imaging.Raw.targets" Pack="true" PackagePath="build\net5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
