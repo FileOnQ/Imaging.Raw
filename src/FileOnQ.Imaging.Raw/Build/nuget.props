@@ -29,12 +29,6 @@
 		<None Include="$(RootDir)\images\fileonq.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
-	<!-- NOTE - 8/3/2021 - @ahoefling - This copies all dlls to output folder so direct project references work. Without this the regular unit tests will fail. However, when the project
-	            reference is using NuGet instead of direct project reference the dlls can be placed in the runtimes/**/native folder for net5+. -->
-	<ItemGroup>
-		<None Include="*.dll" CopyToOutputDirectory="Always" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<!-- Copy all win-x86 native binaries -->
 		<Content Include="*32.dll" Pack="True" PackagePath="runtimes\win-x86\native\" Link="runtimes\win-x86\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
@@ -44,6 +38,12 @@
 		<Content Include="FileOnQ.Imaging.Raw.Gpu.Cuda.dll" Pack="True" PackagePath="runtimes\win-x64\native" Link="runtimes\win-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
+	<!-- NOTE - 8/3/2021 - @ahoefling - This copies all dlls to output folder so direct project references work. Without this the regular unit tests will fail. However, when the project
+	            reference is using NuGet instead of direct project reference the dlls can be placed in the runtimes/**/native folder for net5+. -->
+	<ItemGroup>
+		<None Include="*.dll" CopyToOutputDirectory="Always" />
+	</ItemGroup>
+	
 	<!-- Adds targets to NuGet which runs additional targets downstream. These targets are used for copying native dlls from the package to the bin directory -->
 	<ItemGroup>
 		<Content Include="Build\FileOnQ.Imaging.Raw.targets" Pack="true" PackagePath="build\net48" />
