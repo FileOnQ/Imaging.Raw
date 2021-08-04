@@ -16,17 +16,17 @@ jobs:
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             architecture: 'AnyCPU'
-            library: 'project'
+            library: 'library'
           - os: windows-2019
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             architecture: 'x64'
-            library: 'project'
+            library: 'library'
           - os: windows-2019
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             architecture: 'x86'
-            library: 'project'
+            library: 'library'
           - os: windows-2019
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
@@ -76,14 +76,14 @@ jobs:
     - name: Build
       run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj
       
-    - name: Pack
+    - name: Pack NuGet
       if: ${{ matrix.library == 'nuget' }}
       run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release -o . /p:Version=0.0.0-local.1 /p:PackageVersion=0.0.0-local.1
 
-    - name: Test
+    - name: Test NuGet
       if: ${{ matrix.library == 'nuget' }}
       run: dotnet test --logger:"console;verbosity=detailed" tests/FileOnQ.Imaging.Raw.Tests.NuGet.${{ matrix.architecture }}/FileOnQ.Imaging.Raw.Tests.NuGet.${{ matrix.architecture }}.csproj --filter TestCategory=Integration
       
-    - name: Test
+    - name: Test Library
       if: ${{ matrix.library == 'library' }}
       run: dotnet test --logger:"console;verbosity=detailed" tests/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}.csproj --filter TestCategory=Integration
