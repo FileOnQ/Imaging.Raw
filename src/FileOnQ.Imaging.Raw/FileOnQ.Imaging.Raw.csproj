@@ -44,7 +44,7 @@
 		<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' != 'net48'">
+	<ItemGroup>
 		<!-- Copy all win-x86 native binaries -->
 		<Content Include="*32.dll" Pack="True" PackagePath="runtimes\win-x86\native\" Link="runtimes\win-x86\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
 
@@ -53,9 +53,8 @@
 		<Content Include="FileOnQ.Imaging.Raw.Gpu.Cuda.dll" Pack="True" PackagePath="runtimes\win-x64\native" Link="runtimes\win-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-		<!-- Copy all win-x86 and win-x64 native binaries -->
-		<None Include="*.dll" CopyToOutputDirectory="Always" />
+	<ItemGroup>
+		<Content Include="*.dll" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
 	<!-- Adds targets to NuGet which runs additional targets downstream. These targets are used for copying native dlls from the package to the bin directory -->
