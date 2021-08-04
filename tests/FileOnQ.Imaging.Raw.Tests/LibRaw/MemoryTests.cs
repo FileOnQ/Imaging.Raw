@@ -21,7 +21,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 	[TestFixture(TestData.RawImage12)]
 	[TestFixture(TestData.RawImage13)]
 	[TestFixture(TestData.RawImage14)]
-	[Category("libraw")]
+	[Category(Constants.Category.LibRaw)]
 	public class MemoryTests
     {
 		readonly string path;
@@ -141,7 +141,7 @@ namespace FileOnQ.Imaging.Raw.Tests
 		[Test]
 		public unsafe void LoadUnpackProcessMemoryCopyToBitmapCloseTest()
 		{
-			int count = 20;
+			int count = 30;
 
 			for (int i = 0; i < count; i++)
 			{

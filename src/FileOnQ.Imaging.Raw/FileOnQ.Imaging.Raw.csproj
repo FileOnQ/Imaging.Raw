@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<TargetFrameworks>net48;netstandard2.0;net5.0</TargetFrameworks>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<GpuProject>FileOnQ.Imaging.Raw.Gpu.Cuda</GpuProject>
 	</PropertyGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net48'">
@@ -20,35 +19,6 @@
 		<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Update="*.dll">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
-	<!-- NOTE - 7/30/2021 - @ahoefling - Only build LibRaw if it is a rebuild or clean. The binaries take a long time to compile and don't change often -->
-	<!-- NOTE - 7/30/2021 - @ahoefling - This build target only works with MSBuild through Visual Studio-->
-	<Target Name="LibRaw" BeforeTargets="DispatchToInnerBuilds" Condition="!Exists('libraw32.dll') and !Exists('libraw.dll')">
-		<Exec Command="libraw.bat x64" WorkingDirectory="$(SolutionDir)/build" />
-		<Copy SourceFiles="$(SolutionDir)/LibRaw/bin/libraw.dll" DestinationFolder="." />
-
-		<Exec Command="libraw.bat x86" WorkingDirectory="$(SolutionDir)/build" />
-		<Copy SourceFiles="$(SolutionDir)/LibRaw/bin/libraw32.dll" DestinationFolder="." />
-	</Target>
-
-	<Target Name="CleanLibRaw" BeforeTargets="Clean">
-		<Delete Files="libraw.dll" />
-		<Delete Files="libraw32.dll" />
-	</Target>
-
-	<!-- NOTE 7/30/2021 - @ahoefling - Building the GPU binaries on every build ensures the latest kernels are included with each build -->
-	<Target Name="GpuProject" BeforeTargets="DispatchToInnerBuilds">
-		<Exec Command="dotnet tool restore" WorkingDirectory="$(SolutionDir)" />
-		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=x64" WorkingDirectory="$(SolutionDir)" />
-		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=Win32" WorkingDirectory="$(SolutionDir)" />
-
-		<Copy SourceFiles="../$(GpuProject)/bin/Win32/$(Configuration)/$(GpuProject)32.dll" DestinationFolder="." />
-		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="." />
-	</Target>
-
+	<Import Project="Build\nuget.props" />
+	<Import Project="Build\cpp-build.targets" />
 </Project>

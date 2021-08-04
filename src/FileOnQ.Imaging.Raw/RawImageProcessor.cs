@@ -36,6 +36,7 @@ namespace FileOnQ.Imaging.Raw
 					throw new RawImageException<LibRaw.Error>(error);
 			}
 
+			// TODO - 8/3/2021 - @ahoefling - throw an exception if we have an error
 			if (image->Type == LibRaw.ImageFormat.Bitmap)
 			{
 				var e = LibRaw.Error.Success;

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project ToolsVersion="15.0">
+	<PropertyGroup>
+		<GpuProject>FileOnQ.Imaging.Raw.Gpu.Cuda</GpuProject>
+		<RootDir>$(ProjectDir)../../</RootDir>
+	</PropertyGroup>
+
+	<!-- NOTE - 7/30/2021 - @ahoefling - Only build LibRaw if it is a rebuild or clean. The binaries take a long time to compile and don't change often -->
+	<!-- NOTE - 7/30/2021 - @ahoefling - This build target only works with MSBuild through Visual Studio-->
+	<Target Name="LibRaw" BeforeTargets="DispatchToInnerBuilds" Condition="!Exists('libraw32.dll') and !Exists('libraw.dll')">
+		<Exec Command="libraw.bat x64" WorkingDirectory="$(RootDir)/build" />
+		<Copy SourceFiles="$(RootDir)/LibRaw/bin/libraw.dll" DestinationFolder="." />
+
+		<Exec Command="libraw.bat x86" WorkingDirectory="$(RootDir)/build" />
+		<Copy SourceFiles="$(RootDir)/LibRaw/bin/libraw32.dll" DestinationFolder="." />
+	</Target>
+
+	<Target Name="CleanLibRaw" BeforeTargets="Clean">
+		<Delete Files="libraw.dll" />
+		<Delete Files="libraw32.dll" />
+	</Target>
+
+	<!-- NOTE 7/30/2021 - @ahoefling - Building the GPU binaries on every build ensures the latest kernels are included with each build -->
+	<Target Name="GpuProject" BeforeTargets="DispatchToInnerBuilds">
+		<Exec Command="dotnet tool restore" WorkingDirectory="$(RootDir)" />
+		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=x64" WorkingDirectory="$(RootDir)" />
+		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=Win32" WorkingDirectory="$(RootDir)" />
+
+		<Copy SourceFiles="../$(GpuProject)/bin/Win32/$(Configuration)/$(GpuProject)32.dll" DestinationFolder="." />
+		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="." />
+	</Target>
+</Project>
