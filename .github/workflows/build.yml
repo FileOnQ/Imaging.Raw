@@ -16,14 +16,32 @@ jobs:
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             architecture: 'AnyCPU'
+            library: 'project'
           - os: windows-2019
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             architecture: 'x64'
+            library: 'project'
           - os: windows-2019
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             architecture: 'x86'
+            library: 'project'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            architecture: 'AnyCPU'
+            library: 'nuget'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            architecture: 'x64'
+            library: 'nuget'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            architecture: 'x86'
+            library: 'nuget'
 
     steps:
     - uses: actions/checkout@v2
@@ -57,7 +75,15 @@ jobs:
 
     - name: Build
       run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj
+      
+    - name: Pack
+      if: ${{ matrix.library == 'nuget' }}
+      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release -o . /p:Version=0.0.0-local.1 /p:PackageVersion=0.0.0-local.1
 
-      # TODO - 8/2/2021 - @ahoefling - add separate task for unit vs integration. Right now there are only integration tests      
     - name: Test
+      if: ${{ matrix.library == 'nuget' }}
+      run: dotnet test --logger:"console;verbosity=detailed" tests/FileOnQ.Imaging.Raw.Tests.NuGet.${{ matrix.architecture }}/FileOnQ.Imaging.Raw.Tests.NuGet.${{ matrix.architecture }}.csproj --filter TestCategory=Integration
+      
+    - name: Test
+      if: ${{ matrix.library == 'library' }}
       run: dotnet test --logger:"console;verbosity=detailed" tests/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}.csproj --filter TestCategory=Integration
