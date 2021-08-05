@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -8,15 +7,6 @@ namespace FileOnQ.Imaging.Raw
 {
 	public static class ThumbnailExtensions
 	{
-		// Question - Should we move this into a new library such as
-		// FileOnQ.Imaging.Raw.Drawing so we don't need the core lib
-		// to take a dependency on System.Drawing
-		//
-		// If we go with that approach we could create additional NuGets
-		// for each downstream libray
-		// - FileOnQ.Imaging.Raw.Forms (ImageSource)
-		// - FileONQ.Imaging.Raw.Uwp (Any UWP specific object, I think Bitmap works)
-
 		/// <summary>
 		/// Gets a <see cref="Bitmap"/> from the current
 		/// <see cref="ProcessedImage"/> in the most memory
@@ -145,15 +135,9 @@ namespace FileOnQ.Imaging.Raw
 				memory.Write(bitmapHeader, 0, bitmapHeader.Length);
 			}
 
-			// TODO move this to a partial method
-			//#if NET48 || NETSTANDARD2_0
-			//			memory.Write(imageData.Buffer, 0, imageData.Buffer.Length);
-			//#elif NET5_0_OR_GREATER
-			//			memory.Write(imageData.Buffer);
-			//#endif
 			memory.Write(imageData.Buffer, 0, imageData.Buffer.Length);
-
 			memory.Seek(0, SeekOrigin.Begin);
+			
 			return memory;
 		}
 	}
