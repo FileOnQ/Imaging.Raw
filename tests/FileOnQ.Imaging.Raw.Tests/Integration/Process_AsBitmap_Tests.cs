@@ -69,7 +69,6 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			using (var raw = image.UnpackRaw())
 			{
 				raw.Process(new DcrawProcessor());
-
 				using (var processedImage = raw.AsProcessedImage())
 				using (var bitmap = processedImage.AsBitmap(true))
 				{

@@ -38,13 +38,13 @@ namespace FileOnQ.Imaging.Raw
 
 			return new RawThumbnail(libraw);
 		}
-		public IImageProcessor UnpackRaw()
+		public IUnpackedImage UnpackRaw()
 		{
 			var errorCode = LibRaw.Unpack(libraw);
 			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException<LibRaw.Error>(errorCode);
 
-			return new RawImageProcessor(libraw);
+			return new UnpackedImage(libraw);
 
 			// TBD - this needs more design. We might just end up passing the libraw
 			// pointer to the IImageProcessor

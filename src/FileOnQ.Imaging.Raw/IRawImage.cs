@@ -5,6 +5,6 @@ namespace FileOnQ.Imaging.Raw
 	public interface IRawImage : IDisposable
 	{
 		IImageWriter UnpackThumbnail();
-		IImageProcessor UnpackRaw();
+		IUnpackedImage UnpackRaw();
 	}
 }
