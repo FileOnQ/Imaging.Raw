@@ -95,6 +95,6 @@ jobs:
         working-directory: ./dotnet.performance
         
       - name: ls fileonq.imaging.raw
-          run: ls
-          working-directory: ./fileonq.imaging.raw
+        run: ls
+        working-directory: ./fileonq.imaging.raw
       
