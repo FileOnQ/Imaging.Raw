@@ -27,6 +27,10 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 					Console.WriteLine("Starting DcrawProcess benchmarks . . .");
 					DcrawProcess();
 					break;
+				case "dcraw-gpu":
+					Console.WriteLine("Starting DcrawProcessGpu benchmarks . . .");
+					DcrawProcessGpu();
+					break;
 				case "thumbnail":
 					Console.WriteLine("Starting thumbnail benchmarks . . .");
 					Thumbnail();
@@ -61,6 +65,7 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 		}
 
 		static void DcrawProcess() => BenchmarkRunner.Run<DcrawProcess>();
+		static void DcrawProcessGpu() => BenchmarkRunner.Run<DcrawProcessGpu>();
 		static void Thumbnail() => BenchmarkRunner.Run<Thumbnail>();
 	}
 }
