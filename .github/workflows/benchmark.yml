@@ -88,12 +88,23 @@ jobs:
         working-directory: ./benchmark-artifacts
               
       - name: Compare - dcraw
-        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw" --diff "../../../../dcraw" --threshold 10% --top 10
+        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw" --diff "../../../../dcraw" --threshold 10% --top 10 > dcraw.output.txt
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
         
       - name: Compare - thumbnail
-        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail" --diff "../../../../thumbnail" --threshold 10% --top 10
+        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail" --diff "../../../../thumbnail" --threshold 10% --top 10 > thumbnail.output.txt
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
         
-      # TODO - print results in GitHub
+      - name: Set GitHub Comment
+        run: |
+          $message = "Benchmarking comparison between this Pull Request and the comitted values at `benchmarks/results` `r`n`r`n"
+          $message += "dcraw`r`n"
+          $message += "```ini `r`n" + $(Get-Content "dcraw.output.txt" -raw) + "`r`n ``` "
+          $message += "`r`n`r`nthumbnail"
+          $message += "```ini `r`n + $(Get-Content "thumbnail.output.txt" -raw) + "`r`n ``` "
+          echo "PR_COMMENT=$message" >> $env:GITHUB_ENV
+        working-directory: ./dotnet-performance/src/tools/
+        
+      - name: Post Message to Pull Request
+        run: echo "${{ env.PR_COMMENT }}"
       
