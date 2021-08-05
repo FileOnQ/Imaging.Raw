@@ -7,28 +7,28 @@ namespace FileOnQ.Imaging.Raw
 	{
 		LibRaw.ProcessedImage* image;
 
-		public void Process(IntPtr data)
+		public void Process(RawImageData data)
 		{
 			// TODO - 7/27/2021 - @ahoefling - get properties from parameters.
-			var errorCode = LibRaw.DcrawProcess(data);
+			var errorCode = LibRaw.DcrawProcess(data.LibRawData);
 			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException<LibRaw.Error>(errorCode);
 		}
 
 		// I might want to keep this on the processed image
-		public void Write(IntPtr data, string file)
+		public void Write(RawImageData data, string file)
 		{
 			// TODO - 7/27/2021 - @ahoefling - Add validation
-			LibRaw.DcrawWriter(data, file);
+			LibRaw.DcrawWriter(data.LibRawData, file);
 		}
 
 		// this should remain on the processed image
-		public ProcessedImage AsProcessedImage(IntPtr data)
+		public ProcessedImage AsProcessedImage(RawImageData data)
 		{
 			if ((IntPtr)image == IntPtr.Zero)
 			{
 				var error = LibRaw.Error.Success;
-				image = LibRaw.MakeMemoryImage(data, ref error);
+				image = LibRaw.MakeMemoryImage(data.LibRawData, ref error);
 				if (error != LibRaw.Error.Success)
 					throw new RawImageException<LibRaw.Error>(error);
 			}
