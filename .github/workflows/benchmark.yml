@@ -52,7 +52,7 @@ jobs:
       run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
       
     - name: Benchmark
-      run: dotnet run -c Release -b {{ matrix.benchmark }}
+      run: dotnet run -c Release -b ${{ matrix.benchmark }}
       working-directory: ./benchmarks/tools
       
     - name: Upload Results
