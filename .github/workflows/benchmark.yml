@@ -73,16 +73,16 @@ jobs:
         with:
           repository: dotnet/performance
           
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          path: benchmark-artifacts
-        
-      - name: Extract Artifacts
-        run: |
-          7z x -odcraw Benchmark-dcraw.zip
-          7z x -othumbnail Benchmark-thumbnail.zip 
-        working-directory: ./benchmark-artifacts
+#      - name: Download Artifacts
+#        uses: actions/download-artifact@v2
+#        with:
+#          path: benchmark-artifacts
+#        
+#      - name: Extract Artifacts
+#        run: |
+#          7z x -odcraw Benchmark-dcraw.zip
+#          7z x -othumbnail Benchmark-thumbnail.zip 
+#        working-directory: ./benchmark-artifacts
         
       - name: ls root
         run: ls
