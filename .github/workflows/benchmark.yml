@@ -68,7 +68,7 @@ jobs:
       - name: Clone fileonq/imaging.raw
         uses: actions/checkout@v2
         with:
-          path: FileOnQ.Imaging.Raw
+          path: fileonq.imaging.raw
         
       - name: Clone dotnet/performance
         uses: actions/checkout@v2
@@ -90,7 +90,11 @@ jobs:
       - name: ls root
         run: ls
       
-      - name: ls dotnet/performance
+      - name: ls dotnet.performance
         run: ls
-        working-directory: ./performance
+        working-directory: ./dotnet.performance
+        
+      - name: ls fileonq.imaging.raw
+          run: ls
+          working-directory: ./fileonq.imaging.raw
       
