@@ -50,3 +50,9 @@ jobs:
     - name: Benchmark
       run: dotnet run -c Release -b {{ matrix.benchmark }}
       working-directory: ./benchmarks/tools
+      
+    - name: Upload Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Benchmark-${{ matrix.benchmark }}
+        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
