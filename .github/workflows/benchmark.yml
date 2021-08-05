@@ -1,14 +1,19 @@
 name: FileOnQ.Imaging.Raw
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: {{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'thumbnail'
     steps:
     - uses: actions/checkout@v2
       with:
@@ -40,16 +45,8 @@ jobs:
         nuget-version: 5.x
 
     - name: Build
-      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj
+      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
       
-    - name: Pack NuGet
-      if: ${{ matrix.library == 'nuget' }}
-      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release -o . /p:Version=0.0.0-local.1 /p:PackageVersion=0.0.0-local.1
-
-    - name: Test NuGet
-      if: ${{ matrix.library == 'nuget' }}
-      run: dotnet test --logger:"console;verbosity=detailed" tests/FileOnQ.Imaging.Raw.Tests.NuGet.${{ matrix.architecture }}/FileOnQ.Imaging.Raw.Tests.NuGet.${{ matrix.architecture }}.csproj --filter TestCategory=Integration
-      
-    - name: Test Library
-      if: ${{ matrix.library == 'library' }}
-      run: dotnet test --logger:"console;verbosity=detailed" tests/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}/FileOnQ.Imaging.Raw.Tests.${{ matrix.architecture }}.csproj --filter TestCategory=Integration
+    - name: Benchmark
+      run: dotnet run -c Release -b {{ matrix.benchmark }}
+      working-directory: ./benchmarks/tools
