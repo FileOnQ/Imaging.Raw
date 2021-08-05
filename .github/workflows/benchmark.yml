@@ -1,4 +1,4 @@
-name: FileOnQ.Imaging.Raw
+name: Benchmarks
 
 on:
   pull_request:
