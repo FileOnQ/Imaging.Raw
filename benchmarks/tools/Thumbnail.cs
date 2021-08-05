@@ -53,15 +53,18 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 		[Benchmark]
 		public Size ThumbnailIntoBitmap()
 		{
+			var size = Size.Empty;
 			using (var image = new RawImage(filePath))
 			using (var thumb = image.UnpackThumbnail())
 			{
 				using (var processedImage = thumb.AsProcessedImage())
 				using (var bitmap = processedImage.AsBitmap())
 				{
-					return bitmap.Size;
+					size = bitmap.Size;
 				}
 			}
+
+			return size;
 		}
 	}
 }
