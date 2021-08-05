@@ -67,11 +67,14 @@ jobs:
     steps:
       - name: Clone fileonq/imaging.raw
         uses: actions/checkout@v2
+        with:
+          path: FileOnQ.Imaging.Raw
         
       - name: Clone dotnet/performance
         uses: actions/checkout@v2
         with:
           repository: dotnet/performance
+          path: dotnet.performance
           
 #      - name: Download Artifacts
 #        uses: actions/download-artifact@v2
