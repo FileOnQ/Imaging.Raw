@@ -86,11 +86,11 @@ jobs:
         working-directory: ./benchmark-artifacts
               
       - name: Compare - dcraw
-        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw" --diff "../../../../benchmark-artifacts/dcraw" --threshold 10% --top 10 > dcraw.output.txt
+        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw" --diff "../../../../benchmark-artifacts/Benchmark-dcraw" --threshold 10% --top 10 > dcraw.output.txt
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
         
       - name: Compare - thumbnail
-        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail" --diff "../../../../benchmark-artifacts/thumbnail" --threshold 10% --top 10 > thumbnail.output.txt
+        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail" --diff "../../../../benchmark-artifacts/Benchmark-thumbnail" --threshold 10% --top 10 > thumbnail.output.txt
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
         
       - name: Set GitHub Comment
