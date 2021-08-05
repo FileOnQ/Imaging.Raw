@@ -5,64 +5,64 @@ on:
     branches: [ main ]
 
 jobs:
-#  benchmark:
-#    runs-on: ${{ matrix.os }}
-#    strategy:
-#      matrix:
-#        include:
-#          - os: windows-2019
-#            cuda: 'CUDA-11.4.0'
-#            visual_studio: 'Visual Studio 16 2019'
-#            benchmark: 'thumbnail'
-#          - os: windows-2019
-#            cuda: 'CUDA-11.4.0'
-#            visual_studio: 'Visual Studio 16 2019'
-#            benchmark: 'dcraw'
-#    steps:
-#    - uses: actions/checkout@v2
-#      with:
-#        submodules: 'true'
-#        
-#    - name: Install CUDA
-#      env:
-#        cuda: ${{ matrix.cuda }}
-#        visual_studio: ${{ matrix.visual_studio }}
-#      shell: powershell
-#      run: .\build\cuda.ps1
-#      
-#    - name: Check NVCC
-#      shell: powershell
-#      run: |
-#        nvcc -V
-#        ls $env:CUDA_PATH
-#        ls $env:CUDA_PATH\bin
-#        ls $env:CUDA_PATH\include
-#
-#    - name: Setup .NET SDK
-#      uses: actions/setup-dotnet@v1
-#      with:
-#        dotnet-version: 5.0.102
-#
-#    - name: Setup NuGet.exe
-#      uses: NuGet/setup-nuget@v1.0.5
-#      with:
-#        nuget-version: 5.x
-#
-#    - name: Build
-#      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
-#      
-#    - name: Benchmark
-#      run: dotnet run -c Release -b ${{ matrix.benchmark }}
-#      working-directory: ./benchmarks/tools
-#      
-#    - name: Upload Results
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: Benchmark-${{ matrix.benchmark }}
-#        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
-#        
+  benchmark:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'thumbnail'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw'
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Install CUDA
+      env:
+        cuda: ${{ matrix.cuda }}
+        visual_studio: ${{ matrix.visual_studio }}
+      shell: powershell
+      run: .\build\cuda.ps1
+
+    - name: Check NVCC
+      shell: powershell
+      run: |
+        nvcc -V
+        ls $env:CUDA_PATH
+        ls $env:CUDA_PATH\bin
+        ls $env:CUDA_PATH\include
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.102
+
+    - name: Setup NuGet.exe
+      uses: NuGet/setup-nuget@v1.0.5
+      with:
+        nuget-version: 5.x
+
+    - name: Build
+      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
+
+    - name: Benchmark
+      run: dotnet run -c Release -b ${{ matrix.benchmark }}
+      working-directory: ./benchmarks/tools
+
+    - name: Upload Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Benchmark-${{ matrix.benchmark }}
+        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
+
   benchmark-compare:
-    #needs: benchmark
+    needs: benchmark
     runs-on: windows-2019
     steps:
       - name: Clone fileonq/imaging.raw
@@ -76,25 +76,24 @@ jobs:
           repository: dotnet/performance
           path: dotnet.performance
           
-#      - name: Download Artifacts
-#        uses: actions/download-artifact@v2
-#        with:
-#          path: benchmark-artifacts
-#        
-#      - name: Extract Artifacts
-#        run: |
-#          7z x -odcraw Benchmark-dcraw.zip
-#          7z x -othumbnail Benchmark-thumbnail.zip 
-#        working-directory: ./benchmark-artifacts
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: benchmark-artifacts
+
+      - name: Extract Artifacts
+        run: |
+          7z x -odcraw Benchmark-dcraw.zip
+          7z x -othumbnail Benchmark-thumbnail.zip 
+        working-directory: ./benchmark-artifacts
+              
+      - name: Compare - dcraw
+        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw" --diff "../../../../dcraw" --threshold 10% --top 10
+        working-directory: ./dotnet.performance/src/tools/ResultsComparer
         
-      - name: ls root
-        run: ls
-      
-      - name: ls dotnet.performance
-        run: ls
-        working-directory: ./dotnet.performance
+      - name: Compare - thumbnail
+        run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail" --diff "../../../../thumbnail" --threshold 10% --top 10
+        working-directory: ./dotnet.performance/src/tools/ResultsComparer
         
-      - name: ls fileonq.imaging.raw
-        run: ls
-        working-directory: ./fileonq.imaging.raw
+      # TODO - print results in GitHub
       
