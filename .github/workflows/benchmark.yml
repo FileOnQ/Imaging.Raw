@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  benchmark:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -14,6 +14,10 @@ jobs:
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             benchmark: 'thumbnail'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw'
     steps:
     - uses: actions/checkout@v2
       with:
@@ -56,3 +60,22 @@ jobs:
       with:
         name: Benchmark-${{ matrix.benchmark }}
         path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
+        
+  benchmark-compare:
+    needs: benchmark
+    runs-on: windows-2019
+    steps:
+      - name: Clone dotnet/performance
+        uses: actions/checkout@v2
+        with:
+          repository: https://github.com/dotnet/performance
+          
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: benchmark-artifacts
+      
+      - name: See artifacts
+        run: ls
+        working-directory: ./benchmark-artifacts
+      
