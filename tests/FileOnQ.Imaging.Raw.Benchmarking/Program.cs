@@ -7,10 +7,36 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 {
 	class Program
 	{
-		static readonly string input = "Images/sample1.cr2";
+		public static string Input => "Images/sample1.cr2";
 		static void Main(string[] args)
 		{
-			AsBitmapRunner();
+			Console.WriteLine("FileOnQ Imaging Raw Benchmark tool");
+
+			if (args.Length < 2 || args[0] != "-b")
+			{
+				Console.WriteLine("Available commands:");
+				Console.WriteLine("\t-b benchmark to run (dcraw, thumbnail, etc.)");
+				Console.WriteLine("\r\nExample: dotnet run -b thumbnail");
+				return;
+			}
+
+			var benchmark = args[1].ToLower();
+			switch (benchmark)
+			{
+				case "dcraw":
+					Console.WriteLine("Starting DcrawProcess benchmarks . . .");
+					DcrawProcess();
+					break;
+				case "thumbnail":
+					Console.WriteLine("Starting thumbnail benchmarks . . .");
+					Thumbnail();
+					break;
+				default:
+					Console.WriteLine($"Benchmark {benchmark} is not available");
+					break;
+			}
+
+			Console.WriteLine("Benchmark completed");
 		}
 
 		static void AsBitmapRunner()
@@ -21,7 +47,7 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 			var filePath = Path.Combine(assemblyDirectory, "generated-data-file");
 
-			using (var image = new RawImage(input))
+			using (var image = new RawImage(Input))
 			using (var raw = image.UnpackRaw())
 			{
 				raw.Process(new DcrawProcessor());
@@ -33,5 +59,8 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 			Console.WriteLine("Input data generated, starting benchmark!");
 			BenchmarkRunner.Run<AsBitmap>();
 		}
+
+		static void DcrawProcess() => BenchmarkRunner.Run<DcrawProcess>();
+		static void Thumbnail() => BenchmarkRunner.Run<Thumbnail>();
 	}
 }
