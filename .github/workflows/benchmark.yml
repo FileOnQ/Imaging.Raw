@@ -68,7 +68,7 @@ jobs:
       - name: Clone dotnet/performance
         uses: actions/checkout@v2
         with:
-          repository: https://github.com/dotnet/performance
+          repository: dotnet/performance
           
       - name: Download Artifacts
         uses: actions/download-artifact@v2
