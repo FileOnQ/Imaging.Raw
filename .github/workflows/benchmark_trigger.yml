@@ -41,7 +41,7 @@ jobs:
     - name: GitHub Comment - Comparison
       run: |
         $message = "## Benchmark Comparison
-        $message = "Benchmarking comparison between this Pull Request and the comitted values at `benchmarks/results` `r`n`r`n"
+        $message += "Benchmarking comparison between this Pull Request and the comitted values at `benchmarks/results` `r`n`r`n"
         $message += "dcraw`r`n"
         $message += "```ini `r`n" + "Test Data" + "`r`n ``` "
         $message += "`r`n`r`nthumbnail"
