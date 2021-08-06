@@ -21,7 +21,7 @@ jobs:
         reaction: eyes
       env:
         GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-
+        
     - name: Start Benchmark
       if: steps.check.outputs.triggered == 'true'
       run: |
@@ -30,4 +30,4 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: Bearer ${{ secrets.REPO_ACCESS_TOKEN }}" \
           https://api.github.com/repos/FileOnQ/Imaging.Raw/actions/workflows/benchmark.yml/dispatches \
-          -d '{"ref":"${{ steps.comment-branch.outputs.HEAD_REF }}"}'
+          -d '{"ref":"refs/remotes/pull/9/merge"}'
