@@ -3,12 +3,62 @@ name: Benchmark
 on:
   pull_request:
     branches: [ main ]
-    types: [opened]
-  workflow_dispatch: 
-    
+    types: [ opened ]
+  issue_comment:
+    types: [ created ]
+
 jobs:
+  check-command:
+    runs-on: windows-2019
+    permissions:
+      pull-requests: write
+    outputs:
+      benchmark: ${{ steps.check.outputs.triggered }}
+      ref: ${{ env.CUSTOM_REF }}
+    steps:
+      - name: Check Benchmark Trigger
+        uses: khan/pull-request-comment-trigger@master
+        id: check
+        with:
+          trigger: '/benchmark'
+          reaction: eyes
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Find Branch
+        if: ${{ steps.check.outputs.triggered == 'true' }}
+        uses: actions/github-script@v3
+        id: find-branch
+        with:
+          script: |
+            const request = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            }
+            core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+            try {
+              const result = await github.pulls.get(request)
+              return result.data
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
+
+      - name: Set Branch
+        run: |
+          $triggered = '${{ steps.check.outputs.triggered }}'
+          $ref = '${{ github.REF }}'
+          if ($triggered -eq 'true') {
+            $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
+          }
+          echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
+
   benchmark:
+    if: ${{ needs.check-command.outputs.benchmark == 'true' }}
+    needs: check-command
     runs-on: ${{ matrix.os }}
+    outputs:
+      ref: ${{ needs.check-command.outputs.ref }}
     strategy:
       matrix:
         include:
@@ -21,94 +71,113 @@ jobs:
             visual_studio: 'Visual Studio 16 2019'
             benchmark: 'dcraw'
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'true'
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+          ref: ${{ needs.check-command.outputs.ref }}
 
-    - name: Install CUDA
-      env:
-        cuda: ${{ matrix.cuda }}
-        visual_studio: ${{ matrix.visual_studio }}
-      shell: powershell
-      run: .\build\cuda.ps1
+      - name: Install CUDA
+        env:
+          cuda: ${{ matrix.cuda }}
+          visual_studio: ${{ matrix.visual_studio }}
+        shell: powershell
+        run: .\build\cuda.ps1
 
-    - name: Check NVCC
-      shell: powershell
-      run: |
-        nvcc -V
-        ls $env:CUDA_PATH
-        ls $env:CUDA_PATH\bin
-        ls $env:CUDA_PATH\include
+      - name: Check NVCC
+        shell: powershell
+        run: |
+          nvcc -V
+          ls $env:CUDA_PATH
+          ls $env:CUDA_PATH\bin
+          ls $env:CUDA_PATH\include
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.102
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.102
 
-    - name: Setup NuGet.exe
-      uses: NuGet/setup-nuget@v1.0.5
-      with:
-        nuget-version: 5.x
+      - name: Setup NuGet.exe
+        uses: NuGet/setup-nuget@v1.0.5
+        with:
+          nuget-version: 5.x
 
-    - name: Build
-      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
+      - name: Build
+        run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
 
-    - name: Benchmark
-      run: dotnet run -c Release -b ${{ matrix.benchmark }}
-      working-directory: ./benchmarks/tools
+      - name: Benchmark
+        run: dotnet run -c Release -b ${{ matrix.benchmark }}
+        working-directory: ./benchmarks/tools
 
-    - name: Upload Results
-      uses: actions/upload-artifact@v2
-      with:
-        name: Benchmark-${{ matrix.benchmark }}
-        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
+      - name: Upload Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Benchmark-${{ matrix.benchmark }}
+          path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
 
   benchmark-compare:
+    if: ${{ needs.check-command.outputs.benchmark == 'true' }}
     needs: benchmark
     runs-on: windows-2019
     steps:
       - name: Clone fileonq/imaging.raw
         uses: actions/checkout@v2
         with:
+          ref: ${{ needs.benchmark.outputs.ref }}
           path: fileonq.imaging.raw
-        
+
       - name: Clone dotnet/performance
         uses: actions/checkout@v2
         with:
           repository: dotnet/performance
           path: dotnet.performance
-          
+
       - name: Download Artifacts
         uses: actions/download-artifact@v2
         with:
           path: benchmark-artifacts
-              
+
       - name: Compare - dcraw
         run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw" --diff "../../../../benchmark-artifacts/Benchmark-dcraw" --threshold 10% --top 10 > dcraw.output.txt
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
-        
+
       - name: Compare - thumbnail
         run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail" --diff "../../../../benchmark-artifacts/Benchmark-thumbnail" --threshold 10% --top 10 > thumbnail.output.txt
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
-        
+
       - name: GitHub Comment - Comparison
         run: |
-          $message = "## Benchmark Comparison
-          $message = "Benchmarking comparison between this Pull Request and the comitted values at `benchmarks/results` `r`n`r`n"
+          $dcraw = Get-Content "dcraw.output.txt" -raw
+          $thumbnail = Get-Content "thumbnail.output.txt" -raw
+
+          $message = "## Benchmark Comparison`r`n"
+          $message += "Benchmarking comparison between this Pull Request and the comitted values at benchmarks/results `r`n`r`n"
           $message += "dcraw`r`n"
-          $message += "```ini `r`n" + $(Get-Content "dcraw.output.txt" -raw) + "`r`n ``` "
-          $message += "`r`n`r`nthumbnail"
-          $message += "```ini `r`n" + $(Get-Content "thumbnail.output.txt" -raw) + "`r`n ``` "
-          echo "PR_COMMENT_COMPARISON=$message" >> $env:GITHUB_ENV
+          $message += "\``\``\``ini `r`n $dcraw `r`n \``\``\``"
+          $message += "`r`n`r`nthumbnail`r`n"
+          $message += "\``\``\``ini `r`n $thumbnail `r`n \``\``\``"
+          echo $message
+          echo "PR_COMMENT_COMPARISON<<EOF" >> $env:GITHUB_ENV
+          echo "$message" >> $env:GITHUB_ENV
+          echo "EOF" >> $env:GITHUB_ENV
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
-        
+
       - name: GitHub Comment - Benchmark Results
         run: |
-          $message = "## Benchmark Results
-          $message += "<details><summary>dcraw</summary><p>" + $(Get-Content "dcraw.md" -raw) + "</p></details>`r`n"
-          $message += "<details><summary>thumbnail</summary><p>" + $(Get-Content "thumbnail.md" -raw) + "</p></details>`r`n"
-          echo "PR_COMMENT_RESULTS=$message" >> $env:GITHUB_ENV
-        
+          $dcraw = Get-Content "Benchmark-dcraw/FileOnQ.Imaging.Raw.Benchmarking.DcrawProcess-report-github.md" -raw
+          $dcraw = $dcraw.replace("``", "\``")
+
+          $thumbnail = Get-Content "Benchmark-thumbnail/FileOnQ.Imaging.Raw.Benchmarking.Thumbnail-report-github.md" -raw
+          $thumbnail = $thumbnail.replace("``", "\``")
+
+          $message = "## Benchmark Results`r`n"
+          $message += "<details><summary>dcraw</summary><p>`r`n`r`n $dcraw </p></details>`r`n"
+          $message += "<details><summary>thumbnail</summary><p>`r`n`r`n $thumbnail </p></details>`r`n"
+          echo $message
+          echo "PR_COMMENT_RESULTS<<EOF" >> $env:GITHUB_ENV
+          echo "$message" >> $env:GITHUB_ENV
+          echo "EOF" >> $env:GITHUB_ENV
+        working-directory: ./benchmark-artifacts
+
       - name: GitHub Comment - Post
         uses: actions/github-script@v4
         with:
@@ -117,5 +186,8 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '${{ env.PR_COMMENT_COMPARISON }}\r\n\r\n${{ env.PR_COMMENT_RESULTS }}'
-      
+              body: `${{ env.PR_COMMENT_COMPARISON }}\r\n\r\n${{ env.PR_COMMENT_RESULTS }}`
+            })
+
+
+# TODO - test PR creation
