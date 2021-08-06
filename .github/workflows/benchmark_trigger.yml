@@ -46,6 +46,7 @@ jobs:
         $message += "```ini `r`n" + "Test Data" + "`r`n ``` "
         $message += "`r`n`r`nthumbnail"
         $message += "```ini `r`n" + "Test Data" + "`r`n ``` "
+        echo $message
         echo "PR_COMMENT_COMPARISON=$message" >> $env:GITHUB_ENV
         
     - name: GitHub Comment - Benchmark Results
