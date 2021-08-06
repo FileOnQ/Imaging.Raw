@@ -4,15 +4,13 @@ on:
   issue_comment:
     types: [ created ]
 jobs:
-  trigger:
+  check-command:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
+    outputs:
+      benchmark: ${{ steps.check.outputs.triggered }}
     steps:
-    - name: Pull Request Comment
-      uses: xt0rted/pull-request-comment-branch@v1
-      id: comment-branch
-        
     - name: Check Benchmark Trigger
       uses: khan/pull-request-comment-trigger@master
       id: check
@@ -20,14 +18,20 @@ jobs:
         trigger: '/benchmark'
         reaction: eyes
       env:
-        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' 
         
-    - name: Start Benchmark
-      if: steps.check.outputs.triggered == 'true'
-      run: |
-        curl \
-          -X POST \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: Bearer ${{ secrets.REPO_ACCESS_TOKEN }}" \
-          https://api.github.com/repos/FileOnQ/Imaging.Raw/actions/workflows/benchmark.yml/dispatches \
-          -d '{"ref":"refs/remotes/pull/9/merge"}'
+  benchmark:
+    if: ${{ needs.check-command.outputs.benchmark == 'true' }}
+    needs: check-command
+    runs-on: windows-2019
+    steps:
+    - name: Hello
+      run: echo "Hello World"
+      
+  benchmark-compare:
+    if: ${{ needs.check-command.outputs.benchmark == 'true' }}
+    needs: benchmark
+    runs-on: windows-2019
+    steps:
+    - name: Hello
+      run: echo "Hello World"
