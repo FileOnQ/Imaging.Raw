@@ -9,13 +9,13 @@ namespace FileOnQ.Imaging.Raw
 		{
 			const string DllName = "FileOnQ.Imaging.Raw.Gpu.Cuda.dll";
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern bool is_cuda_capable();
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern IntPtr process_bitmap(IntPtr data, int size, int width, int height, ref int length, ref Error error);
 			
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern void free_memory(IntPtr pointer);
 		}
 	}
