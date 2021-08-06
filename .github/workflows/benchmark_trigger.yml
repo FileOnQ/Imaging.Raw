@@ -1,8 +1,8 @@
 name: Benchmark Trigger
 
 on:
-  issue_comment: [ created ]
-
+  issue_comment:
+    types: [ created ]
 jobs:
   trigger:
     runs-on: ubuntu-latest
