@@ -46,7 +46,7 @@ jobs:
           
     - name: Set Branch
       run: |
-        $triggered = ${{ steps.check.outputs.triggered }}
+        $triggered = '${{ steps.check.outputs.triggered }}'
         $ref = '${{ github.REF }}'
         if ($triggered -eq 'true') {
           $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
