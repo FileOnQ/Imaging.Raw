@@ -115,6 +115,7 @@ jobs:
   benchmark-compare:
     if: ${{ needs.check-command.outputs.benchmark == 'true' }}
 #    needs: benchmark
+    needs: check-command
     runs-on: windows-2019
     steps:
     - name: Clone fileonq/imaging.raw
