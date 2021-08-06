@@ -5,7 +5,7 @@ name: Benchmark
 on:
   pull_request:
     branches: [ main ]
-    types: [ opened ]
+#    types: [ opened ]
   issue_comment:
     types: [ created ]
     
@@ -18,6 +18,9 @@ jobs:
       benchmark: ${{ steps.check.outputs.triggered }}
       ref: ${{ env.CUSTOM_REF }}
     steps:
+    - name: Print Event Name
+      run: echo "${{ github.EVENT_NAME }}"
+    
     - name: Check Benchmark Trigger
       uses: khan/pull-request-comment-trigger@master
       id: check
@@ -46,8 +49,7 @@ jobs:
             core.setFailed(`Request failed with error ${err}`)
           }
           
-    - name: Print Event Name
-      run: echo "${{ github.EVENT_NAME }}"
+    
           
     - name: Set Branch
       run: |
