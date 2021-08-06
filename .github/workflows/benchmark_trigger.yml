@@ -2,7 +2,7 @@ name: Benchmark - Trigger
 
 on:
   pull_request:
-    types: [opened]
+    branches: [ main ]
   issue_comment:
     types: [created]
     
