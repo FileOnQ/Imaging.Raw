@@ -15,7 +15,7 @@ jobs:
       uses: khan/pull-request-comment-trigger@master
       id: check
       with:
-        trigger: '@test'
+        trigger: '/test'
         reaction: eyes
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
