@@ -9,6 +9,8 @@ on:
 jobs:
   trigger:
     runs-on: ubuntu-latest
+    permissions: 
+      pull-requests: write
     steps:
     - name: Check Benchmark Trigger
       uses: khan/pull-request-comment-trigger@master
