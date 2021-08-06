@@ -23,7 +23,12 @@ jobs:
   benchmark:
     if: ${{ needs.check-command.outputs.benchmark == 'true' }}
     needs: check-command
-    runs-on: windows-2019
+    runs-on: ${{ matrix.os }}
+    strategy: 
+      matrix:
+        include:
+          - os: windows-2019
+          - os: windows-2019
     steps:
     - name: Hello
       run: echo "Hello World"
@@ -33,5 +38,29 @@ jobs:
     needs: benchmark
     runs-on: windows-2019
     steps:
-    - name: Hello
-      run: echo "Hello World"
+    - name: GitHub Comment - Comparison
+      run: |
+        $message = "## Benchmark Comparison
+        $message = "Benchmarking comparison between this Pull Request and the comitted values at `benchmarks/results` `r`n`r`n"
+        $message += "dcraw`r`n"
+        $message += "```ini `r`n" + "Test Data" + "`r`n ``` "
+        $message += "`r`n`r`nthumbnail"
+        $message += "```ini `r`n" + "Test Data" + "`r`n ``` "
+        echo "PR_COMMENT_COMPARISON=$message" >> $env:GITHUB_ENV
+        
+    - name: GitHub Comment - Benchmark Results
+      run: |
+        $message = "## Benchmark Results
+        $message += "<details><summary>dcraw</summary><p>" + "test data" + "</p></details>`r`n"
+        $message += "<details><summary>thumbnail</summary><p>" + "test data" + "</p></details>`r`n"
+        echo "PR_COMMENT_RESULTS=$message" >> $env:GITHUB_ENV
+
+    - name: GitHub Comment - Post
+      uses: actions/github-script@v4
+      with:
+        script: |
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '${{ env.PR_COMMENT_COMPARISON }}\r\n\r\n${{ env.PR_COMMENT_RESULTS }}'
