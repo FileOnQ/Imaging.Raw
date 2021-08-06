@@ -38,10 +38,13 @@ jobs:
     needs: benchmark
     runs-on: windows-2019
     steps:
+    - name: Clone
+    - uses: actions/checkout@v2
+
     - name: GitHub Comment - Comparison
       run: |
         $message = "## Benchmark Comparison`r`n"
-        $message += "Benchmarking comparison between this Pull Request and the comitted values at `benchmarks/results` `r`n`r`n"
+        $message += "Benchmarking comparison between this Pull Request and the comitted values at \`benchmarks/results\` `r`n`r`n"
         $message += "dcraw`r`n"
         $message += "\``\``\``ini `r`n" + "Test Data" + "`r`n \``\``\``"
         $message += "`r`n`r`nthumbnail`r`n"
@@ -50,15 +53,17 @@ jobs:
         echo "PR_COMMENT_COMPARISON<<EOF" >> $env:GITHUB_ENV
         echo "$message" >> $env:GITHUB_ENV
         echo "EOF" >> $env:GITHUB_ENV
-#        echo "PR_COMMENT_COMPARISON=" + $message >> $env:GITHUB_ENV
         
     - name: GitHub Comment - Benchmark Results
       run: |
         $message = "## Benchmark Results`r`n"
-        $message += "<details><summary>dcraw</summary><p>" + "test data" + "</p></details>`r`n"
+        $message += "<details><summary>dcraw</summary><p>" + $(Get-Content "FileOnQ.Imaging.Raw.Benchmarking.DcrawProcess-report-github.md" -raw) + "</p></details>`r`n"
         $message += "<details><summary>thumbnail</summary><p>" + "test data" + "</p></details>`r`n"
         echo $message
-#        echo "PR_COMMENT_RESULTS=$message" >> $env:GITHUB_ENV
+        echo "PR_COMMENT_RESULTS<<EOF" >> $env:GITHUB_ENV
+        echo "$message" >> $env:GITHUB_ENV
+        echo "EOF" >> $env.GITHUB_ENV
+      working-directory: ./results/dcraw
 
     - name: GitHub Comment - Post
       uses: actions/github-script@v4
@@ -68,5 +73,5 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: `${{ env.PR_COMMENT_COMPARISON }}`
+            body: `${{ env.PR_COMMENT_COMPARISON }}\r\n\r\n${{ env.PR_COMMENT_RESULTS }}`
           })
