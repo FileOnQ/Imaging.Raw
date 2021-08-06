@@ -10,6 +10,7 @@ jobs:
       pull-requests: write
     steps:
     - name: Check Benchmark Trigger
+      id: check
       uses: khan/pull-request-comment-trigger@master
       with:
         trigger: '/benchmark'
