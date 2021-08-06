@@ -41,18 +41,18 @@ jobs:
     - name: Clone
       uses: actions/checkout@v2
 
-    - name: GitHub Comment - Comparison
-      run: |
-        $message = "## Benchmark Comparison`r`n"
-        $message += "Benchmarking comparison between this Pull Request and the comitted values at \`benchmarks/results\` `r`n`r`n"
-        $message += "dcraw`r`n"
-        $message += "\``\``\``ini `r`n" + "Test Data" + "`r`n \``\``\``"
-        $message += "`r`n`r`nthumbnail`r`n"
-        $message += "\``\``\``ini `r`n" + "Test Data" + "`r`n \``\``\``"
-        echo $message
-        echo "PR_COMMENT_COMPARISON<<EOF" >> $env:GITHUB_ENV
-        echo "$message" >> $env:GITHUB_ENV
-        echo "EOF" >> $env:GITHUB_ENV
+#    - name: GitHub Comment - Comparison
+#      run: |
+#        $message = "## Benchmark Comparison`r`n"
+#        $message += "Benchmarking comparison between this Pull Request and the comitted values at \`benchmarks/results\` `r`n`r`n"
+#        $message += "dcraw`r`n"
+#        $message += "\``\``\``ini `r`n" + "Test Data" + "`r`n \``\``\``"
+#        $message += "`r`n`r`nthumbnail`r`n"
+#        $message += "\``\``\``ini `r`n" + "Test Data" + "`r`n \``\``\``"
+#        echo $message
+#        echo "PR_COMMENT_COMPARISON<<EOF" >> $env:GITHUB_ENV
+#        echo "$message" >> $env:GITHUB_ENV
+#        echo "EOF" >> $env:GITHUB_ENV
         
     - name: GitHub Comment - Benchmark Results
       run: |
