@@ -28,6 +28,6 @@ jobs:
         curl \
           -X POST \
           -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Authorization: Bearer ${{ secrets.REPO_ACCESS_TOKEN }}" \
           https://api.github.com/repos/FileOnQ/Imaging.Raw/actions/workflows/benchmark.yml/dispatches \
           -d '{"ref":"${{ steps.comment-branch.outputs.HEAD_REF }}"}'
