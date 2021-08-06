@@ -76,43 +76,43 @@ jobs:
         submodules: 'true'
         ref: ${{ needs.check-command.outputs.ref }}
 
-#    - name: Install CUDA
-#      env:
-#        cuda: ${{ matrix.cuda }}
-#        visual_studio: ${{ matrix.visual_studio }}
-#      shell: powershell
-#      run: .\build\cuda.ps1
-#
-#    - name: Check NVCC
-#      shell: powershell
-#      run: |
-#        nvcc -V
-#        ls $env:CUDA_PATH
-#        ls $env:CUDA_PATH\bin
-#        ls $env:CUDA_PATH\include
-#
-#    - name: Setup .NET SDK
-#      uses: actions/setup-dotnet@v1
-#      with:
-#        dotnet-version: 5.0.102
-#
-#    - name: Setup NuGet.exe
-#      uses: NuGet/setup-nuget@v1.0.5
-#      with:
-#        nuget-version: 5.x
-#
-#    - name: Build
-#      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
-#
-#    - name: Benchmark
-#      run: dotnet run -c Release -b ${{ matrix.benchmark }}
-#      working-directory: ./benchmarks/tools
-#
-#    - name: Upload Results
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: Benchmark-${{ matrix.benchmark }}
-#        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
+    - name: Install CUDA
+      env:
+        cuda: ${{ matrix.cuda }}
+        visual_studio: ${{ matrix.visual_studio }}
+      shell: powershell
+      run: .\build\cuda.ps1
+
+    - name: Check NVCC
+      shell: powershell
+      run: |
+        nvcc -V
+        ls $env:CUDA_PATH
+        ls $env:CUDA_PATH\bin
+        ls $env:CUDA_PATH\include
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.102
+
+    - name: Setup NuGet.exe
+      uses: NuGet/setup-nuget@v1.0.5
+      with:
+        nuget-version: 5.x
+
+    - name: Build
+      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
+
+    - name: Benchmark
+      run: dotnet run -c Release -b ${{ matrix.benchmark }}
+      working-directory: ./benchmarks/tools
+
+    - name: Upload Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Benchmark-${{ matrix.benchmark }}
+        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
       
   benchmark-compare:
     if: ${{ needs.check-command.outputs.benchmark == 'true' }}
