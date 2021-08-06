@@ -40,7 +40,7 @@ jobs:
         echo "COMMAND_TRIGGERED=$($triggered)" >> $env:GITHUB_ENV
     
     - name: Find Branch
-      if: ${{ env:COMMAND_TRIGGERED == 'true' }}
+      if: ${{ env.COMMAND_TRIGGERED == 'true' }}
       uses: actions/github-script@v3
       id: find-branch
       with:
