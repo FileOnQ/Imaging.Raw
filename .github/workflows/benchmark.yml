@@ -57,6 +57,8 @@ jobs:
     if: ${{ needs.check-command.outputs.benchmark == 'true' }}
     needs: check-command
     runs-on: ${{ matrix.os }}
+    outputs: 
+      ref: ${{ needs.check-command.outputs.ref }}
     strategy:
       matrix:
         include:
@@ -120,7 +122,7 @@ jobs:
     - name: Clone fileonq/imaging.raw
       uses: actions/checkout@v2
       with:
-        ref: ${{ needs.check-command.outputs.ref }}
+        ref: ${{ needs.benchmark.outputs.ref }}
         path: fileonq.imaging.raw
 
     - name: Clone dotnet/performance
