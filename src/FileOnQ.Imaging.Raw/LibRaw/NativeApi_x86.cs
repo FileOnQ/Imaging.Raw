@@ -9,44 +9,44 @@ namespace FileOnQ.Imaging.Raw
 		{
 			const string DllName = "libraw32.dll";
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern IntPtr libraw_init(uint flags);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern void libraw_close(IntPtr libraw);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern void libraw_recycle(IntPtr libraw);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern Error libraw_open_file(IntPtr libraw, string filename);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern Error libraw_unpack_thumb(IntPtr libraw);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern Error libraw_dcraw_thumb_writer(IntPtr libraw, string filename);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern ProcessedImage* libraw_dcraw_make_mem_thumb(IntPtr libraw, ref Error errorCode);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern ProcessedImage* libraw_dcraw_make_mem_image(IntPtr libraw, ref Error errorCode);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern Error libraw_unpack(IntPtr libraw);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern Error libraw_dcraw_process(IntPtr libraw);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern void libraw_set_output_tif(IntPtr libraw, int value);
 
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern void libraw_dcraw_ppm_tiff_writer(IntPtr libraw, string filename);
 
 			// This must pass the processed image so the native lib knows what to clear
-			[DllImport(DllName)]
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern void libraw_dcraw_clear_mem(IntPtr image);
 		}
 	}
