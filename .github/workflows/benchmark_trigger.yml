@@ -3,9 +3,7 @@ name: Benchmark - Trigger
 on:
 #  pull_request:
 #    branches: [ main ]
-  issues_comment:
-    types: [ created ]
-    
+  issue_comment:
 jobs:
   trigger:
     runs-on: ubuntu-latest
