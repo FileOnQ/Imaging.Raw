@@ -44,6 +44,9 @@ jobs:
             core.setFailed(`Request failed with error ${err}`)
           }
           
+    - name: Print Event Name
+      run: echo "${{ github.EVENT_NAME }}"
+          
     - name: Set Branch
       run: |
         $triggered = '${{ steps.check.outputs.triggered }}'
