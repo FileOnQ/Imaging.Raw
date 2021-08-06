@@ -53,69 +53,68 @@ jobs:
         }
         echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
         
-#  benchmark:
-#    if: ${{ needs.check-command.outputs.benchmark == 'true' }}
-#    needs: check-command
-#    runs-on: ${{ matrix.os }}
-#    strategy:
-#      matrix:
-#        include:
-#          - os: windows-2019
-#            cuda: 'CUDA-11.4.0'
-#            visual_studio: 'Visual Studio 16 2019'
-#            benchmark: 'thumbnail'
-#          - os: windows-2019
-#            cuda: 'CUDA-11.4.0'
-#            visual_studio: 'Visual Studio 16 2019'
-#            benchmark: 'dcraw'
-#    steps:
-#    - uses: actions/checkout@v2
-#      with:
-#        submodules: 'true'
-#        ref: ${{ needs.check-command.outputs.ref }}
-#
-#    - name: Install CUDA
-#      env:
-#        cuda: ${{ matrix.cuda }}
-#        visual_studio: ${{ matrix.visual_studio }}
-#      shell: powershell
-#      run: .\build\cuda.ps1
-#
-#    - name: Check NVCC
-#      shell: powershell
-#      run: |
-#        nvcc -V
-#        ls $env:CUDA_PATH
-#        ls $env:CUDA_PATH\bin
-#        ls $env:CUDA_PATH\include
-#
-#    - name: Setup .NET SDK
-#      uses: actions/setup-dotnet@v1
-#      with:
-#        dotnet-version: 5.0.102
-#
-#    - name: Setup NuGet.exe
-#      uses: NuGet/setup-nuget@v1.0.5
-#      with:
-#        nuget-version: 5.x
-#
-#    - name: Build
-#      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
-#
-#    - name: Benchmark
-#      run: dotnet run -c Release -b ${{ matrix.benchmark }}
-#      working-directory: ./benchmarks/tools
-#
-#    - name: Upload Results
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: Benchmark-${{ matrix.benchmark }}
-#        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
+  benchmark:
+    if: ${{ needs.check-command.outputs.benchmark == 'true' }}
+    needs: check-command
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'thumbnail'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw'
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+        ref: ${{ needs.check-command.outputs.ref }}
+
+    - name: Install CUDA
+      env:
+        cuda: ${{ matrix.cuda }}
+        visual_studio: ${{ matrix.visual_studio }}
+      shell: powershell
+      run: .\build\cuda.ps1
+
+    - name: Check NVCC
+      shell: powershell
+      run: |
+        nvcc -V
+        ls $env:CUDA_PATH
+        ls $env:CUDA_PATH\bin
+        ls $env:CUDA_PATH\include
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.102
+
+    - name: Setup NuGet.exe
+      uses: NuGet/setup-nuget@v1.0.5
+      with:
+        nuget-version: 5.x
+
+    - name: Build
+      run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
+
+    - name: Benchmark
+      run: dotnet run -c Release -b ${{ matrix.benchmark }}
+      working-directory: ./benchmarks/tools
+
+    - name: Upload Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Benchmark-${{ matrix.benchmark }}
+        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
       
   benchmark-compare:
     if: ${{ needs.check-command.outputs.benchmark == 'true' }}
-#    needs: benchmark
-    needs: check-command
+    needs: benchmark
     runs-on: windows-2019
     steps:
     - name: Clone fileonq/imaging.raw
