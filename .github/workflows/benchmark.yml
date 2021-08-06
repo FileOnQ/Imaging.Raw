@@ -1,8 +1,9 @@
-name: Benchmarks
+name: Benchmark
 
 on:
   pull_request:
     branches: [ main ]
+    types: [opened]
 
 jobs:
   benchmark:
