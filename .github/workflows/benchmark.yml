@@ -58,13 +58,17 @@ jobs:
             core.setFailed(`Request failed with error ${err}`)
           }
           
-    - name: Set Branch
+    - name: Set Branch - Comment
+      if: ${{ env.COMMAND_TRIGGERED == 'true' }}
       run: |
-        $triggered = 'false'
+        $triggered = '${{ env.COMMAND_TRIGGERED }}'
+        $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
+        echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
+    - name: Set Branch - Comment
+      if: ${{ env.COMMAND_TRIGGERED == 'false' }}
+      run: |
+        $triggered = '${{ env.COMMAND_TRIGGERED }}'
         $ref = '${{ github.REF }}'
-        if ($triggered -eq 'true') {
-          $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
-        }
         echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
         
   benchmark:
