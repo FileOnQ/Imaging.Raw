@@ -14,6 +14,7 @@ jobs:
       pull-requests: write
     outputs:
       benchmark: ${{ steps.check.outputs.triggered }}
+      ref: ${{ env.CUSTOM_REF }}
     steps:
     - name: Check Benchmark Trigger
       uses: khan/pull-request-comment-trigger@master
@@ -23,6 +24,34 @@ jobs:
         reaction: eyes
       env:
         GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' 
+    
+    - name: Find Branch
+      if: ${{ steps.check.outputs.triggered == 'true' }}
+      uses: actions/github-script@v3
+      id: find-branch
+      with:
+        script: |
+          const request = {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          }
+          core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+          try {
+            const result = await github.pulls.get(request)
+            return result.data
+          } catch (err) {
+            core.setFailed(`Request failed with error ${err}`)
+          }
+          
+    - name: Set Branch
+      run: |
+        $triggered = ${{ steps.check.outputs.triggered }}
+        $ref = '${{ github.REF }}'
+        if ($triggered -eq 'true') {
+          $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
+        }
+        echo "CUSTOM_REF=$ref" >> $env:GITHUB_ENV
         
   benchmark:
     if: ${{ needs.check-command.outputs.benchmark == 'true' }}
@@ -43,6 +72,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: 'true'
+        ref: ${{ needs.check-command.outputs.ref }}
 
     - name: Install CUDA
       env:
@@ -155,3 +185,6 @@ jobs:
             repo: context.repo.repo,
             body: `${{ env.PR_COMMENT_COMPARISON }}\r\n\r\n${{ env.PR_COMMENT_RESULTS }}`
           })
+          
+          
+# TODO - test PR creation
