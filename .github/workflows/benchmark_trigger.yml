@@ -1,4 +1,4 @@
-name: Benchmark - Trigger
+name: Benchmark Trigger
 
 on:
   issue_comment: [ created ]
