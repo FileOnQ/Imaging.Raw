@@ -51,7 +51,7 @@ jobs:
         if ($triggered -eq 'true') {
           $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
         }
-        echo "CUSTOM_REF=$ref" >> $env:GITHUB_ENV
+        echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
         
   benchmark:
     if: ${{ needs.check-command.outputs.benchmark == 'true' }}
