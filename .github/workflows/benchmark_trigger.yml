@@ -65,7 +65,7 @@ jobs:
         echo $message
         echo "PR_COMMENT_RESULTS<<EOF" >> $env:GITHUB_ENV
         echo "$message" >> $env:GITHUB_ENV
-        echo "EOF" >> $env.GITHUB_ENV
+        echo "EOF" >> $env:GITHUB_ENV
       working-directory: ./results/dcraw
 
     - name: GitHub Comment - Post
