@@ -9,9 +9,13 @@ jobs:
     permissions:
       pull-requests: write
     steps:
+    - name: Pull Request Comment
+      uses: xt0rted/pull-request-comment-branch@v1
+      id: comment-branch
+        
     - name: Check Benchmark Trigger
-      id: check
       uses: khan/pull-request-comment-trigger@master
+      id: check
       with:
         trigger: '/benchmark'
         reaction: eyes
@@ -26,4 +30,4 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/FileOnQ/Imaging.Raw/actions/workflows/benchmark.yml/dispatches \
-          -d '{"ref":"${{ github.HEAD_REF }}"}'
+          -d '{"ref":"${{ steps.comment-branch.HEAD_REF }}"}'
