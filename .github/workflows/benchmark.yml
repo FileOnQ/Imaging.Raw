@@ -121,6 +121,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: fileonq.imaging.raw
+        ref: ${{ needs.check-command.outputs.ref }}
 
     - name: Clone dotnet/performance
       uses: actions/checkout@v2
