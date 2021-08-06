@@ -93,16 +93,31 @@ jobs:
         run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail" --diff "../../../../benchmark-artifacts/Benchmark-thumbnail" --threshold 10% --top 10 > thumbnail.output.txt
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
         
-      - name: Set GitHub Comment
+      - name: GitHub Comment - Comparison
         run: |
+          $message = "## Benchmark Comparison
           $message = "Benchmarking comparison between this Pull Request and the comitted values at `benchmarks/results` `r`n`r`n"
           $message += "dcraw`r`n"
           $message += "```ini `r`n" + $(Get-Content "dcraw.output.txt" -raw) + "`r`n ``` "
           $message += "`r`n`r`nthumbnail"
           $message += "```ini `r`n + $(Get-Content "thumbnail.output.txt" -raw) + "`r`n ``` "
-          echo "PR_COMMENT=$message" >> $env:GITHUB_ENV
+          echo "PR_COMMENT_COMPARISON=$message" >> $env:GITHUB_ENV
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
         
-      - name: Post Message to Pull Request
-        run: echo "${{ env.PR_COMMENT }}"
+      - name: GitHub Comment - Benchmark Results
+        run: |
+          $message = "## Benchmark Results
+          $message += "<details><summary>dcraw</summary><p>" + $(Get-Content "dcraw.md" -raw) + "</p></details>`r`n"
+          $message += "<details><summary>thumbnail</summary><p>" + $(Get-Content "thumbnail.md" -raw) + "</p></details>`r`n"
+          echo "PR_COMMENT_RESULTS=$message" >> $env:GITHUB_ENV
+        
+      - name: GitHub Comment - Post
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '${{ env.PR_COMMENT_COMPARISON }}\r\n\r\n${{ env.PR_COMMENT_RESULTS }}'
       
