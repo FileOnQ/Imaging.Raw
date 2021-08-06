@@ -4,25 +4,23 @@ on:
 #  pull_request:
 #    branches: [ main ]
   issue_comment:
-    types: [ created ]
+    types: [ created, edited ]
     
 jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
-    
-      - name: Check Benchmark Trigger
-        uses: khan/pull-request-comment-trigger@master
-        id: check
-        with:
-          trigger: '#test'
-          reaction: eyes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Hello
-        if: steps.check.outputs.triggered == 'true'
-        run: echo "Hello world"
+    - name: Check Benchmark Trigger
+      uses: khan/pull-request-comment-trigger@master
+      with:
+        trigger: 'test'
+        reaction: eyes
+      env:
+        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        
+    - name: Hello
+      if: steps.check.outputs.triggered == 'true'
+      run: echo "Hello world"
 
 #    - name: Start Benchmark
 #      run: |
