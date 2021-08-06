@@ -47,6 +47,9 @@ jobs:
         $message += "`r`n`r`nthumbnail`r`n"
         $message += "``````ini `r`n" + "Test Data" + "`r`n ``````"
         echo $message
+        echo "PR_COMMENT_COMPARISON<<EOF" >> $env:GITHUB_ENV
+        echo "$message" >> $env:GITHUB_ENV
+        echo "EOF" >> $env:GITHUB_ENV
 #        echo "PR_COMMENT_COMPARISON=" + $message >> $env:GITHUB_ENV
         
     - name: GitHub Comment - Benchmark Results
@@ -65,5 +68,5 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: 'Hello World'
+            body: '${{ env.PR_COMMENT_COMPARISON }}'
           })
