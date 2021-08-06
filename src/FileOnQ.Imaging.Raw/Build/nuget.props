@@ -34,7 +34,7 @@
 		<Content Include="*32.dll" Pack="True" PackagePath="runtimes\win-x86\native\" Link="runtimes\win-x86\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
 
 		<!-- Copy all win-x64 native binaries -->
-		<Content Include="libraw.dll" Pack="True" PackagePath="runtimes\win-x64\native" Link="runtimes\win-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
+		<Content Include="libraw_fileonq.dll" Pack="True" PackagePath="runtimes\win-x64\native" Link="runtimes\win-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
 		<Content Include="FileOnQ.Imaging.Raw.Gpu.Cuda.dll" Pack="True" PackagePath="runtimes\win-x64\native" Link="runtimes\win-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
