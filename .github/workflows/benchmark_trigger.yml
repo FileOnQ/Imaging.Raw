@@ -60,8 +60,8 @@ jobs:
         $dcraw = $dcraw.replace("``", "\``")
         
         $message = "## Benchmark Results`r`n"
-        $message += "<details><summary>dcraw</summary><p>$dcraw</p></details>`r`n"
-        $message += "<details><summary>thumbnail</summary><p>" + "test data" + "</p></details>`r`n"
+        $message += "<details><summary>dcraw</summary><p>`r`n`r`n $dcraw </p></details>`r`n"
+        $message += "<details><summary>thumbnail</summary><p>`r`n`r`n " + "test data" + "</p></details>`r`n"
         echo $message
         echo "PR_COMMENT_RESULTS<<EOF" >> $env:GITHUB_ENV
         echo "$message" >> $env:GITHUB_ENV
