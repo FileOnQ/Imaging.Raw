@@ -80,10 +80,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: benchmark-artifacts
-
-      - name: ls artifacts
-        run: ls
-        working-directory: ./benchmark-artifacts
               
       - name: Compare - dcraw
         run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw" --diff "../../../../benchmark-artifacts/Benchmark-dcraw" --threshold 10% --top 10 > dcraw.output.txt
@@ -100,7 +96,7 @@ jobs:
           $message += "dcraw`r`n"
           $message += "```ini `r`n" + $(Get-Content "dcraw.output.txt" -raw) + "`r`n ``` "
           $message += "`r`n`r`nthumbnail"
-          $message += "```ini `r`n + $(Get-Content "thumbnail.output.txt" -raw) + "`r`n ``` "
+          $message += "```ini `r`n" + $(Get-Content "thumbnail.output.txt" -raw) + "`r`n ``` "
           echo "PR_COMMENT_COMPARISON=$message" >> $env:GITHUB_ENV
         working-directory: ./dotnet.performance/src/tools/ResultsComparer
         
