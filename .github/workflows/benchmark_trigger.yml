@@ -11,21 +11,22 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
-    - name: Check Benchmark Trigger
-      uses: khan/pull-request-comment-trigger@master
-      id: check
-      with:
-        trigger: '/test'
-        reaction: eyes
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Start Benchmark
-      run: |
-        curl \
-          -X POST \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/FileOnQ/Imaging.Raw/actions/workflows/test.yml/dispatches \
-          -d '{"ref":"${{ github.REF }}"}'
-        
+    - name: Hello
+      run: echo "Hello world" 
+#    - name: Check Benchmark Trigger
+#      uses: khan/pull-request-comment-trigger@master
+#      id: check
+#      with:
+#        trigger: '/test'
+#        reaction: eyes
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        
+#    - name: Start Benchmark
+#      run: |
+#        curl \
+#          -X POST \
+#          -H "Accept: application/vnd.github.v3+json" \
+#          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+#          https://api.github.com/repos/FileOnQ/Imaging.Raw/actions/workflows/test.yml/dispatches \
+#          -d '{"ref":"${{ github.REF }}"}'
