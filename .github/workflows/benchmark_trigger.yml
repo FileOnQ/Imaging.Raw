@@ -3,8 +3,8 @@ name: Benchmark - Trigger
 on:
 #  pull_request:
 #    branches: [ main ]
-  issue_comment:
-    types: [ created, edited ]
+  issues_comment:
+    types: [ created ]
     
 jobs:
   trigger:
