@@ -56,8 +56,11 @@ jobs:
         
     - name: GitHub Comment - Benchmark Results
       run: |
+        $dcraw = Get-Content "FileOnQ.Imaging.Raw.Benchmarking.DcrawProcess-report-github.md" -raw
+        $dcraw = $dcraw.replace("``", "\``")
+        
         $message = "## Benchmark Results`r`n"
-        $message += "<details><summary>dcraw</summary><p>" + $(Get-Content "FileOnQ.Imaging.Raw.Benchmarking.DcrawProcess-report-github.md" -raw) + "</p></details>`r`n"
+        $message += "<details><summary>dcraw</summary><p>$dcraw</p></details>`r`n"
         $message += "<details><summary>thumbnail</summary><p>" + "test data" + "</p></details>`r`n"
         echo $message
         echo "PR_COMMENT_RESULTS<<EOF" >> $env:GITHUB_ENV
