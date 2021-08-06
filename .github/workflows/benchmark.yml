@@ -18,7 +18,7 @@ jobs:
     steps:
     - name: Print Event Name
       run: echo "${{ github.EVENT_NAME }}"
-    
+
     - name: Check Benchmark Trigger
       if: ${{ github.EVENT_NAME != 'pull_request' }}
       uses: khan/pull-request-comment-trigger@master
@@ -27,8 +27,8 @@ jobs:
         trigger: '/benchmark'
         reaction: eyes
       env:
-        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' 
-        
+        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+
     - name: Set Triggered Variable
       run: |
         $triggered = 'false'
@@ -36,7 +36,7 @@ jobs:
           $triggered = '${{ steps.check.outputs.triggered }}'
         }
         echo "COMMAND_TRIGGERED=$($triggered)" >> $env:GITHUB_ENV
-    
+
     - name: Find Branch
       if: ${{ env.COMMAND_TRIGGERED == 'true' }}
       uses: actions/github-script@v3
@@ -55,14 +55,14 @@ jobs:
           } catch (err) {
             core.setFailed(`Request failed with error ${err}`)
           }
-          
+
     - name: Set Branch - Comment
       if: ${{ env.COMMAND_TRIGGERED == 'true' }}
       run: |
         $triggered = '${{ env.COMMAND_TRIGGERED }}'
         $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
         echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
-        
+
     - name: Set Branch - Comment
       if: ${{ env.COMMAND_TRIGGERED == 'false' }}
       run: |
