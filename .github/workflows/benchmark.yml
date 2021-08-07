@@ -6,7 +6,7 @@ on:
     types: [ opened ]
   issue_comment:
     types: [ created ]
-    
+
 jobs:
   check-command:
     runs-on: windows-2019
@@ -16,17 +16,29 @@ jobs:
       benchmark: ${{ steps.check.outputs.triggered }}
       ref: ${{ env.CUSTOM_REF }}
     steps:
+    - name: Print Event Name
+      run: echo "${{ github.EVENT_NAME }}"
+
     - name: Check Benchmark Trigger
+      if: ${{ github.EVENT_NAME != 'pull_request' }}
       uses: khan/pull-request-comment-trigger@master
       id: check
       with:
         trigger: '/benchmark'
         reaction: eyes
       env:
-        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' 
-    
+        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+
+    - name: Set Triggered Variable
+      run: |
+        $triggered = 'false'
+        if ('${{ github.EVENT_NAME }}' -ne 'pull_request') {
+          $triggered = '${{ steps.check.outputs.triggered }}'
+        }
+        echo "COMMAND_TRIGGERED=$($triggered)" >> $env:GITHUB_ENV
+
     - name: Find Branch
-      if: ${{ steps.check.outputs.triggered == 'true' }}
+      if: ${{ env.COMMAND_TRIGGERED == 'true' }}
       uses: actions/github-script@v3
       id: find-branch
       with:
@@ -43,20 +55,27 @@ jobs:
           } catch (err) {
             core.setFailed(`Request failed with error ${err}`)
           }
-          
-    - name: Set Branch
+
+    - name: Set Branch - Comment
+      if: ${{ env.COMMAND_TRIGGERED == 'true' }}
       run: |
-        $triggered = '${{ steps.check.outputs.triggered }}'
-        $ref = '${{ github.REF }}'
-        if ($triggered -eq 'true') {
-          $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
-        }
+        $triggered = '${{ env.COMMAND_TRIGGERED }}'
+        $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
         echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
-        
+
+    - name: Set Branch - Comment
+      if: ${{ env.COMMAND_TRIGGERED == 'false' }}
+      run: |
+        $triggered = '${{ env.COMMAND_TRIGGERED }}'
+        $ref = '${{ github.REF }}'
+        echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
+
   benchmark:
-    if: ${{ needs.check-command.outputs.benchmark == 'true' }}
+    if: ${{ needs.check-command.outputs.benchmark == 'true' || github.EVENT_NAME == 'pull_request' }}
     needs: check-command
     runs-on: ${{ matrix.os }}
+    outputs:
+      ref: ${{ needs.check-command.outputs.ref }}
     strategy:
       matrix:
         include:
@@ -111,17 +130,17 @@ jobs:
       with:
         name: Benchmark-${{ matrix.benchmark }}
         path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
-      
+
   benchmark-compare:
-    if: ${{ needs.check-command.outputs.benchmark == 'true' }}
+    if: ${{ needs.check-command.outputs.benchmark == 'true' || github.EVENT_NAME == 'pull_request' }}
     needs: benchmark
     runs-on: windows-2019
     steps:
     - name: Clone fileonq/imaging.raw
       uses: actions/checkout@v2
       with:
+        ref: ${{ needs.benchmark.outputs.ref }}
         path: fileonq.imaging.raw
-        ref: ${{ needs.check-command.outputs.ref }}
 
     - name: Clone dotnet/performance
       uses: actions/checkout@v2
@@ -146,7 +165,7 @@ jobs:
       run: |
         $dcraw = Get-Content "dcraw.output.txt" -raw
         $thumbnail = Get-Content "thumbnail.output.txt" -raw
-        
+
         $message = "## Benchmark Comparison`r`n"
         $message += "Benchmarking comparison between this Pull Request and the comitted values at benchmarks/results `r`n`r`n"
         $message += "dcraw`r`n"
@@ -158,15 +177,15 @@ jobs:
         echo "$message" >> $env:GITHUB_ENV
         echo "EOF" >> $env:GITHUB_ENV
       working-directory: ./dotnet.performance/src/tools/ResultsComparer
-        
+
     - name: GitHub Comment - Benchmark Results
       run: |
         $dcraw = Get-Content "Benchmark-dcraw/FileOnQ.Imaging.Raw.Benchmarking.DcrawProcess-report-github.md" -raw
         $dcraw = $dcraw.replace("``", "\``")
-        
+
         $thumbnail = Get-Content "Benchmark-thumbnail/FileOnQ.Imaging.Raw.Benchmarking.Thumbnail-report-github.md" -raw
         $thumbnail = $thumbnail.replace("``", "\``")
-        
+
         $message = "## Benchmark Results`r`n"
         $message += "<details><summary>dcraw</summary><p>`r`n`r`n $dcraw </p></details>`r`n"
         $message += "<details><summary>thumbnail</summary><p>`r`n`r`n $thumbnail </p></details>`r`n"
@@ -186,6 +205,6 @@ jobs:
             repo: context.repo.repo,
             body: `${{ env.PR_COMMENT_COMPARISON }}\r\n\r\n${{ env.PR_COMMENT_RESULTS }}`
           })
-          
-          
+
+
 # TODO - test PR creation
