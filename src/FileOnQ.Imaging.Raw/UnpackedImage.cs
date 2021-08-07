@@ -4,16 +4,11 @@ namespace FileOnQ.Imaging.Raw
 {
 	unsafe class UnpackedImage : IUnpackedImage
 	{
-		RawImageData data;
+		IntPtr libraw;
 		IImageProcessor processor;
 
-		internal UnpackedImage(IntPtr libraw)
-		{
-			data = new RawImageData
-			{
-				LibRawData = libraw
-			};
-		}
+		internal UnpackedImage(IntPtr libraw) =>
+			this.libraw = libraw;
 
 		public void Process(IImageProcessor newProcessor)
 		{
@@ -21,7 +16,7 @@ namespace FileOnQ.Imaging.Raw
 				processor.Dispose();
 
 			processor = newProcessor;
-			processor.Process(data);
+			processor.Process(new RawImageData { LibRawData = libraw });
 		}
 
 		public void Write(string file)
@@ -29,7 +24,10 @@ namespace FileOnQ.Imaging.Raw
 			if (processor == null)
 				throw new NullReferenceException("Call Process(IImageProcessor) first");
 
-			processor.Write(data, file);
+			processor.Write(new RawImageData
+			{
+				LibRawData = libraw
+			}, file);
 		}
 
 		public ProcessedImage AsProcessedImage()
@@ -37,7 +35,10 @@ namespace FileOnQ.Imaging.Raw
 			if (processor == null)
 				throw new NullReferenceException("Call Process(IImageProcessor) first");
 
-			return processor.AsProcessedImage(data);
+			return processor.AsProcessedImage(new RawImageData
+			{
+				LibRawData = libraw
+			});
 		}
 
 		~UnpackedImage() => Dispose(false);
@@ -68,11 +69,10 @@ namespace FileOnQ.Imaging.Raw
 				processor = null;
 			}
 			
-			if (data != null)
+			if (libraw != IntPtr.Zero)
 			{
 				// Clear pointer, but don't clear memory, let the owner clear the memory
-				data.LibRawData = IntPtr.Zero;
-				data = null;
+				libraw = IntPtr.Zero;
 			}
 
 			isDisposed = true;

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace FileOnQ.Imaging.Raw
 {
@@ -30,13 +25,13 @@ namespace FileOnQ.Imaging.Raw
 				throw new RawImageException<LibRaw.Error>(error);
 		}
 
-		public IImageWriter UnpackThumbnail()
+		public IUnpackedImage UnpackThumbnail()
 		{
 			var errorCode = LibRaw.UnpackThumbnail(libraw);
 			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException<LibRaw.Error>(errorCode);
 
-			return new RawThumbnail(libraw);
+			return new UnpackedThumbnail(libraw);
 		}
 		public IUnpackedImage UnpackRaw()
 		{

@@ -82,6 +82,8 @@ namespace FileOnQ.Imaging.Raw
 				LibRaw.ClearMemory(image);
 				image = (LibRaw.ProcessedImage*)IntPtr.Zero;
 			}
+
+			isDisposed = true;
 		}
 	}
 }
