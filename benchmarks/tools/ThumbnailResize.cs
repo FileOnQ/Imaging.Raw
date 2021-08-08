@@ -32,18 +32,18 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 			output = Path.Combine(assemblyDirectory, "output.jpeg");
 		}
 
-		[Benchmark(Baseline = true)]
-		public void ExtractThumbnail()
-		{
-			using (var image = new RawImage(filePath))
-			using (var thumb = image.UnpackThumbnail())
-			{
-				thumb.Process(new ThumbnailProcessor());
-				thumb.Write(output);
-			}
+		//[Benchmark(Baseline = true)]
+		//public void ExtractThumbnail()
+		//{
+		//	using (var image = new RawImage(filePath))
+		//	using (var thumb = image.UnpackThumbnail())
+		//	{
+		//		thumb.Process(new ThumbnailProcessor());
+		//		thumb.Write(output);
+		//	}
 
-			File.Delete(output);
-		}
+		//	File.Delete(output);
+		//}
 
 		[Benchmark(Baseline = true)]
 		public void ImageSharp_ThumbnailAndResize_Bicubic()
