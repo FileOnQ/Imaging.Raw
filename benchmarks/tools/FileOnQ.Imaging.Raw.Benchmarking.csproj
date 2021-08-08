@@ -8,6 +8,8 @@
     <ItemGroup>
       <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
       <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.0" />
+      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="8.1.0" />
+      <PackageReference Include="PhotoSauce.MagicScaler" Version="0.12.1" />
       <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     </ItemGroup>
 
