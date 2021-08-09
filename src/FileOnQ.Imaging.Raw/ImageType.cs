@@ -1,6 +1,6 @@
 ﻿namespace FileOnQ.Imaging.Raw
 {
-	public enum ImageFormat
+	public enum ImageType
 	{
 		Jpeg = 1,
 		Bitmap = 2

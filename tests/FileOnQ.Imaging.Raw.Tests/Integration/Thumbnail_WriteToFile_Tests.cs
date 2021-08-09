@@ -9,7 +9,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 	[TestFixture(TestData.RawImage2)]
 	[TestFixture(TestData.RawImage3)]
 	[TestFixture(TestData.RawImage4)]
-	[TestFixture(TestData.RawImage5, ImageFormat.Bitmap)]
+	[TestFixture(TestData.RawImage5, ImageType.Bitmap)]
 	[TestFixture(TestData.RawImage6)]
 	[TestFixture(TestData.RawImage7)]
 	[TestFixture(TestData.RawImage8)]
@@ -26,8 +26,8 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 		readonly string output;
 		readonly string hash;
 
-		public Thumbnail_WriteToFile_Tests(string path) : this(path, ImageFormat.Jpeg) { }
-		public Thumbnail_WriteToFile_Tests(string path, ImageFormat imageFormat)
+		public Thumbnail_WriteToFile_Tests(string path) : this(path, ImageType.Jpeg) { }
+		public Thumbnail_WriteToFile_Tests(string path, ImageType imageFormat)
 		{
 			hash = TestData.Integration.ThumbnailWriteToFile.HashCodes[path];
 
@@ -36,7 +36,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			
 			var filename = Path.GetFileNameWithoutExtension(input);
 			var directory = Path.GetDirectoryName(input) ?? string.Empty;
-			var format = imageFormat == ImageFormat.Jpeg ? "jpeg" : "ppm";
+			var format = imageFormat == ImageType.Jpeg ? "jpeg" : "ppm";
 
 			output = Path.Combine(directory, $"{filename}.thumb.{format}");
 		}

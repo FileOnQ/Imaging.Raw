@@ -48,7 +48,7 @@ namespace FileOnQ.Imaging.Raw
 
 			return new ProcessedImage
 			{
-				ImageFormat = (ImageFormat)image->Type,
+				ImageType = (ImageType)image->Type,
 				Buffer = buffer,
 				Height = image->Height,
 				Width = image->Width,

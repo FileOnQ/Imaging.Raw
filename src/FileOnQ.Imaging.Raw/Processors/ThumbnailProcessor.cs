@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileOnQ.Imaging.Raw.Processors
+namespace FileOnQ.Imaging.Raw
 {
 	public class ThumbnailProcessor : IImageProcessor
 	{

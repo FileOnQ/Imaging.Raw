@@ -20,7 +20,7 @@ namespace FileOnQ.Imaging.Raw
 		/// </returns>
 		public static unsafe Bitmap AsBitmap(this ProcessedImage imageData, bool useAcceleratedGraphics = false)
 		{
-			if (imageData.ImageFormat == ImageFormat.Bitmap)
+			if (imageData.ImageType == ImageType.Bitmap)
 			{
 				if (imageData.Bits != 8)
 					throw new NotSupportedException($"Only 8-bit Bitmaps are supported. Input image is using {imageData.Bits}-bit Bitmap.");
@@ -129,7 +129,7 @@ namespace FileOnQ.Imaging.Raw
 		public static Stream AsStream(this ProcessedImage imageData)
 		{
 			var memory = new MemoryStream();
-			if (imageData.ImageFormat == ImageFormat.Bitmap)
+			if (imageData.ImageType == ImageType.Bitmap)
 			{
 				var bitmapHeader = BitmapUtilities.CreateHeader(imageData.Width, imageData.Height);
 				memory.Write(bitmapHeader, 0, bitmapHeader.Length);

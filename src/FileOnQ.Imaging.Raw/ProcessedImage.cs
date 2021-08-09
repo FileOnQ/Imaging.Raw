@@ -9,7 +9,7 @@ namespace FileOnQ.Imaging.Raw
 		List<GCHandle> handles = new List<GCHandle>();
 
 		public byte[] Buffer { get; set; }
-		public ImageFormat ImageFormat { get; set; }
+		public ImageType ImageType { get; set; }
 		public int Height { get; set; }
 		public int Width { get; set; }
 		public int Colors { get; set; }
