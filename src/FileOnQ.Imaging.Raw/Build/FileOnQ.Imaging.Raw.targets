@@ -2,9 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
 	<Target Name="CopyNativeDlls" BeforeTargets="Build">
-		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\libraw.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
+		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\libraw_fileonq.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
 		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\FileOnQ.Imaging.Raw.Gpu.Cuda.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
-		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\libraw32.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
+		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\libraw_fileonq32.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
 		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\FileOnQ.Imaging.Raw.Gpu.Cuda32.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
 	</Target>
 

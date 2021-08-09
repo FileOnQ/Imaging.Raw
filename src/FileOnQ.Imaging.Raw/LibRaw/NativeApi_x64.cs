@@ -7,7 +7,7 @@ namespace FileOnQ.Imaging.Raw
 	{
 		private static unsafe class X64
 		{
-			const string DllName = "libraw.dll";
+			const string DllName = "libraw_fileonq.dll";
 
 			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern IntPtr libraw_init(uint flags);
