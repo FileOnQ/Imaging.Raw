@@ -2,9 +2,9 @@
 
 namespace FileOnQ.Imaging.Raw
 {
-	public unsafe class DcrawProcessor : IImageProcessor
+	public class DcrawProcessor : IImageProcessor
 	{
-		public bool Process(RawImageData data)
+		public virtual bool Process(RawImageData data)
 		{
 			var errorCode = LibRaw.DcrawProcess(data.LibRawData);
 			if (errorCode != LibRaw.Error.Success)
@@ -13,7 +13,7 @@ namespace FileOnQ.Imaging.Raw
 			return true;
 		}
 
-		public void Write(RawImageData data, string file)
+		public virtual void Write(RawImageData data, string file)
 		{
 			// TODO - 7/27/2021 - @ahoefling - Add validation
 			// In comparison to ThumbnailWriter() there is no
@@ -22,7 +22,7 @@ namespace FileOnQ.Imaging.Raw
 			LibRaw.DcrawWriter(data.LibRawData, file);
 		}
 
-		public ProcessedImage AsProcessedImage(RawImageData data) =>
+		public virtual ProcessedImage AsProcessedImage(RawImageData data) =>
 			new ProcessedImage
 			{
 				ImageType = data.ImageType,
