@@ -86,10 +86,6 @@ jobs:
           - os: windows-2019
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
-            benchmark: 'thumbnail-resize'
-          - os: windows-2019
-            cuda: 'CUDA-11.4.0'
-            visual_studio: 'Visual Studio 16 2019'
             benchmark: 'dcraw'
     steps:
     - uses: actions/checkout@v2
@@ -190,13 +186,9 @@ jobs:
         $thumbnail = Get-Content "Benchmark-thumbnail/FileOnQ.Imaging.Raw.Benchmarking.Thumbnail-report-github.md" -raw
         $thumbnail = $thumbnail.replace("``", "\``")
 
-        $thumbnailResize = Get-Content "Benchmark-thumbnail-resize/FileOnQ.Imaging.Raw.Benchmarking.ThumbnailResize-report-github.md" -raw
-        $thumbnailResize = $thumbnailResize.replace("``", "\``")
-
         $message = "## Benchmark Results`r`n"
         $message += "<details><summary>dcraw</summary><p>`r`n`r`n $dcraw </p></details>`r`n"
         $message += "<details><summary>thumbnail</summary><p>`r`n`r`n $thumbnail </p></details>`r`n"
-        $message += "<details><summary>thumbnail-resize</summary><p>`r`n`r`n $thumbnailResize </p></details>`r`n"
         echo $message
         echo "PR_COMMENT_RESULTS<<EOF" >> $env:GITHUB_ENV
         echo "$message" >> $env:GITHUB_ENV
@@ -213,6 +205,3 @@ jobs:
             repo: context.repo.repo,
             body: `${{ env.PR_COMMENT_COMPARISON }}\r\n\r\n${{ env.PR_COMMENT_RESULTS }}`
           })
-
-
-# TODO - test PR creation
