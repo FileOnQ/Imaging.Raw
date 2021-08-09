@@ -1,43 +1,79 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace FileOnQ.Imaging.Raw
 {
-	unsafe class UnpackedImage : IUnpackedImage
+	unsafe abstract class UnpackedImage : IUnpackedImage
 	{
-		IntPtr libraw;
-		IImageProcessor processor;
+		public UnpackedImage(IntPtr libraw)
+		{
+			this.LibRaw = libraw;
+		}
 
-		internal UnpackedImage(IntPtr libraw) =>
-			this.libraw = libraw;
+		protected IntPtr LibRaw { get; set; }
+		protected LibRaw.ProcessedImage* Image { get; set; }
+		protected IImageProcessor Processor { get; set; }
 
 		public void Process(IImageProcessor newProcessor)
 		{
-			if (processor != null)
-				processor.Dispose();
+			if (Processor != null)
+			{
+				Processor.Dispose();
+				Processor = null;
+			}
 
-			processor = newProcessor;
-			processor.Process(new RawImageData { LibRawData = libraw });
+			Processor = newProcessor;
+			LoadImage();
+			Processor.Process(new RawImageData
+			{
+				LibRawData = LibRaw,
+				Bits = Image->Bits,
+				Colors = Image->Colors,
+				Height = Image->Height,
+				Width = Image->Width,
+				Buffer = new Span<byte>((void*)GetBufferMemoryAddress(), (int)Image->DataSize)
+			});
+		}
+
+		protected abstract void LoadImage();
+		
+		IntPtr GetBufferMemoryAddress()
+		{
+			// get the memory address of the data buffer.
+			var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(Raw.LibRaw.ProcessedImage.Data)).ToInt32();
+			return (IntPtr)Image + memoryOffset;
 		}
 
 		public void Write(string file)
 		{
-			if (processor == null)
+			if (Processor == null)
 				throw new NullReferenceException("Call Process(IImageProcessor) first");
 
-			processor.Write(new RawImageData
+			// REVIEW - 8/7/2021 - @ahoefling - this isn't needed when libraw is writing to disk, maybe there is a way to check if we are using libraw vs memory
+			LoadImage();
+			Processor.Write(new RawImageData
 			{
-				LibRawData = libraw
+				LibRawData = LibRaw,
+				Bits = Image->Bits,
+				Colors = Image->Colors,
+				Height = Image->Height,
+				Width = Image->Width,
+				Buffer = new Span<byte>((void*)GetBufferMemoryAddress(), (int)Image->DataSize)
+
 			}, file);
 		}
 
 		public ProcessedImage AsProcessedImage()
 		{
-			if (processor == null)
-				throw new NullReferenceException("Call Process(IImageProcessor) first");
-
-			return processor.AsProcessedImage(new RawImageData
+			LoadImage();
+			return Processor.AsProcessedImage(new RawImageData
 			{
-				LibRawData = libraw
+				LibRawData = LibRaw,
+				Bits = Image->Bits,
+				Colors = Image->Colors,
+				Height = Image->Height,
+				Width = Image->Width,
+				Buffer = new Span<byte>((void*)GetBufferMemoryAddress(), (int)Image->DataSize)
 			});
 		}
 
@@ -60,19 +96,16 @@ namespace FileOnQ.Imaging.Raw
 				// free managed resources
 			}
 
-			// free unmanaged resources
-			if (processor != null)
+			if (Image != null)
 			{
-				// The processor has unmanaged memory so we are clearing it here
-				// instead of in the managed area
-				processor.Dispose();
-				processor = null;
+				Raw.LibRaw.ClearMemory(Image);
+				Image = (LibRaw.ProcessedImage*)IntPtr.Zero;
 			}
-			
-			if (libraw != IntPtr.Zero)
+
+			if (LibRaw == IntPtr.Zero)
 			{
-				// Clear pointer, but don't clear memory, let the owner clear the memory
-				libraw = IntPtr.Zero;
+				// clear the pointer, but don't clear the memory. Let the pointer owner clear the memory
+				LibRaw = IntPtr.Zero;
 			}
 
 			isDisposed = true;
