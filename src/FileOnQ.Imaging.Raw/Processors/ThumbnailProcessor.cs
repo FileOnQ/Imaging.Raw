@@ -7,7 +7,10 @@ namespace FileOnQ.Imaging.Raw
 		public virtual void Process(RawImageData data)
 		{
 			// left empty by design. The standard thumbnail processor
-			// doesn't add additional functionality to this api.
+			// doesn't add additional functionality to this api. This
+			// is designed so a downstream processor can extend the
+			// base functionality and wouldn't need to implement
+			// all the methods.
 		}
 
 		public virtual void Write(RawImageData data, string file)
@@ -20,7 +23,7 @@ namespace FileOnQ.Imaging.Raw
 		public virtual ProcessedImage AsProcessedImage(RawImageData data) =>
 			new ProcessedImage
 			{
-				//ImageFormat = (ImageFormat)thumbnail->Type,
+				ImageType = data.ImageType,
 				Buffer = data.Buffer.ToArray(),
 				Height = data.Height,
 				Width = data.Width,
