@@ -4,7 +4,6 @@ using System.Reflection;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using BenchmarkDotNet.Jobs;
-using FileOnQ.Imaging.Raw.Processors;
 
 namespace FileOnQ.Imaging.Raw.Benchmarking
 {

@@ -35,10 +35,6 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 					Console.WriteLine("Starting thumbnail benchmarks . . .");
 					Thumbnail();
 					break;
-				case "thumbnail-resize":
-					Console.WriteLine("Starting thumbnail resize (ImageSharp) benchmarks . . .");
-					ThumbnailResize();
-					break;
 				default:
 					Console.WriteLine($"Benchmark {benchmark} is not available");
 					break;
@@ -71,6 +67,5 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 		static void DcrawProcess() => BenchmarkRunner.Run<DcrawProcess>();
 		static void DcrawProcessGpu() => BenchmarkRunner.Run<DcrawProcessGpu>();
 		static void Thumbnail() => BenchmarkRunner.Run<Thumbnail>();
-		static void ThumbnailResize() => BenchmarkRunner.Run<ThumbnailResize>();
 	}
 }
