@@ -23,20 +23,34 @@ namespace FileOnQ.Imaging.Raw
 			}
 
 			Processor = newProcessor;
+			Processor.Process(BuildRawImageData());
+		}
+
+		public void Write(string file) =>
+			Processor.Write(BuildRawImageData(), file);
+
+		public ProcessedImage AsProcessedImage() =>
+			Processor.AsProcessedImage(BuildRawImageData());
+
+		protected abstract void LoadImage();
+
+		RawImageData BuildRawImageData()
+		{
+			if (Processor == null)
+				throw new NullReferenceException("Image has not been processed, Call Process(IImageProcessor) first!");
+
 			LoadImage();
-			Processor.Process(new RawImageData
+			return new RawImageData
 			{
 				LibRawData = LibRaw,
 				Bits = Image->Bits,
 				Colors = Image->Colors,
 				Height = Image->Height,
 				Width = Image->Width,
+				ImageType = (ImageType)Image->Type,
 				Buffer = new Span<byte>((void*)GetBufferMemoryAddress(), (int)Image->DataSize)
-			});
+			};
 		}
-
-		protected abstract void LoadImage();
-		
 		IntPtr GetBufferMemoryAddress()
 		{
 			// get the memory address of the data buffer.
@@ -44,38 +58,6 @@ namespace FileOnQ.Imaging.Raw
 			return (IntPtr)Image + memoryOffset;
 		}
 
-		public void Write(string file)
-		{
-			if (Processor == null)
-				throw new NullReferenceException("Call Process(IImageProcessor) first");
-
-			// REVIEW - 8/7/2021 - @ahoefling - this isn't needed when libraw is writing to disk, maybe there is a way to check if we are using libraw vs memory
-			LoadImage();
-			Processor.Write(new RawImageData
-			{
-				LibRawData = LibRaw,
-				Bits = Image->Bits,
-				Colors = Image->Colors,
-				Height = Image->Height,
-				Width = Image->Width,
-				Buffer = new Span<byte>((void*)GetBufferMemoryAddress(), (int)Image->DataSize)
-
-			}, file);
-		}
-
-		public ProcessedImage AsProcessedImage()
-		{
-			LoadImage();
-			return Processor.AsProcessedImage(new RawImageData
-			{
-				LibRawData = LibRaw,
-				Bits = Image->Bits,
-				Colors = Image->Colors,
-				Height = Image->Height,
-				Width = Image->Width,
-				Buffer = new Span<byte>((void*)GetBufferMemoryAddress(), (int)Image->DataSize)
-			});
-		}
 
 		~UnpackedImage() => Dispose(false);
 

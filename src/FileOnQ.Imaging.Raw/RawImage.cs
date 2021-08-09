@@ -31,7 +31,7 @@ namespace FileOnQ.Imaging.Raw
 			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException<LibRaw.Error>(errorCode);
 
-			return new UnpackedImage(libraw);
+			return new UnpackedThumbnail(libraw);
 		}
 
 		public IUnpackedImage UnpackRaw()
@@ -40,7 +40,7 @@ namespace FileOnQ.Imaging.Raw
 			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException<LibRaw.Error>(errorCode);
 
-			return new UnpackedImage(libraw);
+			return new UnpackedRaw(libraw);
 		}
 
 		~RawImage() => Dispose(false);

@@ -2,9 +2,9 @@
 
 namespace FileOnQ.Imaging.Raw
 {
-	unsafe class UnpackedThumbnailImage : UnpackedImage
+	unsafe class UnpackedThumbnail : UnpackedImage
 	{
-		public UnpackedThumbnailImage(IntPtr libraw) : base(libraw) { }
+		public UnpackedThumbnail(IntPtr libraw) : base(libraw) { }
 
 		protected override void LoadImage()
 		{
