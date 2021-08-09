@@ -23,7 +23,13 @@ namespace FileOnQ.Imaging.Raw
 			}
 
 			Processor = newProcessor;
-			Processor.Process(BuildRawImageData());
+			var resetImage = Processor.Process(BuildRawImageData());
+
+			if (resetImage && Image != null)
+			{
+				Raw.LibRaw.ClearMemory(Image);
+				Image = null;
+			}
 		}
 
 		public void Write(string file) =>

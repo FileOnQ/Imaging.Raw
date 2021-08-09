@@ -4,13 +4,14 @@ namespace FileOnQ.Imaging.Raw
 {
 	public class ThumbnailProcessor : IImageProcessor
 	{
-		public virtual void Process(RawImageData data)
+		public virtual bool Process(RawImageData data)
 		{
 			// left empty by design. The standard thumbnail processor
 			// doesn't add additional functionality to this api. This
 			// is designed so a downstream processor can extend the
 			// base functionality and wouldn't need to implement
 			// all the methods.
+			return false;
 		}
 
 		public virtual void Write(RawImageData data, string file)

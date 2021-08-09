@@ -4,11 +4,13 @@ namespace FileOnQ.Imaging.Raw
 {
 	public unsafe class DcrawProcessor : IImageProcessor
 	{
-		public void Process(RawImageData data)
+		public bool Process(RawImageData data)
 		{
 			var errorCode = LibRaw.DcrawProcess(data.LibRawData);
 			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException<LibRaw.Error>(errorCode);
+
+			return true;
 		}
 
 		public void Write(RawImageData data, string file)
