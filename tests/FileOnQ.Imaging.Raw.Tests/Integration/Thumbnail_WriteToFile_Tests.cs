@@ -46,7 +46,8 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 		{
 			using (var image = new RawImage(input))
 			using (var thumbnail = image.UnpackThumbnail())
-			{ 
+			{
+				thumbnail.Process(new ThumbnailProcessor());
 				thumbnail.Write(output);
 			}
 		}
