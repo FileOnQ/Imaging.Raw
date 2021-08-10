@@ -160,7 +160,7 @@ jobs:
     - name: Compare - thumbnail
       run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail" --diff "../../../../benchmark-artifacts/Benchmark-thumbnail" --threshold 10% --top 10 > thumbnail.output.txt
       working-directory: ./dotnet.performance/src/tools/ResultsComparer
-
+      
     - name: GitHub Comment - Comparison
       run: |
         $dcraw = Get-Content "dcraw.output.txt" -raw
@@ -205,6 +205,3 @@ jobs:
             repo: context.repo.repo,
             body: `${{ env.PR_COMMENT_COMPARISON }}\r\n\r\n${{ env.PR_COMMENT_RESULTS }}`
           })
-
-
-# TODO - test PR creation

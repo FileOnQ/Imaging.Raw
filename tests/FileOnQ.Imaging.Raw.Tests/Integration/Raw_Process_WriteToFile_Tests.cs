@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using FileOnQ.Imaging.Raw.Tests.Utilities;
 using NUnit.Framework;
@@ -21,13 +20,13 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 	[TestFixture(TestData.RawImage13)]
 	[TestFixture(TestData.RawImage14)]
 	[Category(Constants.Category.Integration)]
-	public class Process_WriteToFile_Tests
+	public class Raw_Process_WriteToFile_Tests
 	{
 		readonly string input;
 		readonly string output;
 		readonly string hash;
 
-		public Process_WriteToFile_Tests(string path)
+		public Raw_Process_WriteToFile_Tests(string path)
 		{
 			hash = TestData.Integration.ProcessWriteToFile.HashCodes[path];
 

@@ -1,48 +1,89 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace FileOnQ.Imaging.Raw
 {
-	unsafe class UnpackedImage : IUnpackedImage
+	/// <inheritdoc cref="IUnpackedImage"/>
+	abstract unsafe class UnpackedImage : IUnpackedImage
 	{
-		RawImageData data;
-		IImageProcessor processor;
+		/// <summary>
+		/// Instantiates the default instance of
+		/// <see cref="UnpackedImage"/>.
+		/// </summary>
+		/// <param name="libraw">
+		/// The pointer to the LibRaw data structure.
+		/// </param>
+		internal UnpackedImage(IntPtr libraw) =>
+			LibRaw = libraw;
 
-		internal UnpackedImage(IntPtr libraw)
+		protected IntPtr LibRaw { get; set; }
+		protected LibRaw.ProcessedImage* Image { get; set; }
+		protected IImageProcessor Processor { get; set; }
+
+		/// <inheritdoc cref="IUnpackedImage"/>
+		public void Process(IImageProcessor imageProcessor)
 		{
-			data = new RawImageData
+			if (Processor != null)
 			{
-				LibRawData = libraw
+				Processor.Dispose();
+				Processor = null;
+			}
+
+			Processor = imageProcessor;
+			var resetImage = Processor.Process(BuildRawImageData());
+
+			if (resetImage && Image != null)
+			{
+				Raw.LibRaw.ClearMemory(Image);
+				Image = null;
+			}
+		}
+
+		/// <inheritdoc cref="IUnpackedImage"/>
+		public void Write(string file) =>
+			Processor.Write(BuildRawImageData(), file);
+
+		/// <inheritdoc cref="IUnpackedImage"/>
+		public ProcessedImage AsProcessedImage() =>
+			Processor.AsProcessedImage(BuildRawImageData());
+
+		/// <summary>
+		/// Loads the current image into memory prior
+		/// to processing.
+		/// </summary>
+		protected abstract void LoadImage();
+
+		RawImageData BuildRawImageData()
+		{
+			if (Processor == null)
+				throw new NullReferenceException("Image has not been processed, Call Process(IImageProcessor) first!");
+
+			LoadImage();
+			return new RawImageData
+			{
+				LibRawData = LibRaw,
+				Bits = Image->Bits,
+				Colors = Image->Colors,
+				Height = Image->Height,
+				Width = Image->Width,
+				ImageType = (ImageType)Image->Type,
+				Buffer = new Span<byte>((void*)GetBufferMemoryAddress(), (int)Image->DataSize)
 			};
 		}
-
-		public void Process(IImageProcessor newProcessor)
+		
+		IntPtr GetBufferMemoryAddress()
 		{
-			if (processor != null)
-				processor.Dispose();
-
-			processor = newProcessor;
-			processor.Process(data);
+			// get the memory address of the data buffer.
+			var memoryOffset = Marshal.OffsetOf(typeof(LibRaw.ProcessedImage), nameof(Raw.LibRaw.ProcessedImage.Data)).ToInt32();
+			return (IntPtr)Image + memoryOffset;
 		}
 
-		public void Write(string file)
-		{
-			if (processor == null)
-				throw new NullReferenceException("Call Process(IImageProcessor) first");
-
-			processor.Write(data, file);
-		}
-
-		public ProcessedImage AsProcessedImage()
-		{
-			if (processor == null)
-				throw new NullReferenceException("Call Process(IImageProcessor) first");
-
-			return processor.AsProcessedImage(data);
-		}
 
 		~UnpackedImage() => Dispose(false);
 
 		bool isDisposed;
+		
+		/// <inheritdoc cref="IDisposable"/>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -59,20 +100,16 @@ namespace FileOnQ.Imaging.Raw
 				// free managed resources
 			}
 
-			// free unmanaged resources
-			if (processor != null)
+			if (Image != null)
 			{
-				// The processor has unmanaged memory so we are clearing it here
-				// instead of in the managed area
-				processor.Dispose();
-				processor = null;
+				Raw.LibRaw.ClearMemory(Image);
+				Image = (LibRaw.ProcessedImage*)IntPtr.Zero;
 			}
-			
-			if (data != null)
+
+			if (LibRaw == IntPtr.Zero)
 			{
-				// Clear pointer, but don't clear memory, let the owner clear the memory
-				data.LibRawData = IntPtr.Zero;
-				data = null;
+				// clear the pointer, but don't clear the memory. Let the pointer owner clear the memory
+				LibRaw = IntPtr.Zero;
 			}
 
 			isDisposed = true;

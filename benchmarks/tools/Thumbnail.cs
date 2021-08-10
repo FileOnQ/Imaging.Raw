@@ -33,6 +33,7 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 			using (var image = new RawImage(filePath))
 			using (var thumb = image.UnpackThumbnail())
 			{
+				thumb.Process(new ThumbnailProcessor());
 				thumb.Write(output);
 			}
 
@@ -45,6 +46,7 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 			using (var image = new RawImage(filePath))
 			using (var thumb = image.UnpackThumbnail())
 			{
+				thumb.Process(new ThumbnailProcessor());
 				using (var processedImage = thumb.AsProcessedImage())
 					return processedImage.Buffer;
 			}
@@ -57,6 +59,7 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 			using (var image = new RawImage(filePath))
 			using (var thumb = image.UnpackThumbnail())
 			{
+				thumb.Process(new ThumbnailProcessor());
 				using (var processedImage = thumb.AsProcessedImage())
 				using (var bitmap = processedImage.AsBitmap())
 				{

@@ -39,6 +39,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 			using (var rawImage = new RawImage(input))
 			using (var thumbnail = rawImage.UnpackThumbnail())
 			{
+				thumbnail.Process(new ThumbnailProcessor());
 				var image = thumbnail.AsProcessedImage();
 
 				AssertUtilities.IsHashEqual(hash, image.Buffer);

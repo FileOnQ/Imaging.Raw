@@ -20,12 +20,12 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 	[TestFixture(TestData.RawImage13)]
 	[TestFixture(TestData.RawImage14)]
 	[Category(Constants.Category.Integration)]
-	public class Process_ImageBuffer_Tests
+	public class Raw_Process_ImageBuffer_Tests
 	{
 		readonly string input;
 		readonly string hash;
 
-		public Process_ImageBuffer_Tests(string path)
+		public Raw_Process_ImageBuffer_Tests(string path)
 		{
 			this.hash = TestData.Integration.ProcessAsImageBuffer.HashCodes[path];
 

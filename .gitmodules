@@ -1,3 +1,4 @@
 [submodule "LibRaw"]
 	path = LibRaw
 	url = https://github.com/FileOnQ/LibRaw.git
+	branch = fileonq

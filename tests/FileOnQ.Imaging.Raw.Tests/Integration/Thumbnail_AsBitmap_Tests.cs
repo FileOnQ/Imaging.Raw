@@ -50,10 +50,13 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 		{
 			using (var image = new RawImage(input))
 			using (var thumbnail = image.UnpackThumbnail())
-			using (var processedImage = thumbnail.AsProcessedImage())
-			using (var bitmap = processedImage.AsBitmap())
 			{
-				bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
+				thumbnail.Process(new ThumbnailProcessor());
+				using (var processedImage = thumbnail.AsProcessedImage())
+				using (var bitmap = processedImage.AsBitmap())
+				{
+					bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
+				}
 			}
 
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));
@@ -64,10 +67,13 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 		{
 			using (var image = new RawImage(input))
 			using (var thumbnail = image.UnpackThumbnail())
-			using (var processedImage = thumbnail.AsProcessedImage())
-			using (var bitmap = processedImage.AsBitmap(true))
 			{
-				bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
+				thumbnail.Process(new ThumbnailProcessor());
+				using (var processedImage = thumbnail.AsProcessedImage())
+				using (var bitmap = processedImage.AsBitmap(true))
+				{
+					bitmap.Save(output, System.Drawing.Imaging.ImageFormat.Bmp);
+				}
 			}
 
 			AssertUtilities.IsHashEqual(hash, File.ReadAllBytes(output));

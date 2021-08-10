@@ -3,34 +3,33 @@
 namespace FileOnQ.Imaging.Raw
 {
 	/// <summary>
-	/// Processes LibRaw images using the standard Dcraw algorithm.
+	/// Processes LibRaw thumbnails so they can be written
+	/// to memory or to a storage location.
 	/// </summary>
 	/// <remarks>
 	/// It is expected that the instance of <see cref="IUnpackedImage"/>
-	/// was instantiated by `raw.UnpackRaw()`. This API uses specific
-	/// internal LibRaw APIs that will only work on an unpacked
-	/// raw image.
+	/// was instantiated by `raw.UnpackThumbnail()`. This API uses
+	/// specific internal LibRaw APIs that will only work on a thumbnail.
 	/// </remarks>
-	public class DcrawProcessor : IImageProcessor
+	public class ThumbnailProcessor : IImageProcessor
 	{
 		/// <inheritdoc cref="IImageProcessor"/>
 		public virtual bool Process(RawImageData data)
 		{
-			var errorCode = LibRaw.DcrawProcess(data.LibRawData);
-			if (errorCode != LibRaw.Error.Success)
-				throw new RawImageException<LibRaw.Error>(errorCode);
-
-			return true;
+			// left empty by design. The standard thumbnail processor
+			// doesn't add additional functionality to this api. This
+			// is designed so a downstream processor can extend the
+			// base functionality and wouldn't need to implement
+			// all the methods.
+			return false;
 		}
 
 		/// <inheritdoc cref="IImageProcessor"/>
 		public virtual void Write(RawImageData data, string file)
 		{
-			// TODO - 7/27/2021 - @ahoefling - Add validation
-			// In comparison to ThumbnailWriter() there is no
-			// status. We may want to catch exceptions. Not sure
-			// what can be thrown from LibRaw
-			LibRaw.DcrawWriter(data.LibRawData, file);
+			var error = LibRaw.ThumbnailWriter(data.LibRawData, file);
+			if (error != LibRaw.Error.Success)
+				throw new RawImageException<LibRaw.Error>(error);
 		}
 
 		/// <inheritdoc cref="IImageProcessor"/>
@@ -38,16 +37,16 @@ namespace FileOnQ.Imaging.Raw
 			new ProcessedImage
 			{
 				ImageType = data.ImageType,
-				Buffer = data.Buffer.ToArray(), // TODO - Update ProcessedImage to use Span<T>
+				Buffer = data.Buffer.ToArray(),
 				Height = data.Height,
 				Width = data.Width,
 				Colors = data.Colors,
 				Bits = data.Bits
 			};
 
-		~DcrawProcessor() => Dispose(false);
+		~ThumbnailProcessor() => Dispose(false);
 
-		bool isDisposed;
+		protected bool IsDisposed { get; set; }
 		
 		/// <inheritdoc cref="IDisposable"/>
 		public void Dispose()
@@ -58,7 +57,7 @@ namespace FileOnQ.Imaging.Raw
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (isDisposed)
+			if (IsDisposed)
 				return;
 
 			if (disposing)
@@ -66,7 +65,9 @@ namespace FileOnQ.Imaging.Raw
 				// free managed resources
 			}
 
-			isDisposed = true;
+			// free unmanaged resources
+
+			IsDisposed = true;
 		}
 	}
 }
