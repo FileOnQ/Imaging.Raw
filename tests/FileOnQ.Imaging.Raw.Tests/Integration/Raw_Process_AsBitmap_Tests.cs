@@ -20,13 +20,13 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 	[TestFixture(TestData.RawImage13)]
 	[TestFixture(TestData.RawImage14)]
 	[Category(Constants.Category.Integration)]
-	public class Process_AsBitmap_Tests
+	public class Raw_Process_AsBitmap_Tests
 	{
 		readonly string input;
 		readonly string output;
 		readonly string hash;
 
-		public Process_AsBitmap_Tests(string path)
+		public Raw_Process_AsBitmap_Tests(string path)
 		{
 			hash = TestData.Integration.ProccessAsBitmap.HashCodes[path];
 
