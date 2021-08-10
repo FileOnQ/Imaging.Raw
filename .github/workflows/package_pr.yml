@@ -45,7 +45,7 @@ jobs:
       run: dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release
     
     - name: Pack
-      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release -o . /p:Version=${{ env.PACKAGE_VERSION }} /p:PackageVersion=${{ env.PACKAGE_VERSION }}
+      run: dotnet pack src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj -c Release -o . /p:ContinuousIntegrationBuild=true /p:Version=${{ env.PACKAGE_VERSION }} /p:PackageVersion=${{ env.PACKAGE_VERSION }}
 
     - name: Upload NuGet Package
       uses: actions/upload-artifact@v2

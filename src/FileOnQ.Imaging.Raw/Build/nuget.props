@@ -17,6 +17,8 @@
 		<License>LGPL</License>
 		<RepositoryUrl>https://github.com/FileOnQ/Imaging.Raw</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<!-- End NuGet Package Properties -->
 		
 		<!-- Start NuGet Symbols Package Properties -->
@@ -25,10 +27,15 @@
 		<!-- End1 NuGet Symbols Package Properties -->
 	</PropertyGroup>
 
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<None Include="$(RootDir)\images\fileonq.png" Pack="true" PackagePath="" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
 		<!-- Copy all win-x86 native binaries -->
 		<Content Include="*32.dll" Pack="True" PackagePath="runtimes\win-x86\native\" Link="runtimes\win-x86\native\%(Filename)%(Extension)" CopyToOutputDirectory="Always" />
