@@ -2,6 +2,11 @@
 
 namespace FileOnQ.Imaging.Raw
 {
+	/// <summary>
+	/// The Image Processor contract which defines APIs for
+	/// processing an imaging, writing and retrieving a
+	/// memory buffer.
+	/// </summary>
 	public interface IImageProcessor : IDisposable
 	{
 		/// <summary>
@@ -25,7 +30,39 @@ namespace FileOnQ.Imaging.Raw
 		/// than LibRaw, you will want to return false.
 		/// </remarks>
 		bool Process(RawImageData data);
+		
+		/// <summary>
+		/// Writes the processed image to the specified file path.
+		/// </summary>
+		/// <param name="data">
+		///The <see cref="RawImageData"/> which has already been
+		/// processed.
+		/// </param>
+		/// <param name="file">
+		/// The file path to write the processed image to.
+		/// </param>
+		/// <exception cref="NullReferenceException">
+		/// If <see cref="Process"/> isn't called first this API
+		/// will throw a <see cref="NullReferenceException"/>.
+		/// </exception>
 		void Write(RawImageData data, string file);
+		
+		/// <summary>
+		/// Gets a <see cref="ProcessedImage"/> which is a
+		/// memory buffer of the data.
+		/// </summary>
+		/// <param name="data">
+		/// The <see cref="RawImageData"/> which has already been
+		/// processed.
+		/// </param>
+		/// <returns>
+		/// The memory buffer of a processed image as type
+		/// <see cref="ProcessedImage"/>
+		/// </returns>
+		/// <exception cref="NullReferenceException">
+		/// If <see cref="Process"/> isn't called first this API
+		/// will throw a <see cref="NullReferenceException"/>.
+		/// </exception>
 		ProcessedImage AsProcessedImage(RawImageData data);
 	}
 }

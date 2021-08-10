@@ -2,8 +2,18 @@
 
 namespace FileOnQ.Imaging.Raw
 {
+	/// <summary>
+	/// Processes LibRaw images using the standard Dcraw algorithm.
+	/// </summary>
+	/// <remarks>
+	/// It is expected that the instance of <see cref="IUnpackedImage"/>
+	/// was instantiated by `raw.UnpackRaw()`. This API uses specific
+	/// internal LibRaw APIs that will only work on an unpacked
+	/// raw image.
+	/// </remarks>
 	public class DcrawProcessor : IImageProcessor
 	{
+		/// <inheritdoc cref="IImageProcessor"/>
 		public virtual bool Process(RawImageData data)
 		{
 			var errorCode = LibRaw.DcrawProcess(data.LibRawData);
@@ -13,6 +23,7 @@ namespace FileOnQ.Imaging.Raw
 			return true;
 		}
 
+		/// <inheritdoc cref="IImageProcessor"/>
 		public virtual void Write(RawImageData data, string file)
 		{
 			// TODO - 7/27/2021 - @ahoefling - Add validation
@@ -22,6 +33,7 @@ namespace FileOnQ.Imaging.Raw
 			LibRaw.DcrawWriter(data.LibRawData, file);
 		}
 
+		/// <inheritdoc cref="IImageProcessor"/>
 		public virtual ProcessedImage AsProcessedImage(RawImageData data) =>
 			new ProcessedImage
 			{
@@ -36,6 +48,8 @@ namespace FileOnQ.Imaging.Raw
 		~DcrawProcessor() => Dispose(false);
 
 		bool isDisposed;
+		
+		/// <inheritdoc cref="IDisposable"/>
 		public void Dispose()
 		{
 			Dispose(true);

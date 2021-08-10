@@ -2,8 +2,18 @@
 
 namespace FileOnQ.Imaging.Raw
 {
+	/// <summary>
+	/// Processes LibRaw thumbnails so they can be written
+	/// to memory or to a storage location.
+	/// </summary>
+	/// <remarks>
+	/// It is expected that the instance of <see cref="IUnpackedImage"/>
+	/// was instantiated by `raw.UnpackThumbnail()`. This API uses
+	/// specific internal LibRaw APIs that will only work on a thumbnail.
+	/// </remarks>
 	public class ThumbnailProcessor : IImageProcessor
 	{
+		/// <inheritdoc cref="IImageProcessor"/>
 		public virtual bool Process(RawImageData data)
 		{
 			// left empty by design. The standard thumbnail processor
@@ -14,6 +24,7 @@ namespace FileOnQ.Imaging.Raw
 			return false;
 		}
 
+		/// <inheritdoc cref="IImageProcessor"/>
 		public virtual void Write(RawImageData data, string file)
 		{
 			var error = LibRaw.ThumbnailWriter(data.LibRawData, file);
@@ -21,6 +32,7 @@ namespace FileOnQ.Imaging.Raw
 				throw new RawImageException<LibRaw.Error>(error);
 		}
 
+		/// <inheritdoc cref="IImageProcessor"/>
 		public virtual ProcessedImage AsProcessedImage(RawImageData data) =>
 			new ProcessedImage
 			{
@@ -35,6 +47,8 @@ namespace FileOnQ.Imaging.Raw
 		~ThumbnailProcessor() => Dispose(false);
 
 		protected bool IsDisposed { get; set; }
+		
+		/// <inheritdoc cref="IDisposable"/>
 		public void Dispose()
 		{
 			Dispose(true);

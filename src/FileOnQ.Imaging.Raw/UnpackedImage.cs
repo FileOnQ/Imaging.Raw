@@ -3,18 +3,25 @@ using System.Runtime.InteropServices;
 
 namespace FileOnQ.Imaging.Raw
 {
-	unsafe abstract class UnpackedImage : IUnpackedImage
+	/// <inheritdoc cref="IUnpackedImage"/>
+	abstract unsafe class UnpackedImage : IUnpackedImage
 	{
-		public UnpackedImage(IntPtr libraw)
-		{
-			this.LibRaw = libraw;
-		}
+		/// <summary>
+		/// Instantiates the default instance of
+		/// <see cref="UnpackedImage"/>.
+		/// </summary>
+		/// <param name="libraw">
+		/// The pointer to the LibRaw data structure.
+		/// </param>
+		internal UnpackedImage(IntPtr libraw) =>
+			LibRaw = libraw;
 
 		protected IntPtr LibRaw { get; set; }
 		protected LibRaw.ProcessedImage* Image { get; set; }
 		protected IImageProcessor Processor { get; set; }
 
-		public void Process(IImageProcessor newProcessor)
+		/// <inheritdoc cref="IUnpackedImage"/>
+		public void Process(IImageProcessor imageProcessor)
 		{
 			if (Processor != null)
 			{
@@ -22,7 +29,7 @@ namespace FileOnQ.Imaging.Raw
 				Processor = null;
 			}
 
-			Processor = newProcessor;
+			Processor = imageProcessor;
 			var resetImage = Processor.Process(BuildRawImageData());
 
 			if (resetImage && Image != null)
@@ -32,12 +39,18 @@ namespace FileOnQ.Imaging.Raw
 			}
 		}
 
+		/// <inheritdoc cref="IUnpackedImage"/>
 		public void Write(string file) =>
 			Processor.Write(BuildRawImageData(), file);
 
+		/// <inheritdoc cref="IUnpackedImage"/>
 		public ProcessedImage AsProcessedImage() =>
 			Processor.AsProcessedImage(BuildRawImageData());
 
+		/// <summary>
+		/// Loads the current image into memory prior
+		/// to processing.
+		/// </summary>
 		protected abstract void LoadImage();
 
 		RawImageData BuildRawImageData()
@@ -57,6 +70,7 @@ namespace FileOnQ.Imaging.Raw
 				Buffer = new Span<byte>((void*)GetBufferMemoryAddress(), (int)Image->DataSize)
 			};
 		}
+		
 		IntPtr GetBufferMemoryAddress()
 		{
 			// get the memory address of the data buffer.
@@ -68,6 +82,8 @@ namespace FileOnQ.Imaging.Raw
 		~UnpackedImage() => Dispose(false);
 
 		bool isDisposed;
+		
+		/// <inheritdoc cref="IDisposable"/>
 		public void Dispose()
 		{
 			Dispose(true);
