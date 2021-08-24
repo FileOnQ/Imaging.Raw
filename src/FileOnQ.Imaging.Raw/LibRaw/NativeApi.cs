@@ -20,6 +20,23 @@ namespace FileOnQ.Imaging.Raw
 			}
 		}
 
+		internal static void CreateDngHost(IntPtr libraw)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					X86.libraw_create_dng_host(libraw);
+					break;
+				case Architecture.X64:
+					X64.libraw_create_dng_host(libraw);
+					break;
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
+
 		internal static void Close(IntPtr libraw)
 		{
 			switch (RuntimeInformation.ProcessArchitecture)
@@ -203,6 +220,21 @@ namespace FileOnQ.Imaging.Raw
 				case Architecture.X64:
 					X64.libraw_dcraw_clear_mem((IntPtr)image);
 					break;
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
+
+		internal static Parameters* GetOutputParameters(IntPtr libraw)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_get_output_params(libraw);
+				case Architecture.X64:
+					return X64.libraw_get_output_params(libraw);
 				case Architecture.Arm:
 				case Architecture.Arm64:
 				default:
