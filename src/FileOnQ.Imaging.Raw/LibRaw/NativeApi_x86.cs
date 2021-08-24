@@ -13,9 +13,6 @@ namespace FileOnQ.Imaging.Raw
 			internal static extern IntPtr libraw_init(uint flags);
 
 			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-			internal static extern void libraw_create_dng_host(IntPtr libraw);
-
-			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern void libraw_close(IntPtr libraw);
 
 			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
