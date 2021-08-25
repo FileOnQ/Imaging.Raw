@@ -31,6 +31,14 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 					Console.WriteLine("Starting DcrawProcessGpu benchmarks . . .");
 					DcrawProcessGpu();
 					break;
+				case "dcraw-whitebalance":
+					Console.WriteLine("Starting DcrawProcessWhiteBalance benchmarks . . .");
+					DcrawProcess();
+					break;
+				case "dcraw-whitebalance-Gpu":
+					Console.WriteLine("Starting DcrawProcessWhiteBalanceGpu benchmarks . . .");
+					DcrawProcessGpu();
+					break;
 				case "thumbnail":
 					Console.WriteLine("Starting thumbnail benchmarks . . .");
 					Thumbnail();
@@ -66,6 +74,8 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 
 		static void DcrawProcess() => BenchmarkRunner.Run<DcrawProcess>();
 		static void DcrawProcessGpu() => BenchmarkRunner.Run<DcrawProcessGpu>();
+		static void DcrawProcessWhiteBalance() => BenchmarkRunner.Run<DcrawProcessWhiteBalance>();
+		static void DcrawProcessWhiteBalanceGpu() => BenchmarkRunner.Run<DcrawProcessWhiteBalanceGpu>();
 		static void Thumbnail() => BenchmarkRunner.Run<Thumbnail>();
 	}
 }
