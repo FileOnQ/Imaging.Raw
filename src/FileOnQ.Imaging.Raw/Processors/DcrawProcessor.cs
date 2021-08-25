@@ -16,8 +16,11 @@ namespace FileOnQ.Imaging.Raw
 		/// <inheritdoc cref="IImageProcessor"/>
 		public virtual unsafe bool Process(RawImageData data)
 		{
-			var parameters = LibRaw.GetOutputParameters(data.LibRawData);
+			var pointer = LibRaw.GetOutputParameters(data.LibRawData);
+			var parameters = new DcrawOutputParameters(pointer);
+			
 			SetOutputParameters(parameters);
+			pointer->Update(parameters);
 
 			var errorCode = LibRaw.DcrawProcess(data.LibRawData);
 			if (errorCode != LibRaw.Error.Success)
@@ -34,7 +37,7 @@ namespace FileOnQ.Imaging.Raw
 		/// <param name="parameters">
 		/// The current output parameters.
 		/// </param>
-		protected virtual unsafe void SetOutputParameters(LibRaw.DcrawPostProcessingParameters* parameters)
+		protected virtual void SetOutputParameters(DcrawOutputParameters parameters)
 		{
 			// NOTE - 8/24/2021 - @ahoefling - left empty by design
 		}

@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace FileOnQ.Imaging.Raw
 {
@@ -13,8 +14,105 @@ namespace FileOnQ.Imaging.Raw
 		/// https://www.libraw.org/docs/API-datastruct.html#libraw_output_params_t
 		/// </remarks>
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
-		public struct DcrawPostProcessingParameters
+		internal struct DcrawPostProcessingParameters
 		{
+			/// <summary>
+			/// Sets the managed <see cref="DcrawOutputParameters"/>
+			/// to the native <see cref="DcrawPostProcessingParameters"/>.
+			/// </summary>
+			/// <param name="parameters">
+			/// Updated managed properties.
+			/// </param>
+			internal void Update(DcrawOutputParameters parameters)
+			{
+				if (parameters.Greybox.Length != 4)
+					throw new ArgumentException($"{nameof(DcrawOutputParameters.Greybox)} must be exactly 4 in length");
+
+				Greybox_0 = parameters.Greybox[0];
+				Greybox_1 = parameters.Greybox[1];
+				Greybox_2 = parameters.Greybox[2];
+				Greybox_3 = parameters.Greybox[3];
+
+				if (parameters.Cropbox.Length != 4)
+					throw new ArgumentException($"{nameof(DcrawOutputParameters.Cropbox)} must be exactly 4 in length");
+
+				Cropbox_0 = parameters.Cropbox[0];
+				Cropbox_1 = parameters.Cropbox[1];
+				Cropbox_2 = parameters.Cropbox[2];
+				Cropbox_3 = parameters.Cropbox[3];
+
+				if (parameters.CorrectionOfChromaticAberrations.Length != 4)
+					throw new ArgumentException($"{nameof(DcrawOutputParameters.CorrectionOfChromaticAberrations)} must be exactly 4 in length");
+
+				CorrectionOfChromaticAberrations_0 = parameters.CorrectionOfChromaticAberrations[0];
+				CorrectionOfChromaticAberrations_1 = parameters.CorrectionOfChromaticAberrations[1];
+				CorrectionOfChromaticAberrations_2 = parameters.CorrectionOfChromaticAberrations[2];
+				CorrectionOfChromaticAberrations_3 = parameters.CorrectionOfChromaticAberrations[3];
+
+				if (parameters.Gamma.Length != 6)
+					throw new ArgumentException($"{nameof(DcrawOutputParameters.Gamma)} must be exactly 6 in length");
+
+				Gamma_0 = parameters.Gamma[0];
+				Gamma_1 = parameters.Gamma[1];
+				Gamma_2 = parameters.Gamma[2];
+				Gamma_3 = parameters.Gamma[3];
+				Gamma_4 = parameters.Gamma[4];
+				Gamma_5 = parameters.Gamma[5];
+
+				if (parameters.UserWhiteBalanceMultiplyer.Length != 4)
+					throw new ArgumentException($"{nameof(DcrawOutputParameters.UserWhiteBalanceMultiplyer)} must be exactly 4 in length");
+
+				UserWhiteBalanceMultiplyer_0 = parameters.UserWhiteBalanceMultiplyer[0];
+				UserWhiteBalanceMultiplyer_1 = parameters.UserWhiteBalanceMultiplyer[1];
+				UserWhiteBalanceMultiplyer_2 = parameters.UserWhiteBalanceMultiplyer[2];
+				UserWhiteBalanceMultiplyer_3 = parameters.UserWhiteBalanceMultiplyer[3];
+
+				SelectedRawImage = parameters.SelectedRawImage;
+				Brightness = parameters.Brightness;
+				NoiseReduction = parameters.NoiseReduction;
+				HalfSize = parameters.HalfSize;
+				FourColorRgb = parameters.FourColorRgb;
+				Highlight = parameters.Highlight;
+				UseAutoWhiteBalance = parameters.UseAutoWhiteBalance;
+				UseCameraWhiteBalance = parameters.UseCameraWhiteBalance;
+				UseCameraMatrix = parameters.UseCameraMatrix;
+				OutputColor = parameters.OutputColor;
+				OutputProfile = (char*)Marshal.StringToHGlobalAnsi(parameters.OutputProfile);
+				CameraProfile = (char*)Marshal.StringToHGlobalAnsi(parameters.CameraProfile);
+				BadPixels = (char*)Marshal.StringToHGlobalAnsi(parameters.BadPixels);
+				DarkFrame = (char*)Marshal.StringToHGlobalAnsi(parameters.DarkFrame);
+				OutputBps = parameters.OutputBps;
+				OutputTiff = parameters.OutputTiff;
+				OutputFlags = parameters.OutputFlags;
+				FlipImage = parameters.FlipImage;
+				InterpolationQuality = parameters.InterpolationQuality;
+				BlackLevel = parameters.BlackLevel;
+
+				if (parameters.UserCblack.Length != 4)
+					throw new ArgumentException($"{nameof(DcrawOutputParameters.UserCblack)} must be exactly 4 in length");
+
+				UserCblack_0 = parameters.UserCblack[0];
+				UserCblack_1 = parameters.UserCblack[1];
+				UserCblack_2 = parameters.UserCblack[2];
+				UserCblack_3 = parameters.UserCblack[3];
+
+				SaturationAdjustment = parameters.SaturationAdjustment;
+				MedianFilterPasses = parameters.MedianFilterPasses;
+				AutoBrightThreshold = parameters.AutoBrightThreshold;
+				AdjustMaximumThreshold = parameters.AdjustMaximumThreshold;
+				NoAutoBright = parameters.NoAutoBright;
+				UseFujiRotate = parameters.UseFujiRotate;
+				GreenMatching = parameters.GreenMatching;
+				DcbIterations = parameters.DcbIterations;
+				DcbEnhanceFl = parameters.DcbEnhanceFl;
+				FbddNoiseReduction = parameters.FbddNoiseReduction;
+				ExposureCorrection = parameters.ExposureCorrection;
+				ExposureShift = parameters.ExposureShift;
+				ExposurePreservation = parameters.ExposurePreservation;
+				NoAutoScale = parameters.NoAutoScale;
+				NoInterpolation = parameters.NoInterpolation;
+			}
+
 			/// <summary>
 			/// 4 numbers corresponding to the coordinates (in pixels) of the 
 			/// rectangle that is used to calculate the white balance. X and Y 
