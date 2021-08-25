@@ -14,13 +14,29 @@ namespace FileOnQ.Imaging.Raw
 	public class DcrawProcessor : IImageProcessor
 	{
 		/// <inheritdoc cref="IImageProcessor"/>
-		public virtual bool Process(RawImageData data)
+		public virtual unsafe bool Process(RawImageData data)
 		{
+			var parameters = LibRaw.GetOutputParameters(data.LibRawData);
+			SetOutputParameters(parameters);
+
 			var errorCode = LibRaw.DcrawProcess(data.LibRawData);
 			if (errorCode != LibRaw.Error.Success)
 				throw new RawImageException<LibRaw.Error>(errorCode);
 
 			return true;
+		}
+
+		/// <summary>
+		/// Configures post processing LibRaw output parameters. Any
+		/// value set on <see cref="LibRaw.DcrawPostProcessingParameters"/>
+		/// will be applied, no need to perform additional save operation.
+		/// </summary>
+		/// <param name="parameters">
+		/// The current output parameters.
+		/// </param>
+		protected virtual unsafe void SetOutputParameters(LibRaw.DcrawPostProcessingParameters* parameters)
+		{
+			// NOTE - 8/24/2021 - @ahoefling - left empty by design
 		}
 
 		/// <inheritdoc cref="IImageProcessor"/>

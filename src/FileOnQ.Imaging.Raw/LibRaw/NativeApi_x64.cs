@@ -50,7 +50,7 @@ namespace FileOnQ.Imaging.Raw
 			internal static extern void libraw_dcraw_clear_mem(IntPtr image);
 
 			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-			internal static extern Parameters* libraw_get_output_params(IntPtr libraw);
+			internal static extern DcrawPostProcessingParameters* libraw_get_output_params(IntPtr libraw);
 		}
 	}
 }

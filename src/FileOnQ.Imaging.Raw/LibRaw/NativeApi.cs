@@ -210,7 +210,7 @@ namespace FileOnQ.Imaging.Raw
 			}
 		}
 
-		internal static Parameters* GetOutputParameters(IntPtr libraw)
+		internal static DcrawPostProcessingParameters* GetOutputParameters(IntPtr libraw)
 		{
 			switch (RuntimeInformation.ProcessArchitecture)
 			{
