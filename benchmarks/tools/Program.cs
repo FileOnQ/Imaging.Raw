@@ -33,7 +33,7 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 					break;
 				case "dcraw-whitebalance":
 					Console.WriteLine("Starting DcrawProcessWhiteBalance benchmarks . . .");
-					DcrawProcess();
+					DcrawProcessWhiteBalanceGpu();
 					break;
 				case "dcraw-whitebalance-Gpu":
 					Console.WriteLine("Starting DcrawProcessWhiteBalanceGpu benchmarks . . .");
