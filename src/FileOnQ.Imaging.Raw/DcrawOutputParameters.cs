@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace FileOnQ.Imaging.Raw
 {
-	public unsafe ref struct DcrawOutputParameters
+	public unsafe class DcrawOutputParameters
 	{
 		internal DcrawOutputParameters(LibRaw.DcrawPostProcessingParameters* parameters)
 		{
