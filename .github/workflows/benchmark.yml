@@ -3,8 +3,7 @@ name: Benchmark
 on:
   pull_request:
     branches: [ main ]
-# commented out to force benchmark, we need to uncomment this prior to merging
-#    types: [ opened ]
+    types: [ opened ]
   issue_comment:
     types: [ created ]
 
