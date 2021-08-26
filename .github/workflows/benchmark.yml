@@ -180,7 +180,7 @@ jobs:
         $message += "Benchmarking comparison between this Pull Request and the comitted values at benchmarks/results `r`n`r`n"
         $message += "dcraw`r`n"
         $message += "\``\``\``ini `r`n $dcraw `r`n \``\``\``"
-        $message += "dcraw-whitebalance`r`n"
+        $message += "`r`n`r`ndcraw-whitebalance`r`n"
         $message += "\``\``\``ini `r`n $dcrawWhitebalance `r`n \``\``\``"
         $message += "`r`n`r`nthumbnail`r`n"
         $message += "\``\``\``ini `r`n $thumbnail `r`n \``\``\``"
