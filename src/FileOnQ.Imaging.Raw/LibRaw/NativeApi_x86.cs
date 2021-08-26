@@ -48,6 +48,9 @@ namespace FileOnQ.Imaging.Raw
 			// This must pass the processed image so the native lib knows what to clear
 			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 			internal static extern void libraw_dcraw_clear_mem(IntPtr image);
+
+			[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+			internal static extern DcrawPostProcessingParameters* libraw_get_output_params(IntPtr libraw);
 		}
 	}
 }

@@ -30,6 +30,9 @@
     <None Include="$(MSBuildThisFileDirectory)Images\IMG_20201121_104443.dng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)Images\infrared.nef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="$(MSBuildThisFileDirectory)Images\PANA2417.RW2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -87,6 +87,10 @@ jobs:
             cuda: 'CUDA-11.4.0'
             visual_studio: 'Visual Studio 16 2019'
             benchmark: 'dcraw'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw-whitebalance'
     steps:
     - uses: actions/checkout@v2
       with:
@@ -156,6 +160,10 @@ jobs:
     - name: Compare - dcraw
       run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw" --diff "../../../../benchmark-artifacts/Benchmark-dcraw" --threshold 10% --top 10 > dcraw.output.txt
       working-directory: ./dotnet.performance/src/tools/ResultsComparer
+      
+    - name: Compare - dcraw-whitebalance
+      run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw-whitebalance" --diff "../../../../benchmark-artifacts/Benchmark-dcraw-whitebalance" --threshold 10% --top 10 > dcraw-whitebalance.output.txt
+      working-directory: ./dotnet.performance/src/tools/ResultsComparer
 
     - name: Compare - thumbnail
       run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail" --diff "../../../../benchmark-artifacts/Benchmark-thumbnail" --threshold 10% --top 10 > thumbnail.output.txt
@@ -164,12 +172,15 @@ jobs:
     - name: GitHub Comment - Comparison
       run: |
         $dcraw = Get-Content "dcraw.output.txt" -raw
+        $dcrawWhitebalance = Get-Content "dcraw-whitebalance.output.txt" -raw
         $thumbnail = Get-Content "thumbnail.output.txt" -raw
 
         $message = "## Benchmark Comparison`r`n"
         $message += "Benchmarking comparison between this Pull Request and the comitted values at benchmarks/results `r`n`r`n"
         $message += "dcraw`r`n"
         $message += "\``\``\``ini `r`n $dcraw `r`n \``\``\``"
+        $message += "`r`n`r`ndcraw-whitebalance`r`n"
+        $message += "\``\``\``ini `r`n $dcrawWhitebalance `r`n \``\``\``"
         $message += "`r`n`r`nthumbnail`r`n"
         $message += "\``\``\``ini `r`n $thumbnail `r`n \``\``\``"
         echo $message
@@ -183,11 +194,15 @@ jobs:
         $dcraw = Get-Content "Benchmark-dcraw/FileOnQ.Imaging.Raw.Benchmarking.DcrawProcess-report-github.md" -raw
         $dcraw = $dcraw.replace("``", "\``")
 
+        $dcrawWhitebalance = Get-Content "Benchmark-dcraw-whitebalance/FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance-report-github.md" -raw
+        $dcrawWhitebalance = $dcrawWhitebalance.replace("``", "\``")
+
         $thumbnail = Get-Content "Benchmark-thumbnail/FileOnQ.Imaging.Raw.Benchmarking.Thumbnail-report-github.md" -raw
         $thumbnail = $thumbnail.replace("``", "\``")
 
         $message = "## Benchmark Results`r`n"
         $message += "<details><summary>dcraw</summary><p>`r`n`r`n $dcraw </p></details>`r`n"
+        $message += "<details><summary>dcraw-whitebalance</summary><p>`r`n`r`n $dcrawWhitebalance </p></details>`r`n"
         $message += "<details><summary>thumbnail</summary><p>`r`n`r`n $thumbnail </p></details>`r`n"
         echo $message
         echo "PR_COMMENT_RESULTS<<EOF" >> $env:GITHUB_ENV

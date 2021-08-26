@@ -209,5 +209,20 @@ namespace FileOnQ.Imaging.Raw
 					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
 			}
 		}
+
+		internal static DcrawPostProcessingParameters* GetOutputParameters(IntPtr libraw)
+		{
+			switch (RuntimeInformation.ProcessArchitecture)
+			{
+				case Architecture.X86:
+					return X86.libraw_get_output_params(libraw);
+				case Architecture.X64:
+					return X64.libraw_get_output_params(libraw);
+				case Architecture.Arm:
+				case Architecture.Arm64:
+				default:
+					throw new NotSupportedException($"Current platform ({RuntimeInformation.ProcessArchitecture}) is not supported");
+			}
+		}
 	}
 }

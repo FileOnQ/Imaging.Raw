@@ -19,6 +19,7 @@ namespace FileOnQ.Imaging.Raw.Tests.Integration
 	[TestFixture(TestData.RawImage12)]
 	[TestFixture(TestData.RawImage13)]
 	[TestFixture(TestData.RawImage14)]
+	[TestFixture(TestData.RawImage15)]
 	[Category(Constants.Category.Integration)]
 	public class Thumbnail_ImageBuffer_Tests
 	{
