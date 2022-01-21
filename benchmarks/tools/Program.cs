@@ -14,41 +14,79 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 
 			if (args.Length < 2 || args[0] != "-b")
 			{
+				var benchmarkKeys = new System.Collections.Generic.List<string>(BenchmarkOptions.Keys);
 				Console.WriteLine("Available commands:");
-				Console.WriteLine("\t-b benchmark to run (dcraw, thumbnail, etc.)");
-				Console.WriteLine("\r\nExample: dotnet run -b thumbnail");
+				Console.WriteLine($"\t-b benchmark to run ({string.Join(", ", benchmarkKeys)})");
+				Console.WriteLine("\r\nExample: dotnet run -c release -b thumbnail");
 				return;
 			}
 
-			var benchmark = args[1].ToLower();
+			BenchmarkOptions.TryGetValue(args[1].ToLower(), out var benchmark);
+			
 			switch (benchmark)
 			{
-				case "dcraw":
+				case BenchmarkOption.all:
+					Console.WriteLine("Starting DcrawProcess benchmarks . . .");
+					DcrawProcess();
+					Console.WriteLine();
+					Console.WriteLine("Starting DcrawProcessGpu benchmarks . . .");
+					DcrawProcessGpu();
+					Console.WriteLine();
+					Console.WriteLine("Starting DcrawProcessWhiteBalance benchmarks . . .");
+					DcrawProcessWhiteBalance();
+					Console.WriteLine();
+					Console.WriteLine("Starting DcrawProcessWhiteBalanceGpu benchmarks . . .");
+					DcrawProcessWhiteBalanceGpu();
+					Console.WriteLine();
+					Console.WriteLine("Starting thumbnail benchmarks . . .");
+					Thumbnail();
+					break;
+				case BenchmarkOption.dcraw:
 					Console.WriteLine("Starting DcrawProcess benchmarks . . .");
 					DcrawProcess();
 					break;
-				case "dcraw-gpu":
+				case BenchmarkOption.dcraw_gpu:
 					Console.WriteLine("Starting DcrawProcessGpu benchmarks . . .");
 					DcrawProcessGpu();
 					break;
-				case "dcraw-whitebalance":
+				case BenchmarkOption.dcraw_whitebalance:
 					Console.WriteLine("Starting DcrawProcessWhiteBalance benchmarks . . .");
 					DcrawProcessWhiteBalance();
 					break;
-				case "dcraw-whitebalance-Gpu":
+				case BenchmarkOption.dcraw_whitebalance_gpu:
 					Console.WriteLine("Starting DcrawProcessWhiteBalanceGpu benchmarks . . .");
 					DcrawProcessWhiteBalanceGpu();
 					break;
-				case "thumbnail":
+				case BenchmarkOption.thumbnail:
 					Console.WriteLine("Starting thumbnail benchmarks . . .");
 					Thumbnail();
 					break;
 				default:
-					Console.WriteLine($"Benchmark {benchmark} is not available");
+					Console.WriteLine($"Benchmark {args[1].ToLower()} is not available");
 					break;
 			}
 
 			Console.WriteLine("Benchmark completed");
+		}
+
+		private static System.Collections.Generic.Dictionary<string, BenchmarkOption> BenchmarkOptions => new() {
+			{ "all", BenchmarkOption.dcraw },
+			{ "dcraw", BenchmarkOption.dcraw },
+			{ "dcraw-gpu", BenchmarkOption.dcraw_gpu },
+			{ "dcraw-whitebalance", BenchmarkOption.dcraw_whitebalance },
+			{ "dcraw-whitebalance-gpu", BenchmarkOption.dcraw_whitebalance_gpu },
+			{ "thumbnail", BenchmarkOption.thumbnail }
+		};
+
+		internal enum BenchmarkOption
+		{
+			none_selected = 0,
+			all = 1,
+			dcraw = 2,
+			dcraw_gpu = 3,
+			dcraw_whitebalance = 4,
+			dcraw_whitebalance_gpu = 5,
+			thumbnail = 6
 		}
 
 		static void AsBitmapRunner()
