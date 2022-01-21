@@ -29,15 +29,6 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 					Console.WriteLine("Starting DcrawProcess benchmarks . . .");
 					DcrawProcess();
 					Console.WriteLine();
-					Console.WriteLine("Starting DcrawProcessGpu benchmarks . . .");
-					DcrawProcessGpu();
-					Console.WriteLine();
-					Console.WriteLine("Starting DcrawProcessWhiteBalance benchmarks . . .");
-					DcrawProcessWhiteBalance();
-					Console.WriteLine();
-					Console.WriteLine("Starting DcrawProcessWhiteBalanceGpu benchmarks . . .");
-					DcrawProcessWhiteBalanceGpu();
-					Console.WriteLine();
 					Console.WriteLine("Starting thumbnail benchmarks . . .");
 					Thumbnail();
 					break;
