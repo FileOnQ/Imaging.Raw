@@ -9,6 +9,7 @@
     <Import_RootNamespace>FileOnQ.Imaging.Raw.Tests</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Build\nuget-local.targets" />
     <None Include="$(MSBuildThisFileDirectory)Images\@signatureeditsco(1).dng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
