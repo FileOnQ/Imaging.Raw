@@ -67,9 +67,8 @@ We don't have a wiki or full API documentation. If you are interested in helping
 
 ## Dependencies
 
-FileOnQ.Imaging.Raw uses a C/C++ dependent library
-
-* [LibRaw](https://github.com/LibRaw/LibRaw)
+* C++ Library: [LibRaw](https://github.com/LibRaw/LibRaw)
+* SDK: [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-3-download-archive) 
 
 ## Created By FileOnQ
 
