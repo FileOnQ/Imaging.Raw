@@ -1,6 +1,6 @@
 # How to Compile
 
-FileOnQ.Imaging.Raw uses a mix of .NET Framework, .NET and native C/C++ projects. You will need to have additional build tools installed to properly build this locally. This readme serves as a guide for new developers to contribute.
+FileOnQ.Imaging.Raw uses a mix of .NET Framework, .NET, and native C/C++ projects. You will need to have additional build tools installed to properly build this locally. This readme serves as a guide for new developers to contribute.
 
 ## Visual Studio and .NET
 
@@ -13,11 +13,13 @@ If you are using an older version of Visual Studio or .NET CLI you won't have ac
 
 ## Build Dependencies
 
-TBD
+Grab the LibRaw dependencies by running the command `git submodule update --init --recursive` in the repo's root folder. You will also need to download and install [CUDA SDK 11.4](https://developer.nvidia.com/cuda-11-4-3-download-archive)
 
 ## Compile
 
-TBD
+First time compilation takes a while. Future builds won't take as long even if you do a clean and rebuild as vcpkg will cache binaries in your user directory.
+
+By compiling the main project `FileOnQ.Imaging.Raw` you will be compiling all native dependencies. No need to run any additional compilation instructions.
 
 ### Visual Studio
 
