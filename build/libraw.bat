@@ -1,7 +1,14 @@
 @echo off
 title Building LibRaw
 set arch=%1
-call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %arch%
+for /f "usebackq tokens=1* delims=" %%x in (`vswhere -find **\vcvarsall.bat`) do set vcvar="%%~x"
+
+if not defined vcvar (
+	echo "unable to find 'vcvarsall.bat'. visual studio c++ package needs to be installed"
+	exit /b 2
+)
+
+call %vcvar% %arch%
 cd ../LibRaw
 
 git clean -xd -f lib -f bin -f object
