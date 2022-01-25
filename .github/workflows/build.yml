@@ -196,7 +196,7 @@ jobs:
         working-directory: ./samples/ConsoleApp
         
       - name: Run Console App
-        run: dotnet run -c Release
+        run: dotnet run -c Release -f ${{ matrix.framework }} /p:Platform=${{ matrix.architecture }}
         working-directory: ./samples/ConsoleApp
 
   build-win-forms-app:
@@ -260,5 +260,5 @@ jobs:
         working-directory: ./samples/WinForms
 
       - name: Build WinForms App
-        run: dotnet build -c Release /p:Platform=${{ matrix.architecture }}
+        run: dotnet build -c Release -f ${{ matrix.framework }} /p:Platform=${{ matrix.architecture }}
         working-directory: ./samples/WinForms
