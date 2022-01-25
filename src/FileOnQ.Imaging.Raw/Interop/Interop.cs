@@ -1,0 +1,28 @@
+﻿#if NET48_OR_GREATER
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
+
+namespace FileOnQ.Imaging.Raw
+{
+	static class Interop
+	{
+		[DllImport("kernel32.dll")]
+		private static extern bool SetDllDirectory(string dllToLoad);
+
+		internal static void UpdateDllSearchPath()
+		{
+
+			var binPath = new Uri(typeof(LibRaw).Assembly.CodeBase).LocalPath;
+			var folder = Path.GetDirectoryName(binPath);
+			var runtime = $"runtimes\\win-{RuntimeInformation.ProcessArchitecture}\\native";
+			var nativePath = Path.Combine(folder, runtime);
+
+			var loaded = SetDllDirectory(nativePath);
+			if (!loaded)
+				throw new RawInteropException("Unable to set native path");
+		}
+	}
+}
+
+#endif

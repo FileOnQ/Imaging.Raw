@@ -2,10 +2,17 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
 	<Target Name="Copy_FileOnQImagingRaw_NativeDlls" BeforeTargets="Build">
-		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\libraw_fileonq.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
-		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\FileOnQ.Imaging.Raw.Gpu.Cuda.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
-		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\libraw_fileonq32.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
-		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\FileOnQ.Imaging.Raw.Gpu.Cuda32.dll" DestinationFolder="$(ProjectDir)\$(OutDir)" />
+		<ItemGroup>
+			<AssemblyFiles_x86 Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\*.dll" />
+			<AssemblyFiles_x64 Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\*.dll" />
+		</ItemGroup>
+		<Delete Files="$(ProjectDir)\$(OutDir)\libraw_fileonq.dll" />
+		<Delete Files="$(ProjectDir)\$(OutDir)\libraw_fileonq32.dll" />
+		<Delete Files="$(ProjectDir)\$(OutDir)\FileOnQ.Imaging.Raw.Gpu.Cuda32.dll" />
+		<Delete Files="$(ProjectDir)\$(OutDir)\FileOnQ.Imaging.Raw.Gpu.Cuda.dll" />
+
+		<Copy SourceFiles="@(AssemblyFiles_x86)" DestinationFiles="@(AssemblyFiles_x86->'$(ProjectDir)\$(OutDir)\runtimes\win-x86\native\%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(AssemblyFiles_x64)" DestinationFiles="@(AssemblyFiles_x64->'$(ProjectDir)\$(OutDir)\runtimes\win-x64\native\%(Filename)%(Extension)')" />
 	</Target>
 
 </Project>

@@ -5,10 +5,10 @@
     <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FileOnQ.Imaging.Raw" Version="0.0.0-local.1" />
-  </ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="FileOnQ.Imaging.Raw" Version="0.0.0-local.1" />
+	</ItemGroup>
   <ItemGroup>
     <None Update="PANA2417.RW2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

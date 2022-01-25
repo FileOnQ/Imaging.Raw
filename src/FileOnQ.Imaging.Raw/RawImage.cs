@@ -4,9 +4,15 @@ namespace FileOnQ.Imaging.Raw
 {
 	public unsafe class RawImage : IRawImage
 	{
+
+#if NET48_OR_GREATER
+		static RawImage() =>
+			Interop.UpdateDllSearchPath();
+#endif
+
 		string file;
 		IntPtr libraw;
-		
+
 		// TODO - 7/25/2021 - @ahoefling
 		// Add exception tests if file does not exist. If we
 		// don't manage this in the C# code the problem will
@@ -61,7 +67,7 @@ namespace FileOnQ.Imaging.Raw
 			{
 				// free managed resources
 			}
-			
+
 			if (libraw != IntPtr.Zero)
 			{
 				LibRaw.Recycle(libraw);

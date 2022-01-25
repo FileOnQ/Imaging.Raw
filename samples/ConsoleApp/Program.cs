@@ -18,7 +18,7 @@ namespace ConsoleApp
 			try
 			{
 				using (var image = new RawImage(testImage))
-				using (var thumbnail = image.UnpackThumbnail())
+				using (var thumbnail = image.UnpackRaw())
 				{
 					Console.WriteLine("Image open successfully!");
 					Console.WriteLine("Thumbnail Unpacked");
