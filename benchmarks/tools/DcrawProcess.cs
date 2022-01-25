@@ -9,6 +9,8 @@ using BenchmarkDotNet.Jobs;
 namespace FileOnQ.Imaging.Raw.Benchmarking
 {
 	[SimpleJob(RuntimeMoniker.Net50, launchCount: 1, invocationCount: 1)]
+	[SimpleJob(RuntimeMoniker.Net48, launchCount: 1, invocationCount: 1)]
+	[SimpleJob(RuntimeMoniker.Net60, launchCount: 1, invocationCount: 1)]
 	[NativeMemoryProfiler]
 	[MemoryDiagnoser]
 	[JsonExporterAttribute.Full]
