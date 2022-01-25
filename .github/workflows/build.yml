@@ -10,12 +10,12 @@ on:
 jobs:
   build:
     runs-on: windows-2019
+    outputs:
+      package_version: ${{ env.PACKAGE_VERSION }}
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: 'true'
-
-
     - name: Ensure .NET 5 SDK
       uses: actions/setup-dotnet@v1
       with:
@@ -193,11 +193,11 @@ jobs:
                 
       - name: Update NuGet
         run: dotnet add package FileOnQ.Imaging.Raw --version ${{ needs.build.outputs.package_version }}
-        working-directory: ./samples/ConsoleApp/ConsoleApp
+        working-directory: ./samples/ConsoleApp
         
       - name: Run Console App
         run: dotnet run -c Release
-        working-directory: ./samples/ConsoleApp/ConsoleApp
+        working-directory: ./samples/ConsoleApp
 
   build-win-forms-app:
     needs: build
@@ -257,8 +257,8 @@ jobs:
                 
       - name: Update NuGet
         run: dotnet add package FileOnQ.Imaging.Raw --version ${{ needs.build.outputs.package_version }}
-        working-directory: ./samples/Winforms/Winforms
+        working-directory: ./samples/WinForms
 
       - name: Build WinForms App
         run: dotnet build -c Release /p:Platform=${{ matrix.architecture }}
-        working-directory: ./samples/Winforms/Winforms
+        working-directory: ./samples/WinForms
