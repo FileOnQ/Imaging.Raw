@@ -56,13 +56,12 @@ jobs:
           } catch (err) {
             core.setFailed(`Request failed with error ${err}`)
           }
-
-      - name: Set Repository and Ref
-        run: |
-          $repository = '${{ fromJSON(steps.find-branch.outputs.result).head.repo.full_name }}'
-          $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
-          echo "CUSTOM_REPO=$($repository)" >> $env:GITHUB_ENV
-          echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
+    - name: Set Repository and Ref
+      run: |
+        $repository = '${{ fromJSON(steps.find-branch.outputs.result).head.repo.full_name }}'
+        $ref = '${{ fromJSON(steps.find-branch.outputs.result).head.ref }}'
+        echo "CUSTOM_REPO=$($repository)" >> $env:GITHUB_ENV
+        echo "CUSTOM_REF=$($ref)" >> $env:GITHUB_ENV
 
   benchmark-build:
     if: ${{ needs.check-command.outputs.benchmark == 'true' || github.EVENT_NAME == 'pull_request' }}
