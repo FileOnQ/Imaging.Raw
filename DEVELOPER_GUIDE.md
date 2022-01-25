@@ -18,7 +18,7 @@ TBD
 
 The test project contains unit and integration tests that will run the code, all supported architectures, and platforms. When working on changes locally, it is recommended to use NUnit directly. Using GUIs such as Visual Studio still work, but some of the developer experience may differ from these docs.
 
-TBD: local nuget package
+The test projects all use a local NuGet package of FileOnQ.Imaging.Raw.0.0.0-local.1 which is re-generated every time you build. The cached package in your NuGet Cache is also cleared to ensure you always have the latest changes. See Local NuGets below for more details.
 
 The test projects use a shared project and target head solution to make it easier to manage what architecture is running the code.
 
@@ -112,7 +112,7 @@ TBD
 
 On build of these projects
 1. Clear your local NuGet cache
-2. Pack `FileOnQ.Imaging.Heif` for release or debug configuration
+2. Pack `FileOnQ.Imaging.Raw` for release or debug configuration
 3. dotnet restore
 4. dotnet build
 
