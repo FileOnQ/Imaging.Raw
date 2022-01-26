@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance-20220126-163333</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.17763.2452 (1809/October2018Update/Redstone5)
+Intel Xeon CPU E5-2673 v3 2.40GHz, 1 CPU, 2 logical and 2 physical cores
+.NET SDK=6.0.101
+  [Host]     : .NET 5.0.8 (5.0.821.31504), X64 RyuJIT
+  Job-GHACPE : .NET 5.0.8 (5.0.821.31504), X64 RyuJIT
+  Job-GQUBLI : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
+  Job-VVECKY : .NET Framework 4.8 (4.8.4420.0), X64 RyuJIT
+</code></pre>
+<pre><code>InvocationCount=1  LaunchCount=1  UnrollFactor=1  
+</code></pre>
+
+<table>
+<thead><tr><th>      Method</th><th> Job</th><th>     Runtime</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th><th>Allocated native memory</th><th>Native memory leak</th>
+</tr>
+</thead><tbody><tr><td>ProccessAndWrite</td><td>Job-GHACPE</td><td>.NET 5.0</td><td>13.08 s</td><td>0.175 s</td><td>0.163 s</td><td>-</td><td>-</td><td>-</td><td>2 KB</td><td>810,799 KB</td><td>-</td>
+</tr><tr><td>ProccessIntoMemory</td><td>Job-GHACPE</td><td>.NET 5.0</td><td>12.78 s</td><td>0.053 s</td><td>0.049 s</td><td>-</td><td>-</td><td>-</td><td>149,882 KB</td><td>810,769 KB</td><td>-</td>
+</tr><tr><td>ProcessIntoBitmap</td><td>Job-GHACPE</td><td>.NET 5.0</td><td>13.37 s</td><td>0.130 s</td><td>0.115 s</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>299,756 KB</td><td>810,770 KB</td><td>-</td>
+</tr><tr><td>ProccessAndWrite</td><td>Job-GQUBLI</td><td>.NET 6.0</td><td>13.19 s</td><td>0.110 s</td><td>0.103 s</td><td>-</td><td>-</td><td>-</td><td>2 KB</td><td>810,799 KB</td><td>-</td>
+</tr><tr><td>ProccessIntoMemory</td><td>Job-GQUBLI</td><td>.NET 6.0</td><td>12.85 s</td><td>0.064 s</td><td>0.057 s</td><td>-</td><td>-</td><td>-</td><td>149,887 KB</td><td>810,772 KB</td><td>3 KB</td>
+</tr><tr><td>ProcessIntoBitmap</td><td>Job-GQUBLI</td><td>.NET 6.0</td><td>13.36 s</td><td>0.065 s</td><td>0.058 s</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>299,765 KB</td><td>810,774 KB</td><td>3 KB</td>
+</tr><tr><td>ProccessAndWrite</td><td>Job-VVECKY</td><td>.NET Framework 4.8</td><td>13.18 s</td><td>0.100 s</td><td>0.084 s</td><td>-</td><td>-</td><td>-</td><td>8 KB</td><td>810,799 KB</td><td>-</td>
+</tr><tr><td>ProccessIntoMemory</td><td>Job-VVECKY</td><td>.NET Framework 4.8</td><td>13.34 s</td><td>0.228 s</td><td>0.213 s</td><td>-</td><td>-</td><td>-</td><td>149,885 KB</td><td>810,769 KB</td><td>-</td>
+</tr><tr><td>ProcessIntoBitmap</td><td>Job-VVECKY</td><td>.NET Framework 4.8</td><td>13.38 s</td><td>0.144 s</td><td>0.134 s</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>299,763 KB</td><td>810,770 KB</td><td>-</td>
+</tr></tbody></table>
+</body>
+</html>

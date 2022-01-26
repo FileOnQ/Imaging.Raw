@@ -1,0 +1,196 @@
+{
+   "Title":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance-20220126-163358",
+   "HostEnvironmentInfo":{
+      "BenchmarkDotNetCaption":"BenchmarkDotNet",
+      "BenchmarkDotNetVersion":"0.13.0",
+      "OsVersion":"Windows 10.0.17763.2452 (1809/October2018Update/Redstone5)",
+      "ProcessorName":"Intel Xeon CPU E5-2673 v4 2.30GHz",
+      "PhysicalProcessorCount":1,
+      "PhysicalCoreCount":2,
+      "LogicalCoreCount":2,
+      "RuntimeVersion":".NET Framework 4.8 (4.8.4420.0)",
+      "Architecture":"X64",
+      "HasAttachedDebugger":false,
+      "HasRyuJit":true,
+      "Configuration":"RELEASE",
+      "DotNetCliVersion":"6.0.101",
+      "ChronometerFrequency":{
+         "Hertz":10000000
+      },
+      "HardwareTimerKind":"Unknown"
+   },
+   "Benchmarks":[
+      {
+         "DisplayInfo":"DcrawProcessWhiteBalance.ProccessAndWrite: Job-ULYOBS(Runtime=.NET 5.0, InvocationCount=1, LaunchCount=1, UnrollFactor=1)",
+         "Namespace":"FileOnQ.Imaging.Raw.Benchmarking",
+         "Type":"DcrawProcessWhiteBalance",
+         "Method":"ProccessAndWrite",
+         "MethodTitle":"ProccessAndWrite",
+         "Parameters":"",
+         "FullName":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance.ProccessAndWrite",
+         "Statistics":null,
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":0,
+            "BytesAllocatedPerOperation":0
+         },
+         "Measurements":[
+            
+         ]
+      },{
+         "DisplayInfo":"DcrawProcessWhiteBalance.ProccessIntoMemory: Job-ULYOBS(Runtime=.NET 5.0, InvocationCount=1, LaunchCount=1, UnrollFactor=1)",
+         "Namespace":"FileOnQ.Imaging.Raw.Benchmarking",
+         "Type":"DcrawProcessWhiteBalance",
+         "Method":"ProccessIntoMemory",
+         "MethodTitle":"ProccessIntoMemory",
+         "Parameters":"",
+         "FullName":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance.ProccessIntoMemory",
+         "Statistics":null,
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":0,
+            "BytesAllocatedPerOperation":0
+         },
+         "Measurements":[
+            
+         ]
+      },{
+         "DisplayInfo":"DcrawProcessWhiteBalance.ProcessIntoBitmap: Job-ULYOBS(Runtime=.NET 5.0, InvocationCount=1, LaunchCount=1, UnrollFactor=1)",
+         "Namespace":"FileOnQ.Imaging.Raw.Benchmarking",
+         "Type":"DcrawProcessWhiteBalance",
+         "Method":"ProcessIntoBitmap",
+         "MethodTitle":"ProcessIntoBitmap",
+         "Parameters":"",
+         "FullName":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance.ProcessIntoBitmap",
+         "Statistics":null,
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":0,
+            "BytesAllocatedPerOperation":0
+         },
+         "Measurements":[
+            
+         ]
+      },{
+         "DisplayInfo":"DcrawProcessWhiteBalance.ProccessAndWrite: Job-EYIFXY(Runtime=.NET 6.0, InvocationCount=1, LaunchCount=1, UnrollFactor=1)",
+         "Namespace":"FileOnQ.Imaging.Raw.Benchmarking",
+         "Type":"DcrawProcessWhiteBalance",
+         "Method":"ProccessAndWrite",
+         "MethodTitle":"ProccessAndWrite",
+         "Parameters":"",
+         "FullName":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance.ProccessAndWrite",
+         "Statistics":null,
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":0,
+            "BytesAllocatedPerOperation":0
+         },
+         "Measurements":[
+            
+         ]
+      },{
+         "DisplayInfo":"DcrawProcessWhiteBalance.ProccessIntoMemory: Job-EYIFXY(Runtime=.NET 6.0, InvocationCount=1, LaunchCount=1, UnrollFactor=1)",
+         "Namespace":"FileOnQ.Imaging.Raw.Benchmarking",
+         "Type":"DcrawProcessWhiteBalance",
+         "Method":"ProccessIntoMemory",
+         "MethodTitle":"ProccessIntoMemory",
+         "Parameters":"",
+         "FullName":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance.ProccessIntoMemory",
+         "Statistics":null,
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":0,
+            "BytesAllocatedPerOperation":0
+         },
+         "Measurements":[
+            
+         ]
+      },{
+         "DisplayInfo":"DcrawProcessWhiteBalance.ProcessIntoBitmap: Job-EYIFXY(Runtime=.NET 6.0, InvocationCount=1, LaunchCount=1, UnrollFactor=1)",
+         "Namespace":"FileOnQ.Imaging.Raw.Benchmarking",
+         "Type":"DcrawProcessWhiteBalance",
+         "Method":"ProcessIntoBitmap",
+         "MethodTitle":"ProcessIntoBitmap",
+         "Parameters":"",
+         "FullName":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance.ProcessIntoBitmap",
+         "Statistics":null,
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":0,
+            "BytesAllocatedPerOperation":0
+         },
+         "Measurements":[
+            
+         ]
+      },{
+         "DisplayInfo":"DcrawProcessWhiteBalance.ProccessAndWrite: Job-GHSIOX(Runtime=.NET Framework 4.8, InvocationCount=1, LaunchCount=1, UnrollFactor=1)",
+         "Namespace":"FileOnQ.Imaging.Raw.Benchmarking",
+         "Type":"DcrawProcessWhiteBalance",
+         "Method":"ProccessAndWrite",
+         "MethodTitle":"ProccessAndWrite",
+         "Parameters":"",
+         "FullName":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance.ProccessAndWrite",
+         "Statistics":null,
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":0,
+            "BytesAllocatedPerOperation":0
+         },
+         "Measurements":[
+            
+         ]
+      },{
+         "DisplayInfo":"DcrawProcessWhiteBalance.ProccessIntoMemory: Job-GHSIOX(Runtime=.NET Framework 4.8, InvocationCount=1, LaunchCount=1, UnrollFactor=1)",
+         "Namespace":"FileOnQ.Imaging.Raw.Benchmarking",
+         "Type":"DcrawProcessWhiteBalance",
+         "Method":"ProccessIntoMemory",
+         "MethodTitle":"ProccessIntoMemory",
+         "Parameters":"",
+         "FullName":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance.ProccessIntoMemory",
+         "Statistics":null,
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":0,
+            "BytesAllocatedPerOperation":0
+         },
+         "Measurements":[
+            
+         ]
+      },{
+         "DisplayInfo":"DcrawProcessWhiteBalance.ProcessIntoBitmap: Job-GHSIOX(Runtime=.NET Framework 4.8, InvocationCount=1, LaunchCount=1, UnrollFactor=1)",
+         "Namespace":"FileOnQ.Imaging.Raw.Benchmarking",
+         "Type":"DcrawProcessWhiteBalance",
+         "Method":"ProcessIntoBitmap",
+         "MethodTitle":"ProcessIntoBitmap",
+         "Parameters":"",
+         "FullName":"FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance.ProcessIntoBitmap",
+         "Statistics":null,
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":0,
+            "BytesAllocatedPerOperation":0
+         },
+         "Measurements":[
+            
+         ]
+      }
+   ]
+}
