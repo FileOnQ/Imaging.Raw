@@ -40,6 +40,7 @@ FileOnQ.Imaging.Raw is available for use in the following target frameworks
 |------------------|-----------|-------------------------|
 | net48            | ✅        | 1.0.0                   |
 | net5.0           | ✅        | 1.0.0                   |
+| net6.0           | ✅        | 1.0.0                   |
 | Xamarin.iOS      | ❌        | Planned                 |
 | Xamarin.Mac      | ❌        | Planned                 |
 | MonoAndroid      | ❌        | Planned                 |
@@ -67,7 +68,6 @@ We don't have a wiki or full API documentation. If you are interested in helping
 ## Dependencies
 
 * C++ Library: [LibRaw](https://github.com/LibRaw/LibRaw)
-* SDK: [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-3-download-archive) 
 
 ## Created By FileOnQ
 
