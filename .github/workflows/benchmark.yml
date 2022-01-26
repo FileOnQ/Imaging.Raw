@@ -109,11 +109,7 @@ jobs:
     - name: Pack
       run: dotnet pack -c Release -o ../../ /p:ContinuousIntegrationBuild=true /p:Version=${{ env.PACKAGE_VERSION }} /p:PackageVersion=${{ env.PACKAGE_VERSION }}
       working-directory: ./src/FileOnQ.Imaging.Raw
-
-    - name: Benchmark
-      run: dotnet run -c Release -b ${{ matrix.benchmark }}
-      working-directory: ./benchmarks/tools
-    
+      
     - name: Upload NuGet Package
       uses: actions/upload-artifact@v2
       with:
@@ -200,7 +196,7 @@ jobs:
       run: Copy-Item Benchmark-Packages\* -Destination .
     
     - name: Update NuGet
-      run: dotnet add package FileOnQ.Imaging.Heif --version ${{ needs.benchmark-build.outputs.package_version }}
+      run: dotnet add package FileOnQ.Imaging.Raw --version ${{ needs.benchmark-build.outputs.package_version }}
       working-directory: ./benchmarks/tools
 
     - name: Benchmark
