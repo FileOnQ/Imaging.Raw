@@ -7,6 +7,8 @@ FileOnQ.Imaging.Raw uses a mix of .NET Framework, .NET, and native C/C++ project
 This project uses a combination of Visual Studio and .NET CLI tools for building and developing.
 
 * Visual Studio 2019 (16.10.3) or newer
+  * Workload: Desktop development with C++
+  * Component: Windows 10 SDK (10.0.18)
 * .NET CLI 5.0.300 or newer
 
 If you are using an older version of Visual Studio or .NET CLI you won't have access to the `_OR_GREATER` preprocessor directives. This will result in runtime issues when running the library locally.
