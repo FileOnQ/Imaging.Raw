@@ -71,8 +71,8 @@ jobs:
 
     - name: Install CUDA
       env:
-        cuda: ${{ matrix.cuda }}
-        visual_studio: ${{ matrix.visual_studio }}
+        cuda: 'CUDA-11.4.0'
+        visual_studio: 'Visual Studio 16 2019'
       shell: powershell
       run: .\build\cuda.ps1
 
