@@ -1,9 +1,16 @@
 @echo off
 title Building LibRaw
 set arch=%1
-for /f "usebackq tokens=1* delims=" %%x in (`vswhere -find **\vcvarsall.bat`) do set vcvar="%%~x"
+set vcvar=
 
-if not defined vcvar (
+for /f "usebackq tokens=1* delims=" %%x in ("%ProgramFiles%\Microsoft Visual Studio\Installer\vswhere.exe" -find **\vcvarsall.bat) do set vcvar="%%~x"
+
+if not defined vcvar (	
+	pause
+	for /f "usebackq tokens=1* delims=" %%x in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -find **\vcvarsall.bat`) do set vcvar="%%~x"
+)
+
+if not defined vcvar (	
 	echo "unable to find 'vcvarsall.bat'. visual studio c++ package needs to be installed"
 	exit /b 2
 )
