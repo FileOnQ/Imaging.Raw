@@ -15,7 +15,22 @@ dotnet build
 
 ### Native Assemblies
 
-TBD
+This project uses native C/C++ assemblies that are hooked into the standard .NET build process. After a successful build you should see a new `runtimes` folder populated in `FileOnQ.Imaging.Raw` project.
+
+```text
+runtimes/
+├─ win-x64/
+│  ├─ libraw.dll
+│  ├─ FileOnQ.Imaging.Raw.Gpu.Cuda.dll
+├─ win-x86/
+│  ├─ libraw.dll
+│  ├─ FileOnQ.Imaging.Raw.Gpu.Cuda.dll
+```
+
+If you need to make any changes to how these assemblies are generated you will need to look at the additional build files.
+
+* Targets files are located at [src\FileOnQ.Imaging.Raw\Build](src\FileOnQ.Imaging.Raw\Build)
+* Batch files are located at [build](build)
 
 ## Core Code - FileOnQ.Imaging.Raw
 
