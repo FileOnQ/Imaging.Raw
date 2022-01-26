@@ -33,8 +33,11 @@ The test projects use a shared project and target head solution to make it easie
 tests/
 ├─ FileOnQ.Imaging.Raw.Tests.AnyCPU/
 ├─ FileOnQ.Imaging.Raw.Tests.x86/
-├─ FileOnQ.Imaging.Raw.Tests.x65/
+├─ FileOnQ.Imaging.Raw.Tests.x64/
 ├─ FileOnQ.Imaging.Raw.Tests/
+├─ FileOnQ.Imaging.Raw.Tests.NuGet.AnyCPU/
+├─ FileOnQ.Imaging.Raw.Tests.NuGet.x86/
+├─ FileOnQ.Imaging.Raw.Tests.NuGet.x64/
 ```
 
 All test code should be added to the shared project, where the target heads just faciliate running the tests on the correct platform and arhitecture.
