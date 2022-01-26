@@ -3,10 +3,9 @@ title Building LibRaw
 set arch=%1
 set vcvar=
 
-for /f "usebackq tokens=1* delims=" %%x in ("%ProgramFiles%\Microsoft Visual Studio\Installer\vswhere.exe" -find **\vcvarsall.bat) do set vcvar="%%~x"
+for /f "usebackq tokens=1* delims=" %%x in (`"%ProgramFiles%\Microsoft Visual Studio\Installer\vswhere.exe" -find **\vcvarsall.bat`) do set vcvar="%%~x"
 
-if not defined vcvar (	
-	pause
+if defined ProgramFiles(x86) if not defined vcvar (
 	for /f "usebackq tokens=1* delims=" %%x in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -find **\vcvarsall.bat`) do set vcvar="%%~x"
 )
 
