@@ -50,4 +50,4 @@ The build targets located in the main project (FileOnQ.Imaging.Raw) are used to 
 
 ### Build Scripts (bat)
 
-The build scripts load the Visual Studio Developer Command Prompt for the desired platform architecture and then run the build commands. This is really important when compiling native libraries for x86, x64, etc. Once the tools are loaded it compiles the code using the native toolchains.
+The build scripts load the Visual Studio Developer Command Prompt for the desired platform architecture and then run the build commands. This is really important when compiling native libraries for x86, x64, ARM, etc. Once the tools are loaded it compiles the code using the native toolchains.
