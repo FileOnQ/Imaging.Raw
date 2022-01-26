@@ -15,7 +15,15 @@ If you are using an older version of Visual Studio or .NET CLI you won't have ac
 
 ## Build Dependencies
 
-Grab the LibRaw dependencies by running the command `git submodule update --init --recursive` in the repo's root folder. You will also need to download and install [CUDA SDK 11.4](https://developer.nvidia.com/cuda-11-4-3-download-archive)
+* LibRaw: get these dependencies by running the command `git submodule update --init --recursive` in the repo's root folder. 
+* CUDA: You will need to download and install [CUDA SDK 11.4](https://developer.nvidia.com/cuda-11-4-3-download-archive)
+* [vswhere](https://github.com/microsoft/vswhere)
+
+An easy way to install this dependency is to use [Chocolatey](https://docs.chocolatey.org/en-us/choco/setup).
+
+```shell
+choco install vswhere
+```
 
 ## Compile
 
@@ -41,8 +49,12 @@ The build targets and scripts should work out of the box if the required depende
 
 ### Build Targets
 
-TBD
+The build targets located in the main project (FileOnQ.Imaging.Raw) are used to orchestrate builds for all supported platform architectures. They all follow a similar process
+
+1. Clone repository for each supported platform architecture
+2. Run build script (bat file)
+3. Copy generated assemblies over to `src/FileOnQ.Imaging.Raw/runtimes/platform/native`
 
 ### Build Scripts (bat)
 
-TBD
+The build scripts load the Visual Studio Developer Command Prompt for the desired platform architecture and then run the build commands. This is really important when compiling native libraries for x86, x64, etc. Once the tools are loaded it compiles the code using the native toolchains.
