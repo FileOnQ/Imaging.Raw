@@ -34,6 +34,10 @@ Right click on `FileOnQ.Imaging.Raw` and select build
 dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj
 ```
 
+### Troubleshooting
+
+If after doing all of the above and compiling is causing errors. Try opening a developer command prompt as admin, navigate to the repo's root directory and run `msbuild /p:Platform="x64"` or `msbuild /p:Platform="x86"`
+
 ## Build Scripts and Structure
 
 The entire build process is orchestrated from `FileOnQ.Imaging.Raw.csproj` which includes downloading and compiling third party libraries. During the build you'll need to clone several git repositories and compile them. This leverages a combination of dotnet build targets and bat files. The build targets can be found in the `src/FileOnQ.Imaging.Raw/Build` directory. The build scripts or batch files can be found in the `build` directory.
