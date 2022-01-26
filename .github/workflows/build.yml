@@ -216,22 +216,22 @@ jobs:
             framework: 'net48'
           - os: windows-2019
             architecture: 'AnyCPU'
-            framework: 'net5'
+            framework: 'net5.0-windows'
           - os: windows-2019
             architecture: 'x86'
-            framework: 'net5'
+            framework: 'net5.0-windows'
           - os: windows-2019
             architecture: 'x64'
-            framework: 'net5'
+            framework: 'net5.0-windows'
           - os: windows-2019
             architecture: 'AnyCPU'
-            framework: 'net6'
+            framework: 'net6.0-windows'
           - os: windows-2019
             architecture: 'x86'
-            framework: 'net6'
+            framework: 'net6.0-windows'
           - os: windows-2019
             architecture: 'x64'
-            framework: 'net6'
+            framework: 'net6.0-windows'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
