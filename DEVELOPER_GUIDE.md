@@ -29,7 +29,7 @@ runtimes/
 
 If you need to make any changes to how these assemblies are generated you will need to look at the additional build files.
 
-* Targets files are located at [src\FileOnQ.Imaging.Raw\Build](src\FileOnQ.Imaging.Raw\Build)
+* Targets files are located at [src\FileOnQ.Imaging.Raw\Build](\src\FileOnQ.Imaging.Raw\Build)
 * Batch files are located at [build](build)
 
 ## Core Code - FileOnQ.Imaging.Raw
