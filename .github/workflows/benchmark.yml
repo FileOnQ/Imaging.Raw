@@ -20,16 +20,15 @@ jobs:
     - name: Print Event Name
       run: echo "${{ github.EVENT_NAME }}"
 
-      - name: Check Benchmark Trigger
-        if: ${{ github.EVENT_NAME != 'pull_request_target' }}
-        uses: khan/pull-request-comment-trigger@master
-        id: check
-        with:
+    - name: Check Benchmark Trigger
+      if: ${{ github.EVENT_NAME != 'pull_request_target' }}
+      uses: khan/pull-request-comment-trigger@master
+      id: check
+      with:
           trigger: '/benchmark'
           reaction: eyes
-        env:
+      env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-
 
     - name: Find Branch
       uses: actions/github-script@v3
@@ -63,7 +62,7 @@ jobs:
      repo: ${{ needs.check-command.outputs.repo }}
      ref: ${{ needs.check-command.outputs.ref }}
      package_version: ${{ env.PACKAGE_VERSION }}
-    steps:
+   steps:
     - uses: actions/checkout@v2
       with:
         repository: ${{ needs.check-command.outputs.repo }}
