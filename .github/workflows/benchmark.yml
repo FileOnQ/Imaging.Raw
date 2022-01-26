@@ -210,7 +210,7 @@ jobs:
        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
   benchmark-compare:
     if: ${{ needs.check-command.outputs.benchmark == 'true' || github.EVENT_NAME == 'pull_request' }}
-    needs: benchmark-build
+    needs: benchmark-run
     runs-on: windows-2019
     strategy:
      matrix:
