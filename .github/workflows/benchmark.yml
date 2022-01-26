@@ -208,3 +208,144 @@ jobs:
       with:
        name: Benchmark-${{ matrix.benchmark }}.${{ matrix.framework }}
        path: ./benchmarks/tools/BenchmarkDotNet.Artifacts/results
+  benchmark-compare:
+    if: ${{ needs.check-command.outputs.benchmark == 'true' || github.EVENT_NAME == 'pull_request' }}
+    needs: benchmark-build
+    runs-on: windows-2019
+    strategy:
+     matrix:
+       include:
+         - framework: 'net48'
+           name: '.NET Framework 4.8'
+         - framework: 'net5.0'
+           name: '.NET 5'
+         - framework: 'net6.0'
+           name: '.NET 6'
+    steps:
+    - name: Clone fileonq/imaging.raw
+      uses: actions/checkout@v2
+      with:
+        repository: ${{ needs.benchmark-run.outputs.repo }}
+        ref: ${{ needs.benchmark-run.outputs.ref }}
+        path: fileonq.imaging.raw
+
+    - name: Clone dotnet/performance
+      uses: actions/checkout@v2
+      with:
+        repository: dotnet/performance
+        path: dotnet.performance
+
+    - name: Download Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        path: artifacts
+      
+    - name: Ensure .NET 5 SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.302
+
+    - name: Build Compare Tool
+      run: dotnet build
+      working-directory: ./dotnet.performance/src/tools/ResultsComparer
+
+    - name: Compare - dcraw (${{ matrix.framework }})
+      run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw.${{ matrix.framework }}" --diff "../../../../artifacts/Benchmark-dcraw.${{ matrix.framework }}" --threshold 10% --top 10 > dcraw.${{ matrix.framework }}.output.txt
+      working-directory: ./dotnet.performance/src/tools/ResultsComparer
+   
+    - name: Compare - dcraw-whitebalance (${{ matrix.framework }})
+      run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/dcraw-whitebalance.${{ matrix.framework }}" --diff "../../../../artifacts/Benchmark-dcraw-whitebalance.${{ matrix.framework }}" --threshold 10% --top 10 > dcraw-whitebalance.${{ matrix.framework }}.output.txt
+      working-directory: ./dotnet.performance/src/tools/ResultsComparer
+    - name: Compare - thumbnail (${{ matrix.framework }})
+      run: dotnet run  --base "../../../../fileonq.imaging.raw/benchmarks/results/thumbnail.${{ matrix.framework }}" --diff "../../../../artifacts/Benchmark-thumbnail.${{ matrix.framework }}" --threshold 10% --top 10 > thumbnail.${{ matrix.framework }}.output.txt
+      working-directory: ./dotnet.performance/src/tools/ResultsComparer
+
+    - name: GitHub Comment - Comparison (${{ matrix.framework }})
+      run: |
+          $dcraw = Get-Content "dcraw.${{ matrix.framework }}.output.txt" -raw
+          $dcrawWhiteBalance = Get-Content "dcraw-whitebalance.${{ matrix.framework }}.output.txt" -raw
+          $thumbnail = Get-Content "thumbnail.${{ matrix.framework }}.output.txt" -raw
+      
+          $message = "## Benchmark Comparison - ${{ matrix.name }}`r`n"
+          $message += "Benchmarking comparison between this Pull Request and the comitted values at benchmarks/results `r`n`r`n"
+          $message += "dcraw`r`n"
+          $message += "\``\``\``ini `r`n $dcraw `r`n \``\``\``"
+          $message += "`r`n`r`ndcraw-whitebalance`r`n"
+          $message += "\``\``\``ini `r`n $dcrawWhiteBalance `r`n \``\``\``"
+          $message += "`r`n`r`nthumbnail`r`n"
+          $message += "\``\``\``ini `r`n $thumbnail `r`n \``\``\``"
+          echo $message
+          echo "PR_COMMENT_COMPARISON<<EOF" >> $env:GITHUB_ENV
+          echo "$message" >> $env:GITHUB_ENV
+          echo "EOF" >> $env:GITHUB_ENV
+      working-directory: ./dotnet.performance/src/tools/ResultsComparer
+
+    - name: GitHub Comment - Benchmark Results (${{ matrix.framework }})
+      run: |
+
+          $dcraw = Get-Content "Benchmark-dcraw.${{ matrix.framework }}/FileOnQ.Imaging.Raw.Benchmarking.DcrawProcess-report-github.md" -raw
+          $dcraw = $dcraw.replace("``", "\``")
+  
+          $dcrawwhitebalance = Get-Content "Benchmark-dcraw-whitebalance.${{ matrix.framework }}/FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance-report-github.md" -raw
+          $dcrawwhitebalance = $thumbnail.replace("``", "\``")
+
+          $thumbnail = Get-Content "Benchmark-thumbnail.${{ matrix.framework }}/FileOnQ.Imaging.Raw.Benchmarking.Thumbnail-report-github.md" -raw
+          $thumbnail = $thumbnail.replace("``", "\``")
+
+       
+      
+          $message = "## Benchmark Results - ${{ matrix.name }}`r`n"
+          $message += "<details><summary>dcraw</summary><p>`r`n`r`n $dcraw </p></details>`r`n"
+          $message += "<details><summary>dcraw white balance</summary><p>`r`n`r`n $dcrawwhitebalance </p></details>`r`n"
+          $message += "<details><summary>thumbnail</summary><p>`r`n`r`n $thumbnail </p></details>`r`n"
+          echo $message
+          echo "PR_COMMENT_RESULTS<<EOF" >> $env:GITHUB_ENV
+          echo "$message" >> $env:GITHUB_ENV
+          echo "EOF" >> $env:GITHUB_ENV
+      working-directory: ./artifacts
+
+    - name: Combine Message (${{ matrix.framework }})
+      run: |
+          $message = "${{ env.PR_COMMENT_COMPARISON }} \r\n\r\n ${{ env.PR_COMMENT_RESULTS }}"
+          $message = $message.replace("\\\", "\``\``\``")
+          echo $message > github-comment.${{ matrix.framework }}.md
+      working-directory: ./artifacts
+
+    - name: Upload Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Benchmark-GitHub-Comment.${{ matrix.framework }}
+        path: ./artifacts/github-comment.${{ matrix.framework }}.md
+
+  benchmark-github-post:
+    if: ${{ needs.check-command.outputs.benchmark == 'true' || github.EVENT_NAME == 'pull_request_target' }}
+    needs: benchmark-compare
+    runs-on: windows-2019
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Combine GitHub Comments
+        run: |
+          $net48 = Get-Content ./Benchmark-GitHub-Comment.net48/github-comment.net48.md -raw
+          $net5 = Get-Content ./Benchmark-GitHub-Comment.net5.0/github-comment.net5.0.md -raw
+          $net6 = Get-Content Benchmark-GitHub-Comment.net6.0/github-comment.net6.0.md -raw
+          $message = "$net48`r`n`r`n$net5`r`n`r`n$net6"
+          echo $message
+          echo "GITHUB_COMMENT<<EOF" >> $env:GITHUB_ENV
+          echo "$message" >> $env:GITHUB_ENV
+          echo "EOF" >> $env:GITHUB_ENV
+        working-directory: ./artifacts
+        
+      - name: GitHub Comment - Post
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${{ env.GITHUB_COMMENT }}`
+            })
