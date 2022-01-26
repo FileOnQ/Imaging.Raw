@@ -10,7 +10,7 @@ namespace ConsoleApp
 		static void Main(string[] args)
         {
 			var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-			var testImage = Path.Combine(assemblyDirectory, "PANA2417.RW2");
+			var testImage = Path.Combine(assemblyDirectory, "sample1.cr2");
 			var output = "output.ppm";
 
 			Console.WriteLine($"Testing raw image file {testImage}");
