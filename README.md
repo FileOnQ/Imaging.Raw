@@ -60,7 +60,25 @@ FileOnQ.Imaging.Heif is available for use in the following runtime identifiers
 
 ## Usage
 
-TBD
+Saves a raw image as a ppm
+
+```C#
+using (var image = new RawImage("image.RW2"))
+using (var raw = image.UnpackRaw())
+{
+    raw.Write("output.ppm");
+}
+```
+
+Saves the embedded thumbnail as a ppm
+
+```C#
+using (var image = new RawImage("image.RW2"))
+using (var thumbnail = image.UnpackThumbnail())
+{
+    thumbnail.Write("output.ppm");
+}
+```
 
 ## Documentation
 
