@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance-20220126-163326</title>
+<title>FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance-20220127-170140</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,29 +13,22 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.13.0, OS=Windows 10.0.17763.2452 (1809/October2018Update/Redstone5)
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.17763.2458 (1809/October2018Update/Redstone5)
 Intel Xeon Platinum 8272CL CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
 .NET SDK=6.0.101
   [Host]     : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
-  Job-RPZEDY : .NET 5.0.8 (5.0.821.31504), X64 RyuJIT
-  Job-TAGGTQ : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
-  Job-ZGQAKC : .NET Framework 4.8 (4.8.4420.0), X64 RyuJIT
+  Job-KKMFSC : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
 </code></pre>
-<pre><code>InvocationCount=1  LaunchCount=1  UnrollFactor=1  
+<pre><code>Runtime=.NET 6.0  InvocationCount=1  LaunchCount=1  
+UnrollFactor=1  
 </code></pre>
 
 <table>
-<thead><tr><th>      Method</th><th> Job</th><th>     Runtime</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th><th>Allocated native memory</th><th>Native memory leak</th>
+<thead><tr><th>      Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Allocated native memory</th><th>Native memory leak</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>ProccessAndWrite</td><td>Job-RPZEDY</td><td>.NET 5.0</td><td>11.06 s</td><td>0.009 s</td><td>0.008 s</td><td>-</td><td>-</td><td>-</td><td>2 KB</td><td>810,799 KB</td><td>-</td>
-</tr><tr><td>ProccessIntoMemory</td><td>Job-RPZEDY</td><td>.NET 5.0</td><td>10.85 s</td><td>0.013 s</td><td>0.013 s</td><td>-</td><td>-</td><td>-</td><td>149,879 KB</td><td>810,769 KB</td><td>-</td>
-</tr><tr><td>ProcessIntoBitmap</td><td>Job-RPZEDY</td><td>.NET 5.0</td><td>11.16 s</td><td>0.010 s</td><td>0.009 s</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>299,756 KB</td><td>810,770 KB</td><td>0 KB</td>
-</tr><tr><td>ProccessAndWrite</td><td>Job-TAGGTQ</td><td>.NET 6.0</td><td>11.12 s</td><td>0.010 s</td><td>0.009 s</td><td>-</td><td>-</td><td>-</td><td>3 KB</td><td>810,799 KB</td><td>-</td>
-</tr><tr><td>ProccessIntoMemory</td><td>Job-TAGGTQ</td><td>.NET 6.0</td><td>10.84 s</td><td>0.028 s</td><td>0.024 s</td><td>-</td><td>-</td><td>-</td><td>149,887 KB</td><td>810,772 KB</td><td>3 KB</td>
-</tr><tr><td>ProcessIntoBitmap</td><td>Job-TAGGTQ</td><td>.NET 6.0</td><td>11.18 s</td><td>0.018 s</td><td>0.017 s</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>299,764 KB</td><td>810,774 KB</td><td>3 KB</td>
-</tr><tr><td>ProccessAndWrite</td><td>Job-ZGQAKC</td><td>.NET Framework 4.8</td><td>11.09 s</td><td>0.007 s</td><td>0.007 s</td><td>-</td><td>-</td><td>-</td><td>8 KB</td><td>810,799 KB</td><td>-</td>
-</tr><tr><td>ProccessIntoMemory</td><td>Job-ZGQAKC</td><td>.NET Framework 4.8</td><td>10.85 s</td><td>0.008 s</td><td>0.008 s</td><td>-</td><td>-</td><td>-</td><td>149,885 KB</td><td>810,769 KB</td><td>-</td>
-</tr><tr><td>ProcessIntoBitmap</td><td>Job-ZGQAKC</td><td>.NET Framework 4.8</td><td>11.18 s</td><td>0.018 s</td><td>0.017 s</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>299,763 KB</td><td>810,770 KB</td><td>-</td>
+</thead><tbody><tr><td>ProccessAndWrite</td><td>11.10 s</td><td>0.053 s</td><td>0.044 s</td><td>810,799 KB</td><td>-</td><td>-</td><td>-</td><td>-</td><td>3 KB</td>
+</tr><tr><td>ProccessIntoMemory</td><td>10.89 s</td><td>0.124 s</td><td>0.110 s</td><td>810,769 KB</td><td>-</td><td>-</td><td>-</td><td>-</td><td>149,887 KB</td>
+</tr><tr><td>ProcessIntoBitmap</td><td>11.19 s</td><td>0.207 s</td><td>0.194 s</td><td>810,774 KB</td><td>3 KB</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>299,764 KB</td>
 </tr></tbody></table>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>FileOnQ.Imaging.Raw.Benchmarking.Thumbnail-20220126-163412</title>
+<title>FileOnQ.Imaging.Raw.Benchmarking.Thumbnail-20220127-170151</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,25 +13,21 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.13.0, OS=Windows 10.0.17763.2452 (1809/October2018Update/Redstone5), VM=Hyper-V
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.17763.2458 (1809/October2018Update/Redstone5), VM=Hyper-V
 Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
-  [Host] : .NET Framework 4.8 (4.8.4420.0), X64 RyuJIT
+  [Host]     : .NET Framework 4.8 (4.8.4420.0), X64 RyuJIT
+  Job-GHSIOX : .NET Framework 4.8 (4.8.4420.0), X64 RyuJIT
 </code></pre>
-<pre><code>InvocationCount=1  LaunchCount=1  UnrollFactor=1  
+<pre><code>Runtime=.NET Framework 4.8  InvocationCount=1  LaunchCount=1  
+UnrollFactor=1  
 </code></pre>
 
 <table>
-<thead><tr><th>       Method</th><th> Job</th><th>     Runtime</th><th>Mean</th><th>Error</th>
+<thead><tr><th>       Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Median</th><th>Allocated native memory</th><th>Native memory leak</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>ThumbnailAndWrite</td><td>Job-ULYOBS</td><td>.NET 5.0</td><td>NA</td><td>NA</td>
-</tr><tr><td>ThumbnailIntoMemory</td><td>Job-ULYOBS</td><td>.NET 5.0</td><td>NA</td><td>NA</td>
-</tr><tr><td>ThumbnailIntoBitmap</td><td>Job-ULYOBS</td><td>.NET 5.0</td><td>NA</td><td>NA</td>
-</tr><tr><td>ThumbnailAndWrite</td><td>Job-EYIFXY</td><td>.NET 6.0</td><td>NA</td><td>NA</td>
-</tr><tr><td>ThumbnailIntoMemory</td><td>Job-EYIFXY</td><td>.NET 6.0</td><td>NA</td><td>NA</td>
-</tr><tr><td>ThumbnailIntoBitmap</td><td>Job-EYIFXY</td><td>.NET 6.0</td><td>NA</td><td>NA</td>
-</tr><tr><td>ThumbnailAndWrite</td><td>Job-GHSIOX</td><td>.NET Framework 4.8</td><td>NA</td><td>NA</td>
-</tr><tr><td>ThumbnailIntoMemory</td><td>Job-GHSIOX</td><td>.NET Framework 4.8</td><td>NA</td><td>NA</td>
-</tr><tr><td>ThumbnailIntoBitmap</td><td>Job-GHSIOX</td><td>.NET Framework 4.8</td><td>NA</td><td>NA</td>
+</thead><tbody><tr><td>ThumbnailAndWrite</td><td>11.741 ms</td><td>0.2340 ms</td><td>0.5086 ms</td><td>11.652 ms</td><td>12,601,608 B</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ThumbnailIntoMemory</td><td>9.161 ms</td><td>0.1828 ms</td><td>0.4553 ms</td><td>9.011 ms</td><td>12,597,040 B</td><td>-</td><td>-</td><td>-</td><td>-</td><td>5,691,416 B</td>
+</tr><tr><td>ThumbnailIntoBitmap</td><td>293.274 ms</td><td>5.8564 ms</td><td>15.1172 ms</td><td>293.231 ms</td><td>12,818,670 B</td><td>216 B</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>17,117,760 B</td>
 </tr></tbody></table>
 </body>
 </html>
