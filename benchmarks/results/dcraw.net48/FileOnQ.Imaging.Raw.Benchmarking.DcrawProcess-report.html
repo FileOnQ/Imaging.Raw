@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>FileOnQ.Imaging.Raw.Benchmarking.DcrawProcess-20220126-163327</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.17763.2452 (1809/October2018Update/Redstone5), VM=Hyper-V
+Intel Xeon CPU E5-2673 v4 2.30GHz, 1 CPU, 2 logical and 2 physical cores
+  [Host] : .NET Framework 4.8 (4.8.4420.0), X64 RyuJIT
+</code></pre>
+<pre><code>InvocationCount=1  LaunchCount=1  UnrollFactor=1  
+</code></pre>
+
+<table>
+<thead><tr><th>      Method</th><th> Job</th><th>     Runtime</th><th>Mean</th><th>Error</th>
+</tr>
+</thead><tbody><tr><td>ProccessAndWrite</td><td>Job-ULYOBS</td><td>.NET 5.0</td><td>NA</td><td>NA</td>
+</tr><tr><td>ProccessIntoMemory</td><td>Job-ULYOBS</td><td>.NET 5.0</td><td>NA</td><td>NA</td>
+</tr><tr><td>ProcessIntoBitmap</td><td>Job-ULYOBS</td><td>.NET 5.0</td><td>NA</td><td>NA</td>
+</tr><tr><td>ProccessAndWrite</td><td>Job-EYIFXY</td><td>.NET 6.0</td><td>NA</td><td>NA</td>
+</tr><tr><td>ProccessIntoMemory</td><td>Job-EYIFXY</td><td>.NET 6.0</td><td>NA</td><td>NA</td>
+</tr><tr><td>ProcessIntoBitmap</td><td>Job-EYIFXY</td><td>.NET 6.0</td><td>NA</td><td>NA</td>
+</tr><tr><td>ProccessAndWrite</td><td>Job-GHSIOX</td><td>.NET Framework 4.8</td><td>NA</td><td>NA</td>
+</tr><tr><td>ProccessIntoMemory</td><td>Job-GHSIOX</td><td>.NET Framework 4.8</td><td>NA</td><td>NA</td>
+</tr><tr><td>ProcessIntoBitmap</td><td>Job-GHSIOX</td><td>.NET Framework 4.8</td><td>NA</td><td>NA</td>
+</tr></tbody></table>
+</body>
+</html>
