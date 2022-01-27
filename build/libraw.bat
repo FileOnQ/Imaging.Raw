@@ -1,4 +1,4 @@
-::@echo off
+@echo off
 title Building LibRaw
 set arch=%1
 set vcvar=
