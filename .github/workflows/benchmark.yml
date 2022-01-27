@@ -287,7 +287,7 @@ jobs:
           $dcraw = $dcraw.replace("``", "\``")
   
           $dcrawwhitebalance = Get-Content "Benchmark-dcraw-whitebalance.${{ matrix.framework }}/FileOnQ.Imaging.Raw.Benchmarking.DcrawProcessWhiteBalance-report-github.md" -raw
-          $dcrawwhitebalance = $thumbnail.replace("``", "\``")
+          $dcrawwhitebalance = $dcrawwhitebalance.replace("``", "\``")
 
           $thumbnail = Get-Content "Benchmark-thumbnail.${{ matrix.framework }}/FileOnQ.Imaging.Raw.Benchmarking.Thumbnail-report-github.md" -raw
           $thumbnail = $thumbnail.replace("``", "\``")
