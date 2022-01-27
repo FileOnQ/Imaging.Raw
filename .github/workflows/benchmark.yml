@@ -132,46 +132,46 @@ jobs:
             visual_studio: 'Visual Studio 16 2019'
             benchmark: 'thumbnail'
             framework: 'net48'
-          # - os: windows-2019
-          #   cuda: 'CUDA-11.4.0'
-          #   visual_studio: 'Visual Studio 16 2019'
-          #   benchmark: 'thumbnail'
-          #   framework: 'net5.0'
-          # - os: windows-2019
-          #   cuda: 'CUDA-11.4.0'
-          #   visual_studio: 'Visual Studio 16 2019'
-          #   benchmark: 'thumbnail'
-          #   framework: 'net6.0'
-          # - os: windows-2019
-          #   cuda: 'CUDA-11.4.0'
-          #   visual_studio: 'Visual Studio 16 2019'
-          #   benchmark: 'dcraw'
-          #   framework: 'net48'
-          # - os: windows-2019
-          #   cuda: 'CUDA-11.4.0'
-          #   visual_studio: 'Visual Studio 16 2019'
-          #   benchmark: 'dcraw'
-          #   framework: 'net5.0'
-          # - os: windows-2019
-          #   cuda: 'CUDA-11.4.0'
-          #   visual_studio: 'Visual Studio 16 2019'
-          #   benchmark: 'dcraw'
-          #   framework: 'net6.0'            
-          # - os: windows-2019
-          #   cuda: 'CUDA-11.4.0'
-          #   visual_studio: 'Visual Studio 16 2019'
-          #   benchmark: 'dcraw-whitebalance'
-          #   framework: 'net48'
-          # - os: windows-2019
-          #   cuda: 'CUDA-11.4.0'
-          #   visual_studio: 'Visual Studio 16 2019'
-          #   benchmark: 'dcraw-whitebalance'
-          #   framework: 'net5.0'
-          # - os: windows-2019
-          #   cuda: 'CUDA-11.4.0'
-          #   visual_studio: 'Visual Studio 16 2019'
-          #   benchmark: 'dcraw-whitebalance'
-          #   framework: 'net6.0'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'thumbnail'
+            framework: 'net5.0'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'thumbnail'
+            framework: 'net6.0'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw'
+            framework: 'net48'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw'
+            framework: 'net5.0'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw'
+            framework: 'net6.0'            
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw-whitebalance'
+            framework: 'net48'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw-whitebalance'
+            framework: 'net5.0'
+          - os: windows-2019
+            cuda: 'CUDA-11.4.0'
+            visual_studio: 'Visual Studio 16 2019'
+            benchmark: 'dcraw-whitebalance'
+            framework: 'net6.0'
    steps:
     - name: Clone fileonq/imaging.heif
       uses: actions/checkout@v2
