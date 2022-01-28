@@ -2,17 +2,37 @@
 title Building LibRaw
 set arch=%1
 set vcvar=
-
-set progFiles="%ProgramFiles%\Microsoft Visual Studio\Installer\vswhere.exe"
-for /f "usebackq tokens=1 delims=" %%x in (`"%progFiles%" -find **\vcvarsall.bat`) do set vcvar="%%~x"
-
-if defined vcvar goto fileFound
+set progFile=
 
 
-if not defined ProgramFiles(x86) goto fileNotFound
+::check default 
+set vswhereFile="%ProgramFiles%\Microsoft Visual Studio\Installer\vswhere.exe"
+if exist %vswhereFile% (	
+	goto setprogfile
+)
+goto check86
 
 
-for /f "usebackq tokens=1 delims=" %%y in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -find **\vcvarsall.bat`) do set vcvar="%%~y"
+
+:setprogfile
+set progFile=%ProgramFiles%
+goto vswhereFound
+
+
+
+:check86
+set vswhereFile86="%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+if exist "%vswhereFile86%" (
+	set progFile=%vswhereFile86%
+	goto vswhereFound
+)
+goto fileNotFound
+
+
+
+:vswhereFound
+set vcvar=
+for /f "usebackq tokens=1 delims=" %%x in (`%progFile% -find **\vcvarsall.bat`) do set vcvar="%%~x"
 if defined vcvar goto fileFound
 
 
