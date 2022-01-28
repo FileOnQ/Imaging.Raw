@@ -7,26 +7,25 @@
 
 	<!-- NOTE - 7/30/2021 - @ahoefling - Only build LibRaw if it is a rebuild or clean. The binaries take a long time to compile and don't change often -->
 	<!-- NOTE - 7/30/2021 - @ahoefling - This build target only works with MSBuild through Visual Studio-->
-	<Target Name="LibRaw" BeforeTargets="DispatchToInnerBuilds" Condition="!Exists('libraw_fileonq32.dll') and !Exists('libraw_fileonq.dll')">
+	<Target Name="LibRaw" BeforeTargets="DispatchToInnerBuilds" Condition="!Exists('runtimes/win-x86/native/libraw_fileonq32.dll') and !Exists('runtimes/win-x64/native/libraw_fileonq.dll')">
 		<Exec Command="libraw.bat x64" WorkingDirectory="$(RootDir)/build" />
-		<Copy SourceFiles="$(RootDir)/LibRaw/bin/libraw_fileonq.dll" DestinationFolder="." />
+		<Copy SourceFiles="$(RootDir)/LibRaw/bin/libraw_fileonq.dll" DestinationFolder="runtimes/win-x64/native" />
 
 		<Exec Command="libraw.bat x86" WorkingDirectory="$(RootDir)/build" />
-		<Copy SourceFiles="$(RootDir)/LibRaw/bin/libraw_fileonq32.dll" DestinationFolder="." />
+		<Copy SourceFiles="$(RootDir)/LibRaw/bin/libraw_fileonq32.dll" DestinationFolder="runtimes/win-x86/native" />
 	</Target>
-
 	<Target Name="CleanLibRaw" BeforeTargets="Clean">
-		<Delete Files="libraw_fileonq.dll" />
-		<Delete Files="libraw_fileonq32.dll" />
+		<Delete Files="$(ProjectDir)/runtimes/win-x64/native/libraw_fileonq.dll" />
+		<Delete Files="$(ProjectDir)/runtimes/win-x86/native/libraw_fileonq32.dll" />
 	</Target>
-
 	<!-- NOTE 7/30/2021 - @ahoefling - Building the GPU binaries on every build ensures the latest kernels are included with each build -->
 	<Target Name="GpuProject" BeforeTargets="DispatchToInnerBuilds">
 		<Exec Command="dotnet tool restore" WorkingDirectory="$(RootDir)" />
 		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=x64" WorkingDirectory="$(RootDir)" />
 		<Exec Command="dotnet cake --Target=Build-GPU --Configuration=$(Configuration) --Platform=Win32" WorkingDirectory="$(RootDir)" />
 
-		<Copy SourceFiles="../$(GpuProject)/bin/Win32/$(Configuration)/$(GpuProject)32.dll" DestinationFolder="." />
-		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="." />
+		<Copy SourceFiles="../$(GpuProject)/bin/Win32/$(Configuration)/$(GpuProject)32.dll" DestinationFolder="runtimes/win-x86/native/" />
+		<Copy SourceFiles="../$(GpuProject)/bin/x64/$(Configuration)/$(GpuProject).dll" DestinationFolder="runtimes/win-x64/native/" />
 	</Target>
 </Project>
+

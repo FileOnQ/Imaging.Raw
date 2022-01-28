@@ -7,9 +7,13 @@ using BenchmarkDotNet.Jobs;
 
 namespace FileOnQ.Imaging.Raw.Benchmarking
 {
-	// comparer can only handle 1 job at a time
-	//[SimpleJob(RuntimeMoniker.Net48, launchCount: 1, invocationCount: 1)]
+#if NET48
+	[SimpleJob(RuntimeMoniker.Net48, launchCount: 1, invocationCount: 1)]
+#elif NET5_0
 	[SimpleJob(RuntimeMoniker.Net50, launchCount: 1, invocationCount: 1)]
+#elif NET6_0
+	[SimpleJob(RuntimeMoniker.Net60, launchCount: 1, invocationCount: 1)]
+#endif
 	[NativeMemoryProfiler]
 	[MemoryDiagnoser]
 	[JsonExporterAttribute.Full]

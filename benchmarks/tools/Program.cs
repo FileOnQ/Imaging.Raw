@@ -22,7 +22,7 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 			}
 
 			BenchmarkOptions.TryGetValue(args[1].ToLower(), out var benchmark);
-			
+
 			switch (benchmark)
 			{
 				case BenchmarkOption.all:
@@ -60,7 +60,8 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 			Console.WriteLine("Benchmark completed");
 		}
 
-		private static System.Collections.Generic.Dictionary<string, BenchmarkOption> BenchmarkOptions => new() {
+		private static System.Collections.Generic.Dictionary<string, BenchmarkOption> BenchmarkOptions = new System.Collections.Generic.Dictionary<string, BenchmarkOption>
+		{
 			{ "all", BenchmarkOption.dcraw },
 			{ "dcraw", BenchmarkOption.dcraw },
 			{ "dcraw-gpu", BenchmarkOption.dcraw_gpu },
@@ -101,10 +102,25 @@ namespace FileOnQ.Imaging.Raw.Benchmarking
 			BenchmarkRunner.Run<AsBitmap>();
 		}
 
-		static void DcrawProcess() => BenchmarkRunner.Run<DcrawProcess>();
-		static void DcrawProcessGpu() => BenchmarkRunner.Run<DcrawProcessGpu>();
-		static void DcrawProcessWhiteBalance() => BenchmarkRunner.Run<DcrawProcessWhiteBalance>();
-		static void DcrawProcessWhiteBalanceGpu() => BenchmarkRunner.Run<DcrawProcessWhiteBalanceGpu>();
-		static void Thumbnail() => BenchmarkRunner.Run<Thumbnail>();
+		static void DcrawProcess()
+		{
+			BenchmarkRunner.Run<DcrawProcess>();
+		}
+		static void DcrawProcessGpu()
+		{
+			BenchmarkRunner.Run<DcrawProcessGpu>();
+		}
+		static void DcrawProcessWhiteBalance()
+		{
+			BenchmarkRunner.Run<DcrawProcessWhiteBalance>();
+		}
+		static void DcrawProcessWhiteBalanceGpu()
+		{
+			BenchmarkRunner.Run<DcrawProcessWhiteBalanceGpu>();
+		}
+		static void Thumbnail()
+		{
+			BenchmarkRunner.Run<Thumbnail>();
+		}
 	}
 }
