@@ -22,7 +22,7 @@ namespace ConsoleApp
 				{
 					Console.WriteLine("Image open successfully!");
 					Console.WriteLine("Thumbnail Unpacked");
-
+					thumbnail.Process(new DcrawProcessor());
 					thumbnail.Write(output);
 					Console.WriteLine($"Thumbnail written to location: {output}");
 				}

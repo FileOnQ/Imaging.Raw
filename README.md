@@ -66,6 +66,7 @@ Saves a raw image as a ppm
 using (var image = new RawImage("image.RW2"))
 using (var raw = image.UnpackRaw())
 {
+    raw.Process(new DcrawProcessor());
     raw.Write("output.ppm");
 }
 ```
@@ -76,6 +77,7 @@ Saves the embedded thumbnail as a ppm
 using (var image = new RawImage("image.RW2"))
 using (var thumbnail = image.UnpackThumbnail())
 {
+    thumbnail.Process(new DcrawProcessor());
     thumbnail.Write("output.ppm");
 }
 ```
