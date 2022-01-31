@@ -1,6 +1,6 @@
 # Developer Guide
 
-The developer guide is an on-boarding document for new contributors to FileOnQ.Imaging.Raw. This project implements some non-standard practices and the goal of this document is to answer questions and explain how the code works.
+The developer guide is an on-boarding document for new contributors to `FileOnQ.Imaging.Raw`. This project implements some non-standard practices and the goal of this document is to answer questions and explain how the code works.
 
 ## Compiling/Building
 
@@ -34,13 +34,13 @@ If you need to make any changes to how these assemblies are generated you will n
 
 ## Core Code - FileOnQ.Imaging.Raw
 
- The core API is built in the main project FileOnQ.Imaging.Raw. There is a special build that generates all of the native assemblies. Other than that everything for compiling and packaging this project follows standard best practices.
+ The core API is built in the main project `FileOnQ.Imaging.Raw`. There is a special build that generates all of the native assemblies. Other than that everything for compiling and packaging this project follows standard best practices.
 
 ## Test Projects
 
 The test project contains unit and integration tests that will run the code, all supported architectures, and platforms. When working on changes locally, it is recommended to use NUnit directly. Using GUIs such as Visual Studio still work, but some of the developer experience may differ from these docs.
 
-The test projects all use a local NuGet package of FileOnQ.Imaging.Raw.0.0.0-local.1 which is re-generated every time you build. The cached package in your NuGet Cache is also cleared to ensure you always have the latest changes. See Local NuGets below for more details.
+The test projects all use a local NuGet package of `FileOnQ.Imaging.Raw.0.0.0-local.1` which is re-generated every time you build. The cached package in your NuGet Cache is also cleared to ensure you always have the latest changes. See Local NuGets below for more details.
 
 The test projects use a shared project and target head solution to make it easier to manage what architecture is running the code.
 
@@ -139,9 +139,9 @@ On build of these projects
 
 1. Clear your local NuGet cache
 2. Pack `FileOnQ.Imaging.Raw` for release or debug configuration
-3. dotnet restore
-4. dotnet build
+3. `dotnet restore`
+4. `dotnet build`
 
 Using tools such as Visual Studio or JetBrains Rider you can still debug the binaries and step into them using this workflow. If it is not working as you expect, please log a new issue so it can be fixed.
 
-All the build scripts can be found in their respective projects "Build" folder
+All the build scripts can be found in their respective projects `Build` folder

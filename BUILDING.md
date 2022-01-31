@@ -1,6 +1,6 @@
 # How to Compile
 
-FileOnQ.Imaging.Raw uses a mix of .NET Framework, .NET, native C/C++ projects, and CUDA kernels for GPU processing. You will need to have additional build tools installed to properly build this locally. This readme serves as a guide for new developers to contribute.
+`FileOnQ.Imaging.Raw` uses a mix of .NET Framework, .NET, native C/C++ projects, and CUDA kernels for GPU processing. You will need to have additional build tools installed to properly build this locally. This readme serves as a guide for new developers to contribute.
 
 ## Visual Studio and .NET
 
@@ -15,7 +15,18 @@ If you are using an older version of Visual Studio or .NET CLI you won't have ac
 
 ## Build Dependencies
 
-* LibRaw: add these dependencies by running the command `git submodule update --init --recursive` in the repo's root folder. or pull them with the repo using `git clone --recurse-submodules https://github.com/FileOnQ.Imaging.Raw.git`
+* LibRaw: add these dependencies by running the below command in the repo's root folder.
+  
+  ```shell
+  git submodule update --init --recursive
+  ```
+
+  or clone them with the repo using
+
+   ```shell
+   git clone --recurse-submodules https://github.com/FileOnQ.Imaging.Raw.git
+   ```
+
 * CUDA: You will need to download and install [CUDA SDK 11.4](https://developer.nvidia.com/cuda-11-4-3-download-archive)
 
 ## Compile
@@ -36,7 +47,15 @@ dotnet build src/FileOnQ.Imaging.Raw/FileOnQ.Imaging.Raw.csproj
 
 ### Troubleshooting
 
-If after doing all of the above and compiling is causing errors. Try opening a developer command prompt as admin, navigate to the repo's root directory and run `msbuild /p:Platform="x64"` or `msbuild /p:Platform="x86"`
+If after doing all of the above and compiling is causing errors. Try opening a developer command prompt as admin, navigate to the repo's root directory and run one of the following
+
+```shell
+msbuild /p:Platform="x64"
+```
+
+ ```shell
+ msbuild /p:Platform="x86"
+ ```
 
 ## Build Scripts and Structure
 
@@ -46,7 +65,7 @@ The build targets and scripts should work out of the box if the required depende
 
 ### Build Targets
 
-The build targets located in the main project (FileOnQ.Imaging.Raw) are used to orchestrate builds for all supported platform architectures. They all follow a similar process
+The build targets located in the main project `FileOnQ.Imaging.Raw` are used to orchestrate builds for all supported platform architectures. They all follow a similar process
 
 1. Clone repository for each supported platform architecture
 2. Run build script (bat file)
