@@ -2,7 +2,7 @@
 
 **This project is a work in progress all code is currently experimental**
 
-A C#/.NET wrapper around [LibRaw](https://github.com/LibRaw/LibRaw) to simplify opening raw images and retrieving thumbnails.
+A C#/.NET wrapper around [LibRaw](https://github.com/LibRaw/LibRaw) to simplify processing raw images and retrieving thumbnails.
 
 <!-- Add all badges here such as CI Build, wiki, etc. -->
 [![Build](https://github.com/FileOnQ/Imaging.Raw/actions/workflows/package_main.yml/badge.svg?branch=main)](https://github.com/FileOnQ/Imaging.Raw/actions/workflows/package_main.yml)
