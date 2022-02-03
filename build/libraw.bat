@@ -44,7 +44,7 @@ exit /b 2
 
 
 :fileFound
-echo "csvarsall.bat was found, continuing"
+echo "vcvarsall.bat was found, continuing"
 
 call %vcvar% %arch%
 cd ../LibRaw
