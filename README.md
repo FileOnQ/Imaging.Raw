@@ -48,7 +48,7 @@ FileOnQ.Imaging.Raw is available for use in the following target frameworks
 
 ## Supported Runtime Identifiers
 
-FileOnQ.Imaging.Heif is available for use in the following runtime identifiers
+FileOnQ.Imaging.Raw is available for use in the following runtime identifiers
 
 | Platform         | Supported | Version                 |
 |------------------|-----------|-------------------------|
